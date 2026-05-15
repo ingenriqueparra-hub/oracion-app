@@ -64,7 +64,7 @@
   &:hover { opacity: 0.85; }
 }
 
-.filter-tabs {
+.main-tabs {
   display: flex;
   background: white;
   border-bottom: 1px solid #E8F5E9;
@@ -89,6 +89,56 @@
     color: #2E7D32;
     border-bottom-color: #2E7D32;
     font-weight: 600;
+  }
+}
+
+.sub-tabs {
+  display: flex;
+  background: #F9FBE7;
+  border-bottom: 1px solid #E8F5E9;
+  position: sticky;
+  top: 100px;
+  z-index: 8;
+  gap: 0;
+}
+
+.sub-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #9E9E9E;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+
+  &.active {
+    color: #2E7D32;
+    border-bottom-color: #2E7D32;
+    font-weight: 600;
+  }
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #2E7D32;
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border-radius: 9px;
+  line-height: 1;
+
+  &.muted {
+    background: #BDBDBD;
   }
 }
 
@@ -258,20 +308,45 @@
   flex-shrink: 0;
 }
 
-.nav-profile {
-  position: fixed;
-  bottom: 1.25rem;
-  right: 1.25rem;
-  background: white;
-  color: #2E7D32;
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.625rem 1rem;
-  border-radius: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
-  border: 1.5px solid #E8F5E9;
-  transition: box-shadow 0.2s;
+.scroll-sentinel {
+  padding: 1rem 0 2rem;
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+}
 
-  &:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16); }
+.loading-more {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.dot-spinner {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #A5D6A7;
+    animation: dot-bounce 1.2s infinite ease-in-out;
+
+    &:nth-child(1) { animation-delay: 0s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+  }
+}
+
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1);   opacity: 1; }
+}
+
+.end-msg {
+  font-size: 0.8125rem;
+  color: #BDBDBD;
+  text-align: center;
+  padding: 0.5rem 1rem;
 }

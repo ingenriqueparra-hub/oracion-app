@@ -1,11 +1,19 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import {
+  Component, inject, signal, computed,
+  OnInit, AfterViewInit, OnDestroy,
+  ElementRef, ViewChild,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { PrayerService } from '../../../core/services/prayer.service';
 import { IPrayerFeedItem } from '../../../models/prayer.model';
 import { DailyPromiseComponent } from '../../promises/daily-promise/daily-promise.component';
-type FeedFilter = 'all' | 'church' | 'group';
+
+type MainTab = 'group' | 'church' | 'all';
+type SubTab = 'new' | 'prayed';
+
+const PAGE_SIZE = 5;
 
 @Component({
   selector: 'app-prayer-feed',
@@ -14,52 +22,142 @@ type FeedFilter = 'all' | 'church' | 'group';
   templateUrl: './prayer-feed.component.html',
   styleUrl: './prayer-feed.component.scss',
 })
-export class PrayerFeedComponent implements OnInit {
+export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('scrollSentinel') sentinelRef?: ElementRef;
+
   private prayerService = inject(PrayerService);
   private auth = inject(AuthService);
   private supabase = inject(SupabaseService);
   private router = inject(Router);
+
   user = this.auth.user;
   prayers = signal<IPrayerFeedItem[]>([]);
   loading = signal(true);
+  loadingMore = signal(false);
+  hasMore = signal(true);
   error = signal('');
-  filter = signal<FeedFilter>('all');
+  mainTab = signal<MainTab>('all');
+  subTab = signal<SubTab>('new');
+  private userId = '';
+  private currentOffset = 0;
+  private scrollContainer: Element | null = null;
+  private scrollHandler = () => this.checkAndLoadMore();
 
+  nuevos = computed(() =>
+    this.prayers().filter(p => !p.has_prayed && p.user_id !== this.userId)
+  );
+  yaOre = computed(() =>
+    this.prayers().filter(p => p.has_prayed)
+  );
+  visiblePrayers = computed(() =>
+    this.subTab() === 'new' ? this.nuevos() : this.yaOre()
+  );
+
+  get hasGroup(): boolean { return !!this.user()?.group_id; }
+  get hasChurch(): boolean { return !!this.user()?.church_id; }
+
+  // Fix 1: ensure profile is loaded before resolving default tab
   async ngOnInit() {
+    let user = this.user();
+    if (!user) {
+      await this.auth.refreshProfile();
+      user = this.user();
+    }
+    if (!user) return;
+    this.userId = user.id;
+
+    if (user.group_id) {
+      this.mainTab.set('group');
+    } else if (user.church_id) {
+      this.mainTab.set('church');
+    } else {
+      this.mainTab.set('all');
+    }
+
     await this.loadFeed();
   }
 
-  async loadFeed() {
-    // user() signal may not be populated yet if onAuthStateChange hasn't fired.
-    // Fall back to getSession() which the guard already confirmed is valid.
-    const user = this.user();
-    let userId = user?.id;
-    if (!userId) {
-      const { data: { session } } = await this.supabase.client.auth.getSession();
-      userId = session?.user?.id;
+  ngAfterViewInit() {
+    // Walk up DOM to find the scrollable container (shell's center column)
+    let el = this.sentinelRef?.nativeElement?.parentElement as Element | null;
+    while (el && el !== document.body) {
+      const oy = getComputedStyle(el).overflowY;
+      if (oy === 'auto' || oy === 'scroll') { this.scrollContainer = el; break; }
+      el = el.parentElement;
     }
-    if (!userId) return;
+    const target = (this.scrollContainer ?? document) as EventTarget;
+    target.addEventListener('scroll', this.scrollHandler, { passive: true } as any);
+  }
 
+  ngOnDestroy() {
+    const target = (this.scrollContainer ?? document) as EventTarget;
+    target.removeEventListener('scroll', this.scrollHandler);
+  }
+
+  private checkAndLoadMore() {
+    if (this.loading() || this.loadingMore() || !this.hasMore()) return;
+    const sentinel = this.sentinelRef?.nativeElement as HTMLElement | undefined;
+    if (!sentinel) return;
+    const sentinelTop = sentinel.getBoundingClientRect().top;
+    const containerBottom = this.scrollContainer
+      ? this.scrollContainer.getBoundingClientRect().bottom
+      : window.innerHeight;
+    if (sentinelTop <= containerBottom + 300) {
+      this.loadMore();
+    }
+  }
+
+  private async loadFeedPage(offset: number): Promise<IPrayerFeedItem[]> {
+    const user = this.user();
+    return this.prayerService.getFeedScoped(
+      this.userId,
+      user?.church_id ?? null,
+      user?.group_id ?? null,
+      this.mainTab(),
+      offset,
+      PAGE_SIZE
+    );
+  }
+
+  async loadFeed() {
+    this.currentOffset = 0;
+    this.hasMore.set(true);
     this.loading.set(true);
     this.error.set('');
     try {
-      const data = await this.prayerService.getFeed(
-        userId,
-        user?.church_id ?? null,
-        this.filter(),
-        user?.group_id ?? null
-      );
+      const data = await this.loadFeedPage(0);
       this.prayers.set(data);
+      this.currentOffset = data.length;
+      if (data.length < PAGE_SIZE) this.hasMore.set(false);
     } catch (err: any) {
       console.error('[PrayerFeed]', err);
       this.error.set('No se pudo cargar el feed.');
     } finally {
       this.loading.set(false);
+      // Auto-load if sentinel already visible after initial render
+      setTimeout(() => this.checkAndLoadMore(), 0);
     }
   }
 
-  async setFilter(f: FeedFilter) {
-    this.filter.set(f);
+  async loadMore() {
+    if (this.loadingMore() || !this.hasMore() || this.loading()) return;
+    this.loadingMore.set(true);
+    try {
+      const data = await this.loadFeedPage(this.currentOffset);
+      this.prayers.update(list => [...list, ...data]);
+      this.currentOffset += data.length;
+      if (data.length < PAGE_SIZE) this.hasMore.set(false);
+    } catch {
+      // silent — user can scroll again to retry
+    } finally {
+      this.loadingMore.set(false);
+      setTimeout(() => this.checkAndLoadMore(), 0);
+    }
+  }
+
+  async setMainTab(tab: MainTab) {
+    this.mainTab.set(tab);
+    this.subTab.set('new');
     await this.loadFeed();
   }
 
@@ -69,7 +167,6 @@ export class PrayerFeedComponent implements OnInit {
     const user = this.user();
     if (!user) return;
 
-    // Optimistic update
     this.prayers.update(list =>
       list.map(p => p.id === prayer.id
         ? { ...p, has_prayed: !p.has_prayed, pray_count: p.pray_count + (p.has_prayed ? -1 : 1) }
@@ -83,8 +180,7 @@ export class PrayerFeedComponent implements OnInit {
       } else {
         await this.prayerService.addPray(prayer.id, user.id);
       }
-    } catch (err) {
-      // Revert on error
+    } catch {
       this.prayers.update(list =>
         list.map(p => p.id === prayer.id
           ? { ...p, has_prayed: prayer.has_prayed, pray_count: prayer.pray_count }
@@ -96,6 +192,24 @@ export class PrayerFeedComponent implements OnInit {
 
   goToDetail(id: string) {
     this.router.navigate(['/prayers', id]);
+  }
+
+  emptyMessage(): string {
+    const tab = this.mainTab();
+    const sub = this.subTab();
+    if (tab === 'group') {
+      return sub === 'new'
+        ? 'No hay nuevos pedidos en tu grupo para orar.'
+        : 'Aún no has orado por ningún pedido de tu grupo.';
+    }
+    if (tab === 'church') {
+      return sub === 'new'
+        ? 'No hay nuevos pedidos en tu iglesia para orar.'
+        : 'Aún no has orado por ningún pedido de tu iglesia.';
+    }
+    return sub === 'new'
+      ? 'No hay pedidos de otras iglesias para orar.'
+      : 'Aún no has orado por pedidos de otras iglesias.';
   }
 
   timeAgo(dateStr: string): string {
@@ -112,7 +226,4 @@ export class PrayerFeedComponent implements OnInit {
   initials(name: string): string {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   }
-
-  get canFilterChurch(): boolean { return !!this.user()?.church_id; }
-  get canFilterGroup(): boolean { return !!this.user()?.group_id; }
 }

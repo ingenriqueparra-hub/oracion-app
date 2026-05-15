@@ -6,41 +6,37 @@ import { IPrayer, IPrayerFeedItem } from '../../models/prayer.model';
 export class PrayerService {
   constructor(private supabase: SupabaseService) {}
 
-  async getFeed(
+  async getFeedScoped(
     userId: string,
     churchId: string | null,
-    filter: 'all' | 'church' | 'group' = 'all',
-    groupId: string | null = null
+    groupId: string | null,
+    scope: 'group' | 'church' | 'all',
+    offset = 0,
+    limit = 5
   ): Promise<IPrayerFeedItem[]> {
     let query = this.supabase.client
       .from('prayers')
       .select('*, profiles(name, avatar_url, level), churches(name), prayer_prays(user_id)')
       .eq('status', 'active')
       .order('created_at', { ascending: false })
-      .limit(50);
+      .range(offset, offset + limit - 1);
 
-    if (filter === 'church' && churchId) {
-      query = query.eq('church_id', churchId);
-    } else if (filter === 'group' && groupId) {
+    if (scope === 'group' && groupId) {
       query = query.eq('group_id', groupId);
+    } else if (scope === 'church' && churchId) {
+      query = query.eq('church_id', churchId);
+    } else if (scope === 'all' && churchId) {
+      query = query.or(`church_id.is.null,church_id.neq.${churchId}`);
     }
 
     const { data, error } = await query;
     if (error) throw error;
 
-    const prayers = (data as any[]).map(p => ({
+    return (data as any[]).map(p => ({
       ...p,
       pray_count: p.prayer_prays?.length ?? 0,
       has_prayed: p.prayer_prays?.some((pp: any) => pp.user_id === userId) ?? false,
     })) as IPrayerFeedItem[];
-
-    if (filter === 'all' && churchId) {
-      return [
-        ...prayers.filter(p => p.church_id === churchId),
-        ...prayers.filter(p => p.church_id !== churchId),
-      ];
-    }
-    return prayers;
   }
 
   async getById(id: string, userId: string): Promise<IPrayerFeedItem> {

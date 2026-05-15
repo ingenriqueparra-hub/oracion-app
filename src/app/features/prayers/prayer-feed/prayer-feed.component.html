@@ -4,20 +4,35 @@
     <a routerLink="/prayers/new" class="btn-new">+ Nueva</a>
   </header>
 
-  <div class="filter-tabs">
-    <button class="tab" [class.active]="filter() === 'all'" (click)="setFilter('all')">
-      Todos
-    </button>
-    @if (canFilterChurch) {
-      <button class="tab" [class.active]="filter() === 'church'" (click)="setFilter('church')">
-        Mi iglesia
-      </button>
-    }
-    @if (canFilterGroup) {
-      <button class="tab" [class.active]="filter() === 'group'" (click)="setFilter('group')">
+  <div class="main-tabs">
+    @if (hasGroup) {
+      <button class="tab" [class.active]="mainTab() === 'group'" (click)="setMainTab('group')">
         Mi grupo
       </button>
     }
+    @if (hasChurch) {
+      <button class="tab" [class.active]="mainTab() === 'church'" (click)="setMainTab('church')">
+        Mi iglesia
+      </button>
+    }
+    <button class="tab" [class.active]="mainTab() === 'all'" (click)="setMainTab('all')">
+      Otros
+    </button>
+  </div>
+
+  <div class="sub-tabs">
+    <button class="sub-tab" [class.active]="subTab() === 'new'" (click)="subTab.set('new')">
+      Nuevos
+      @if (!loading() && nuevos().length > 0) {
+        <span class="count-badge">{{ nuevos().length }}</span>
+      }
+    </button>
+    <button class="sub-tab" [class.active]="subTab() === 'prayed'" (click)="subTab.set('prayed')">
+      Ya oré
+      @if (!loading() && yaOre().length > 0) {
+        <span class="count-badge muted">{{ yaOre().length }}</span>
+      }
+    </button>
   </div>
 
   <app-daily-promise />
@@ -26,15 +41,17 @@
     <div class="state-msg">Cargando pedidos...</div>
   } @else if (error()) {
     <div class="state-msg error">{{ error() }}</div>
-  } @else if (prayers().length === 0) {
+  } @else if (visiblePrayers().length === 0) {
     <div class="empty-state">
       <span class="empty-icon">🙏</span>
-      <p>No hay pedidos de oración aún.</p>
-      <a routerLink="/prayers/new" class="btn-primary">Publicar el primero</a>
+      <p>{{ emptyMessage() }}</p>
+      @if (subTab() === 'new') {
+        <a routerLink="/prayers/new" class="btn-primary">Publicar un pedido</a>
+      }
     </div>
   } @else {
     <div class="prayer-list">
-      @for (prayer of prayers(); track prayer.id) {
+      @for (prayer of visiblePrayers(); track prayer.id) {
         <div class="prayer-card" (click)="goToDetail(prayer.id)">
           <div class="card-top">
             <div class="author-row">
@@ -66,7 +83,10 @@
               [class.prayed]="prayer.has_prayed"
               (click)="onPray(prayer, $event)"
             >
-              🙏 {{ prayer.pray_count }}
+              🙏
+              @if (mainTab() !== 'all') {
+                {{ prayer.pray_count }}
+              }
               {{ prayer.has_prayed ? 'Ya oré' : 'Orar' }}
             </button>
           </div>
@@ -75,5 +95,16 @@
     </div>
   }
 
-  <a routerLink="/profile" class="nav-profile">👤 Perfil</a>
+  <!-- Infinite scroll sentinel — always in DOM -->
+  <div #scrollSentinel class="scroll-sentinel">
+    @if (loadingMore()) {
+      <div class="loading-more">
+        <span class="dot-spinner">
+          <span></span><span></span><span></span>
+        </span>
+      </div>
+    } @else if (!loading() && !hasMore() && prayers().length > 0) {
+      <p class="end-msg">Ya viste todos los pedidos 🙏</p>
+    }
+  </div>
 </div>
