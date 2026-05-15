@@ -1,0 +1,87 @@
+<div class="feed-page">
+  <header class="feed-header">
+    <h1>Feed de Oración</h1>
+    <div class="header-actions">
+      <a routerLink="/notifications" class="notif-btn" aria-label="Notificaciones">
+        🔔
+        @if (unreadCount() > 0) {
+          <span class="notif-badge">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
+        }
+      </a>
+      <a routerLink="/prayers/new" class="btn-new">+ Nueva</a>
+    </div>
+  </header>
+
+  <div class="filter-tabs">
+    <button class="tab" [class.active]="filter() === 'all'" (click)="setFilter('all')">
+      Todos
+    </button>
+    @if (canFilterChurch) {
+      <button class="tab" [class.active]="filter() === 'church'" (click)="setFilter('church')">
+        Mi iglesia
+      </button>
+    }
+    @if (canFilterGroup) {
+      <button class="tab" [class.active]="filter() === 'group'" (click)="setFilter('group')">
+        Mi grupo
+      </button>
+    }
+  </div>
+
+  <app-daily-promise />
+
+  @if (loading()) {
+    <div class="state-msg">Cargando pedidos...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (prayers().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">🙏</span>
+      <p>No hay pedidos de oración aún.</p>
+      <a routerLink="/prayers/new" class="btn-primary">Publicar el primero</a>
+    </div>
+  } @else {
+    <div class="prayer-list">
+      @for (prayer of prayers(); track prayer.id) {
+        <div class="prayer-card" (click)="goToDetail(prayer.id)">
+          <div class="card-top">
+            <div class="author-row">
+              <div class="avatar">
+                @if (prayer.profiles?.avatar_url) {
+                  <img [src]="prayer.profiles.avatar_url" [alt]="prayer.profiles.name">
+                } @else {
+                  {{ initials(prayer.profiles?.name ?? '') }}
+                }
+              </div>
+              <div class="author-info">
+                <a [routerLink]="['/profile', prayer.user_id]" class="author-name" (click)="$event.stopPropagation()">{{ prayer.profiles?.name }}</a>
+                <span class="time">{{ prayer.profiles?.level }} · {{ timeAgo(prayer.created_at) }}</span>
+              </div>
+            </div>
+            @if (prayer.churches?.name) {
+              <span class="church-badge">⛪ {{ prayer.churches!.name }}</span>
+            }
+          </div>
+
+          <p class="prayer-text">{{ prayer.text }}</p>
+
+          <div class="card-footer">
+            @if (prayer.status === 'answered') {
+              <span class="answered-badge">✨ Respondido</span>
+            }
+            <button
+              class="pray-btn"
+              [class.prayed]="prayer.has_prayed"
+              (click)="onPray(prayer, $event)"
+            >
+              🙏 {{ prayer.pray_count }}
+              {{ prayer.has_prayed ? 'Ya oré' : 'Orar' }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <a routerLink="/profile" class="nav-profile">👤 Perfil</a>
+</div>

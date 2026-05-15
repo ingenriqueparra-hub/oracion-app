@@ -1,0 +1,69 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/churches" class="back-btn">← Volver</a>
+    <h1>Registrar iglesia</h1>
+  </header>
+
+  @if (success()) {
+    <div class="card success-card">
+      <span class="success-icon">✅</span>
+      <h2>¡Solicitud enviada!</h2>
+      <p>
+        Tu iglesia está en revisión. El administrador de la plataforma
+        la aprobará pronto. Te avisaremos por correo.
+      </p>
+      <a routerLink="/churches" class="btn-primary">Ver iglesias</a>
+    </div>
+  } @else {
+    <form class="card" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <p class="form-intro">
+        Completa el formulario y un administrador revisará tu solicitud.
+      </p>
+
+      <div class="field">
+        <label for="name">Nombre de la iglesia *</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Ej: Iglesia Vida Nueva"
+          [class.invalid]="nameCtrl.invalid && nameCtrl.touched"
+        >
+        @if (nameCtrl.touched && nameCtrl.hasError('required')) {
+          <span class="field-error">El nombre es obligatorio</span>
+        } @else if (nameCtrl.touched && nameCtrl.hasError('minlength')) {
+          <span class="field-error">Mínimo 3 caracteres</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="description">Descripción *</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          placeholder="Cuéntanos un poco sobre tu iglesia..."
+          rows="4"
+          [class.invalid]="descCtrl.invalid && descCtrl.touched"
+        ></textarea>
+        @if (descCtrl.touched && descCtrl.hasError('required')) {
+          <span class="field-error">La descripción es obligatoria</span>
+        } @else if (descCtrl.touched && descCtrl.hasError('minlength')) {
+          <span class="field-error">Mínimo 10 caracteres</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="photo_url">URL de foto (opcional)</label>
+        <input id="photo_url" type="url" formControlName="photo_url" placeholder="https://...">
+      </div>
+
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="loading()">
+        @if (loading()) { Enviando... } @else { Enviar solicitud }
+      </button>
+    </form>
+  }
+</div>

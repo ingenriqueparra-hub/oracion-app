@@ -1,0 +1,99 @@
+<div class="profile-page">
+  <header class="profile-header">
+    <div class="avatar">
+      @if (user()?.avatar_url) {
+        <img [src]="user()?.avatar_url" [alt]="user()?.name">
+      } @else {
+        <span class="initials">{{ initials }}</span>
+      }
+    </div>
+    <h2>{{ user()?.name }}</h2>
+    <p class="user-email">{{ user()?.email }}</p>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-value">{{ user()?.points ?? 0 }}</span>
+      <span class="stat-label">Puntos</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ user()?.streak_days ?? 0 }}</span>
+      <span class="stat-label">Días de racha</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{{ user()?.level ?? 'Creyente' }}</span>
+      <span class="stat-label">Nivel</span>
+    </div>
+  </div>
+
+  @if (user()?.role === 'super_admin') {
+    <a routerLink="/admin" class="church-link admin-link">
+      <span class="church-link-icon">⚙️</span>
+      <span>Panel Super Admin</span>
+      <span class="arrow">›</span>
+    </a>
+  }
+
+  <a routerLink="/prayers" class="church-link">
+    <span class="church-link-icon">🙏</span>
+    <span>Feed de oración</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a routerLink="/testimonies" class="church-link">
+    <span class="church-link-icon">✨</span>
+    <span>Testimonios</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <a routerLink="/ranking" class="church-link">
+    <span class="church-link-icon">🏆</span>
+    <span>Ranking de mi iglesia</span>
+    <span class="arrow">›</span>
+  </a>
+
+  <div class="profile-card badges-section">
+    <h3>Mis insignias</h3>
+    <app-badge-list
+      [allBadges]="allBadges()"
+      [earnedIds]="earnedIds()"
+      [showLocked]="true"
+    />
+  </div>
+
+  <a routerLink="/churches" class="church-link">
+    @if (user()?.church_id) {
+      <span class="church-link-icon">⛪</span>
+      <span>Ver mi iglesia</span>
+    } @else {
+      <span class="church-link-icon">🔍</span>
+      <span>Buscar y unirme a una iglesia</span>
+    }
+    <span class="arrow">›</span>
+  </a>
+
+  <form class="profile-card" [formGroup]="form" (ngSubmit)="onSave()">
+    <h3>Editar perfil</h3>
+
+    <div class="field">
+      <label for="name">Nombre</label>
+      <input id="name" type="text" formControlName="name" autocomplete="name">
+    </div>
+
+    @if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    }
+
+    @if (saved()) {
+      <p class="success-msg">¡Cambios guardados!</p>
+    }
+
+    <button type="submit" class="btn-primary" [disabled]="loading()">
+      @if (loading()) { Guardando... } @else { Guardar cambios }
+    </button>
+  </form>
+
+  <div class="profile-actions">
+    <button class="btn-logout" (click)="onLogout()">Cerrar sesión</button>
+  </div>
+</div>

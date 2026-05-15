@@ -1,0 +1,39 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/prayers" class="back-btn">← Volver</a>
+    <h1>Nueva oración</h1>
+  </header>
+
+  <form class="card" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <p class="form-intro">
+      Comparte tu pedido de oración con la comunidad. Serán miles de personas orando contigo.
+    </p>
+
+    <div class="field">
+      <textarea
+        formControlName="text"
+        placeholder="Escribe tu pedido de oración aquí... Sé específico para que la comunidad pueda interceder mejor por ti."
+        rows="7"
+        [class.invalid]="textCtrl.invalid && textCtrl.touched"
+      ></textarea>
+      <div class="char-row">
+        @if (textCtrl.touched && textCtrl.hasError('required')) {
+          <span class="field-error">Escribe tu pedido de oración</span>
+        } @else if (textCtrl.touched && textCtrl.hasError('minlength')) {
+          <span class="field-error">Mínimo 10 caracteres</span>
+        } @else {
+          <span></span>
+        }
+        <span class="char-count" [class.over]="charCount > 900">{{ charCount }}/1000</span>
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    }
+
+    <button type="submit" class="btn-primary" [disabled]="loading()">
+      @if (loading()) { Publicando... } @else { 🙏 Publicar pedido }
+    </button>
+  </form>
+</div>

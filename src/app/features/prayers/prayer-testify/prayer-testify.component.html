@@ -1,0 +1,52 @@
+<div class="page">
+  <header class="page-header">
+    <a [routerLink]="['/prayers', prayerId]" class="back-btn">← Volver</a>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando...</div>
+  } @else if (error() && !prayer()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (prayer()) {
+
+    <div class="prayer-preview">
+      <p class="label">Pedido de oración:</p>
+      <p class="prayer-text">{{ prayer()!.text }}</p>
+    </div>
+
+    <form class="testimony-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h2>¿Cómo respondió Dios?</h2>
+      <p class="subtitle">Comparte tu testimonio con la comunidad y da gloria a Dios.</p>
+
+      <div class="field">
+        <textarea
+          formControlName="text"
+          rows="6"
+          placeholder="Escribe cómo Dios respondió este pedido..."
+          [class.invalid]="textCtrl.invalid && textCtrl.touched"
+        ></textarea>
+        <div class="char-count" [class.over]="charCount > 2000">
+          {{ charCount }} / 2000
+        </div>
+        @if (textCtrl.invalid && textCtrl.touched) {
+          @if (textCtrl.errors?.['required']) {
+            <p class="field-error">El testimonio no puede estar vacío.</p>
+          } @else if (textCtrl.errors?.['minlength']) {
+            <p class="field-error">Escribe al menos 10 caracteres.</p>
+          } @else if (textCtrl.errors?.['maxlength']) {
+            <p class="field-error">Máximo 2000 caracteres.</p>
+          }
+        }
+      </div>
+
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn-submit" [disabled]="submitting()">
+        @if (submitting()) { Publicando... } @else { ¡Publicar testimonio! }
+      </button>
+    </form>
+
+  }
+</div>

@@ -1,0 +1,41 @@
+<div class="page">
+  <header class="page-header">
+    <h1>Iglesias</h1>
+    <button class="btn-register" (click)="goToRegister()">+ Registrar iglesia</button>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando iglesias...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (churches().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">⛪</span>
+      <p>Aún no hay iglesias registradas.</p>
+      <button class="btn-primary" (click)="goToRegister()">Registra la tuya</button>
+    </div>
+  } @else {
+    <div class="church-grid">
+      @for (church of churches(); track church.id) {
+        <a [routerLink]="['/churches', church.id]" class="church-card">
+          <div class="church-photo">
+            @if (church.photo_url) {
+              <img [src]="church.photo_url" [alt]="church.name">
+            } @else {
+              <span class="church-icon">⛪</span>
+            }
+          </div>
+          <div class="church-info">
+            <h3>{{ church.name }}</h3>
+            @if (church.description) {
+              <p>{{ church.description }}</p>
+            }
+          </div>
+          @if (user()?.church_id === church.id) {
+            <span class="badge-member">Mi iglesia</span>
+          }
+        </a>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,237 @@
+<div class="page">
+  <header class="page-header">
+    <a [routerLink]="['/churches', churchId]" class="back-btn">← Volver</a>
+    <h1>{{ church()?.name ?? 'Panel de administración' }}</h1>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else {
+    <div class="tabs">
+      <button
+        class="tab"
+        [class.active]="activeTab() === 'members'"
+        (click)="setTab('members')"
+      >
+        Miembros
+        @if (pendingMembers().length > 0) {
+          <span class="badge">{{ pendingMembers().length }}</span>
+        }
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab() === 'groups'"
+        (click)="setTab('groups')"
+      >
+        Grupos
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab() === 'stats'"
+        (click)="setTab('stats')"
+      >
+        Estadísticas
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab() === 'church'"
+        (click)="setTab('church')"
+      >
+        Iglesia
+      </button>
+    </div>
+
+    @if (activeTab() === 'members') {
+      @if (pendingMembers().length > 0) {
+        <div class="section">
+          <h2>Solicitudes pendientes</h2>
+          <div class="member-list">
+            @for (member of pendingMembers(); track member.id) {
+              <div class="member-card">
+                <div class="member-avatar">
+                  {{ member.profiles?.name?.charAt(0)?.toUpperCase() ?? '?' }}
+                </div>
+                <div class="member-info">
+                  <strong>{{ member.profiles?.name }}</strong>
+                  <span>{{ member.profiles?.email }}</span>
+                </div>
+                <div class="member-actions">
+                  <button class="btn-approve" (click)="onApprove(member)" title="Aprobar">✓</button>
+                  <button class="btn-reject" (click)="onReject(member)" title="Rechazar">✕</button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="section">
+        <h2>Miembros aprobados ({{ approvedMembers().length }})</h2>
+        @if (approvedMembers().length === 0) {
+          <p class="empty-text">Aún no hay miembros aprobados.</p>
+        } @else {
+          <div class="member-list">
+            @for (member of approvedMembers(); track member.id) {
+              <div class="member-card">
+                <div class="member-avatar">
+                  {{ member.profiles?.name?.charAt(0)?.toUpperCase() ?? '?' }}
+                </div>
+                <div class="member-info">
+                  <strong>{{ member.profiles?.name }}</strong>
+                  <span>{{ member.profiles?.email }}</span>
+                </div>
+                <div class="member-actions">
+                  @if (groups().length > 0) {
+                    <select
+                      class="group-select"
+                      (change)="onGroupChange(member.id, $any($event.target).value)"
+                    >
+                      <option value="" [selected]="!(pendingGroupIds()[member.id] ?? member.group_id)">Sin grupo</option>
+                      @for (group of groups(); track group.id) {
+                        <option
+                          [value]="group.id"
+                          [selected]="(pendingGroupIds()[member.id] ?? member.group_id) === group.id"
+                        >{{ group.name }}</option>
+                      }
+                    </select>
+                    @if (hasPendingGroup(member)) {
+                      <button class="btn-save-group" (click)="onAssignGroup(member)">Guardar</button>
+                    }
+                  }
+                  <button class="btn-remove" (click)="onRemoveMember(member)" title="Expulsar">🚫</button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'groups') {
+      <div class="section">
+        <h2>Crear grupo</h2>
+        <form [formGroup]="groupForm" (ngSubmit)="onCreateGroup()" class="group-form">
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Nombre del grupo o célula"
+          >
+          <button type="submit" class="btn-primary" [disabled]="groupForm.invalid">
+            Crear
+          </button>
+        </form>
+        @if (groupError()) {
+          <p class="error-msg">{{ groupError() }}</p>
+        }
+      </div>
+
+      <div class="section">
+        <h2>Grupos ({{ groups().length }})</h2>
+        @if (groups().length === 0) {
+          <p class="empty-text">Aún no hay grupos creados.</p>
+        } @else {
+          <div class="group-list">
+            @for (group of groups(); track group.id) {
+              <div class="group-item">
+                <span class="group-icon">👥</span>
+                <span class="group-name">{{ group.name }}</span>
+                <button class="btn-delete" (click)="onDeleteGroup(group)">✕</button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'stats') {
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">{{ stats()?.totalMembers ?? 0 }}</div>
+          <div class="stat-label">Miembros</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🙏</div>
+          <div class="stat-value">{{ stats()?.prayersThisWeek ?? 0 }}</div>
+          <div class="stat-label">Pedidos esta semana</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📖</div>
+          <div class="stat-value">{{ stats()?.totalPrayers ?? 0 }}</div>
+          <div class="stat-label">Total pedidos</div>
+        </div>
+        <div class="stat-card highlight">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value">{{ stats()?.answeredPrayers ?? 0 }}</div>
+          <div class="stat-label">Respondidos</div>
+        </div>
+      </div>
+
+      @if ((stats()?.totalPrayers ?? 0) > 0) {
+        <div class="section">
+          <h2>Tasa de respuesta</h2>
+          <div class="progress-bar-wrap">
+            <div
+              class="progress-bar-fill"
+              [style.width.%]="((stats()!.answeredPrayers / stats()!.totalPrayers) * 100)"
+            ></div>
+          </div>
+          <p class="progress-label">
+            {{ ((stats()!.answeredPrayers / stats()!.totalPrayers) * 100) | number:'1.0-0' }}%
+            de los pedidos fueron respondidos
+          </p>
+        </div>
+      }
+    }
+
+    @if (activeTab() === 'church') {
+      <div class="section">
+        <h2>Información de la iglesia</h2>
+        <form [formGroup]="churchForm" (ngSubmit)="onSaveChurch()" class="church-form">
+          <div class="field">
+            <label>Nombre</label>
+            <input type="text" formControlName="name" placeholder="Nombre de la iglesia">
+          </div>
+          <div class="field">
+            <label>Descripción</label>
+            <textarea
+              formControlName="description"
+              rows="4"
+              placeholder="Describe tu iglesia..."
+            ></textarea>
+          </div>
+          <div class="form-footer">
+            @if (churchSaved()) {
+              <span class="saved-msg">¡Guardado!</span>
+            }
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="churchForm.invalid || churchSaving()"
+            >
+              {{ churchSaving() ? 'Guardando...' : 'Guardar cambios' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="section">
+        <h2>Estado de la iglesia</h2>
+        <div class="status-row">
+          <span class="status-dot" [class]="church()?.status ?? ''"></span>
+          <span class="status-text">
+            @switch (church()?.status) {
+              @case ('approved') { Aprobada — activa en la plataforma }
+              @case ('pending')  { Pendiente de aprobación }
+              @case ('rejected') { Rechazada }
+              @case ('suspended'){ Suspendida }
+              @default           { {{ church()?.status }} }
+            }
+          </span>
+        </div>
+      </div>
+    }
+  }
+</div>

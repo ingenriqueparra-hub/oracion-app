@@ -1,0 +1,60 @@
+.empty {
+  font-size: 0.875rem;
+  color: #9E9E9E;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.badge-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0.75rem;
+  border-radius: 12px;
+  border: 1.5px solid #E8F5E9;
+  background: #F9FBE7;
+  transition: opacity 0.2s;
+
+  &.locked {
+    opacity: 0.45;
+    filter: grayscale(0.4);
+  }
+
+  &.earned {
+    border-color: #A5D6A7;
+    background: #F1F8E9;
+  }
+}
+
+.badge-icon {
+  font-size: 2rem;
+  margin-bottom: 0.375rem;
+}
+
+.badge-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #1B5E20;
+  margin-bottom: 0.25rem;
+}
+
+.badge-desc {
+  font-size: 0.75rem;
+  color: #757575;
+  line-height: 1.4;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 0.75rem;
+}

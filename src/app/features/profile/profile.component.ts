@@ -1,0 +1,78 @@
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { GamificationService } from '../../core/services/gamification.service';
+import { SupabaseService } from '../../core/services/supabase.service';
+import { BadgeListComponent } from '../gamification/badge-list/badge-list.component';
+import { IBadge } from '../../models/badge.model';
+
+@Component({
+  selector: 'app-profile',
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLink, BadgeListComponent],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss',
+})
+export class ProfileComponent implements OnInit {
+  private auth = inject(AuthService);
+  private fb = inject(FormBuilder);
+  private gamificationService = inject(GamificationService);
+  private supabase = inject(SupabaseService);
+
+  user = this.auth.user;
+  loading = signal(false);
+  error = signal('');
+  saved = signal(false);
+  allBadges = signal<IBadge[]>([]);
+  earnedIds = signal<Set<string>>(new Set());
+
+  async ngOnInit() {
+    const user = this.auth.user();
+    let userId = user?.id;
+    if (!userId) {
+      const { data: { session } } = await this.supabase.client.auth.getSession();
+      userId = session?.user?.id;
+    }
+    if (!userId) return;
+    try {
+      const { all, earnedIds } = await this.gamificationService.getUserBadges(userId);
+      this.allBadges.set(all);
+      this.earnedIds.set(earnedIds);
+    } catch { /* non-critical */ }
+  }
+
+  form = this.fb.group({
+    name: [this.user()?.name ?? '', [Validators.required, Validators.minLength(2)]],
+  });
+
+  get initials(): string {
+    const name = this.user()?.name ?? '';
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  async onSave() {
+    if (this.form.invalid) return;
+    this.loading.set(true);
+    this.error.set('');
+    this.saved.set(false);
+    try {
+      await this.auth.updateProfile({ name: this.form.value.name! });
+      this.saved.set(true);
+      setTimeout(() => this.saved.set(false), 3000);
+    } catch {
+      this.error.set('No se pudo guardar. Inténtalo de nuevo.');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async onLogout() {
+    await this.auth.logout();
+  }
+}

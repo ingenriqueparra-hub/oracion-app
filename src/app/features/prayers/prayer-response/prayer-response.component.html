@@ -1,0 +1,76 @@
+<div class="response-form">
+  <div class="form-tabs">
+    <button
+      class="tab"
+      [class.active]="activeTab() === 'text'"
+      (click)="activeTab.set('text')"
+    >
+      💬 Texto
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab() === 'audio'"
+      (click)="activeTab.set('audio')"
+    >
+      🎤 Audio
+    </button>
+  </div>
+
+  @if (activeTab() === 'text') {
+    <div class="text-tab" [formGroup]="textForm">
+      <textarea
+        formControlName="text"
+        placeholder="Escribe unas palabras de aliento..."
+        rows="3"
+        [class.invalid]="textCtrl.invalid && textCtrl.touched"
+      ></textarea>
+      @if (textCtrl.touched && textCtrl.hasError('required')) {
+        <span class="field-error">Escribe tu respuesta</span>
+      } @else if (textCtrl.touched && textCtrl.hasError('minlength')) {
+        <span class="field-error">Mínimo 5 caracteres</span>
+      }
+      <button class="btn-send" (click)="sendText()" [disabled]="sending()">
+        @if (sending()) { Enviando... } @else { Enviar aliento }
+      </button>
+    </div>
+  }
+
+  @if (activeTab() === 'audio') {
+    <div class="audio-tab">
+      @if (recordingState() === 'idle') {
+        <div class="audio-idle">
+          <button class="btn-record" (click)="startRecording()">
+            🎤 Iniciar grabación
+          </button>
+          <p class="audio-hint">Máximo 60 segundos</p>
+        </div>
+      } @else if (recordingState() === 'recording') {
+        <div class="recording-active">
+          <div class="rec-indicator">
+            <span class="rec-dot"></span>
+            <span class="rec-label">Grabando</span>
+            <span class="rec-time">{{ formatTime(recordingSeconds()) }}</span>
+          </div>
+          <button class="btn-stop" (click)="stopRecording()">⏹ Detener</button>
+        </div>
+      } @else if (recordingState() === 'preview') {
+        <div class="audio-preview">
+          <p class="preview-label">Vista previa — {{ formatTime(recordingSeconds()) }}</p>
+          <audio [src]="audioPreviewUrl()!" controls class="audio-player"></audio>
+          <div class="audio-actions">
+            <button class="btn-discard" (click)="discardAudio()" [disabled]="sending()">
+              Descartar
+            </button>
+            <button class="btn-send" (click)="sendAudio()" [disabled]="sending()">
+              @if (sending()) { Enviando... } @else { Enviar audio }
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (error()) {
+    <p class="error-msg">{{ error() }}</p>
+  }
+</div>

@@ -1,0 +1,154 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.page-header {
+  background: #2E7D32;
+  padding: 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    color: white;
+    font-size: 1.375rem;
+    font-weight: 700;
+  }
+}
+
+.btn-register {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.state-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #757575;
+
+  &.error {
+    color: #C62828;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+
+  .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #616161;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: #1B5E20;
+  }
+}
+
+.church-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.church-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  position: relative;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.church-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: #E8F5E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .church-icon {
+    font-size: 1.75rem;
+  }
+}
+
+.church-info {
+  flex: 1;
+  min-width: 0;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1B5E20;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    font-size: 0.8125rem;
+    color: #757575;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.badge-member {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.75rem;
+  background: #E8F5E9;
+  color: #2E7D32;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+}

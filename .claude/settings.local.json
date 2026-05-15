@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npx ng *)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\src\\\\app\\\\features\\\\promises\\\\daily-promise\")",
+      "Bash(Out-Null)",
+      "Bash(Write-Output \"ok\")"
+    ]
+  }
+}

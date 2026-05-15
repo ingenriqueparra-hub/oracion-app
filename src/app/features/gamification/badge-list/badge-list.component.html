@@ -1,0 +1,16 @@
+@if (displayBadges.length === 0) {
+  <p class="empty">Aún no hay insignias ganadas.</p>
+} @else {
+  <div class="badge-grid">
+    @for (badge of displayBadges; track badge.id) {
+      <div class="badge-item" [class.earned]="isEarned(badge)" [class.locked]="!isEarned(badge)">
+        <span class="badge-icon">{{ badge.icon }}</span>
+        <span class="badge-name">{{ badge.name }}</span>
+        <span class="badge-desc">{{ badge.description }}</span>
+        @if (!isEarned(badge)) {
+          <span class="lock-overlay">🔒</span>
+        }
+      </div>
+    }
+  </div>
+}

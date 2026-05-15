@@ -1,0 +1,36 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/profile" class="back-btn">← Perfil</a>
+    <h1>Ranking de mi iglesia</h1>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando ranking...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (!hasChurch()) {
+    <div class="state-msg">Únete a una iglesia para ver el ranking.</div>
+  } @else if (ranking().length === 0) {
+    <div class="state-msg">Aún no hay actividad en tu iglesia.</div>
+  } @else {
+    <ul class="ranking-list">
+      @for (entry of ranking(); track entry.id; let i = $index) {
+        <li class="ranking-item" [class.top3]="i < 3" [routerLink]="['/profile', entry.id]">
+          <span class="medal">{{ medal(i) }}</span>
+          <div class="avatar">
+            @if (entry.avatar_url) {
+              <img [src]="entry.avatar_url" [alt]="entry.name">
+            } @else {
+              {{ initials(entry.name) }}
+            }
+          </div>
+          <div class="entry-info">
+            <span class="entry-name">{{ entry.name }}</span>
+            <span class="entry-level">{{ entry.level }}</span>
+          </div>
+          <span class="entry-points">{{ entry.points }} pts</span>
+        </li>
+      }
+    </ul>
+  }
+</div>

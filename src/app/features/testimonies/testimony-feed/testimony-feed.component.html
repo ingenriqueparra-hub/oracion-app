@@ -1,0 +1,46 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/prayers" class="back-btn">← Feed</a>
+    <h1>Testimonios</h1>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando testimonios...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (testimonies().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">✨</span>
+      <p>Aún no hay testimonios. ¡Sé el primero en compartir cómo Dios respondió!</p>
+    </div>
+  } @else {
+    <div class="testimony-list">
+      @for (t of testimonies(); track t.id) {
+        <div class="testimony-card">
+          <div class="author-row">
+            <div class="avatar">
+              @if (t.profiles?.avatar_url) {
+                <img [src]="t.profiles.avatar_url" [alt]="t.profiles.name">
+              } @else {
+                {{ initials(t.profiles.name ?? '') }}
+              }
+            </div>
+            <div class="author-info">
+              <span class="author-name">{{ t.profiles.name }}</span>
+              <span class="time">{{ timeAgo(t.created_at) }}</span>
+            </div>
+          </div>
+
+          @if (t.prayers?.text) {
+            <div class="prayer-preview">
+              <span class="prayer-label">Pedido:</span>
+              <span class="prayer-snippet">{{ t.prayers!.text }}</span>
+            </div>
+          }
+
+          <p class="testimony-text">{{ t.text }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

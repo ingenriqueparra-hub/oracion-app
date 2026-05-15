@@ -1,0 +1,132 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.page-header {
+  background: #2E7D32;
+  padding: 1.25rem 1rem;
+}
+
+.back-btn {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.9rem;
+  &:hover { color: white; }
+}
+
+.state-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #757575;
+  &.error { color: #C62828; }
+}
+
+.profile-hero {
+  background: #2E7D32;
+  padding: 1.5rem 1rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #1B5E20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.875rem;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.level-chip {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 0.25rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.stats-row {
+  display: flex;
+  background: white;
+  margin: 0 1rem;
+  padding: 1.25rem;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 0.75rem;
+
+  .stat {
+    flex: 1;
+    text-align: center;
+
+    &:not(:last-child) { border-right: 1px solid #F5F5F5; }
+
+    .stat-value {
+      display: block;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #1B5E20;
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.75rem;
+      color: #757575;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.community-card {
+  background: white;
+  margin: 0 1rem 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.community-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.9375rem;
+  color: #1B5E20;
+  font-weight: 500;
+}
+
+.community-icon { font-size: 1.125rem; }
+
+.badges-card {
+  background: white;
+  margin: 0 1rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1B5E20;
+    margin-bottom: 1rem;
+  }
+}

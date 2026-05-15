@@ -1,0 +1,108 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.page-header {
+  background: #2E7D32;
+  padding: 1.25rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  h1 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    flex: 1;
+  }
+}
+
+.back-btn {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.9rem;
+  &:hover { color: white; }
+}
+
+.state-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #757575;
+  &.error { color: #C62828; }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+
+  .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  p { color: #616161; }
+}
+
+.notif-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1rem;
+  border-bottom: 1px solid #F5F5F5;
+  position: relative;
+  transition: background 0.15s;
+
+  &.unread { background: #F1F8E9; }
+  &.clickable { cursor: pointer; }
+  &.clickable:hover { background: #E8F5E9; }
+}
+
+.notif-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.notif-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 0.2rem;
+}
+
+.notif-text {
+  font-size: 0.875rem;
+  color: #555;
+  line-height: 1.45;
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notif-time {
+  font-size: 0.75rem;
+  color: #9E9E9E;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2E7D32;
+  flex-shrink: 0;
+  margin-top: 0.4rem;
+}

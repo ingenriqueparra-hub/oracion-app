@@ -1,0 +1,55 @@
+.promise-card {
+  margin: 0.75rem 1rem 0;
+  padding: 1rem 1.125rem;
+  background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+  border-radius: 14px;
+  color: white;
+}
+
+.promise-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+.share-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(255, 255, 255, 0.25); }
+}
+
+.promise-text {
+  font-size: 1rem;
+  line-height: 1.65;
+  font-style: italic;
+  margin: 0 0 0.5rem;
+  quotes: "\201C" "\201D";
+
+  &::before { content: open-quote; }
+  &::after  { content: close-quote; }
+}
+
+.promise-ref {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  opacity: 0.8;
+  text-align: right;
+  margin: 0;
+}

@@ -1,0 +1,209 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.page-header {
+  background: #2E7D32;
+  padding: 1.25rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back-btn {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.admin-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  text-decoration: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.4rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.state-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #757575;
+
+  &.error {
+    color: #C62828;
+  }
+}
+
+.church-hero {
+  background: white;
+  margin: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.church-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: #E8F5E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .church-icon {
+    font-size: 2.5rem;
+  }
+}
+
+h1 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #1B5E20;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: #616161;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.section {
+  background: white;
+  margin: 0 1rem 1rem;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1B5E20;
+    margin-bottom: 1rem;
+  }
+}
+
+.empty-text {
+  color: #9E9E9E;
+  font-size: 0.875rem;
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.group-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  background: #F9FBE7;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+
+  .group-icon {
+    font-size: 1rem;
+  }
+}
+
+.join-section {
+  margin: 0 1rem;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.875rem;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #1B5E20;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.status-badge {
+  padding: 0.875rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9375rem;
+
+  &.approved {
+    background: #E8F5E9;
+    color: #2E7D32;
+  }
+
+  &.pending {
+    background: #FFF8E1;
+    color: #F57F17;
+  }
+}
+
+.btn-leave {
+  width: 100%;
+  margin-top: 0.625rem;
+  padding: 0.75rem;
+  background: none;
+  color: #C62828;
+  border: 1.5px solid #FFCDD2;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #FFEBEE;
+    border-color: #EF9A9A;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.error-msg {
+  color: #C62828;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  background: #FFEBEE;
+  border-radius: 6px;
+}

@@ -1,0 +1,38 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/prayers" class="back-btn">← Feed</a>
+    <h1>Notificaciones</h1>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (notifications().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">🔔</span>
+      <p>No tienes notificaciones aún.</p>
+    </div>
+  } @else {
+    <ul class="notif-list">
+      @for (n of notifications(); track n.id) {
+        <li
+          class="notif-item"
+          [class.unread]="!n.read"
+          [class.clickable]="!!n.prayer_id"
+          (click)="goToPrayer(n)"
+        >
+          <span class="notif-icon">{{ icon(n.type) }}</span>
+          <div class="notif-body">
+            <p class="notif-title">{{ n.title }}</p>
+            <p class="notif-text">{{ n.body }}</p>
+            <span class="notif-time">{{ timeAgo(n.created_at) }}</span>
+          </div>
+          @if (!n.read) {
+            <span class="unread-dot"></span>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

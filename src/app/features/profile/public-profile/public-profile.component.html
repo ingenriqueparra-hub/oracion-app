@@ -1,0 +1,64 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/prayers" class="back-btn">← Volver</a>
+  </header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando perfil...</div>
+  } @else if (error() || !profile()) {
+    <div class="state-msg error">{{ error() || 'Perfil no encontrado.' }}</div>
+  } @else {
+    <div class="profile-hero">
+      <div class="avatar">
+        @if (profile()!.avatar_url) {
+          <img [src]="profile()!.avatar_url" [alt]="profile()!.name">
+        } @else {
+          {{ initials(profile()!.name) }}
+        }
+      </div>
+      <h2>{{ profile()!.name }}</h2>
+      <span class="level-chip">{{ profile()!.level }}</span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-value">{{ profile()!.points }}</span>
+        <span class="stat-label">Puntos</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ profile()!.streak_days }}</span>
+        <span class="stat-label">Días de racha</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ earnedIds().size }}</span>
+        <span class="stat-label">Insignias</span>
+      </div>
+    </div>
+
+    @if (profile()!.churches?.name || profile()!.groups?.name) {
+      <div class="community-card">
+        @if (profile()!.churches?.name) {
+          <div class="community-row">
+            <span class="community-icon">⛪</span>
+            <span>{{ profile()!.churches!.name }}</span>
+          </div>
+        }
+        @if (profile()!.groups?.name) {
+          <div class="community-row">
+            <span class="community-icon">👥</span>
+            <span>{{ profile()!.groups!.name }}</span>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="badges-card">
+      <h3>Insignias ganadas</h3>
+      <app-badge-list
+        [allBadges]="allBadges()"
+        [earnedIds]="earnedIds()"
+        [showLocked]="false"
+      />
+    </div>
+  }
+</div>

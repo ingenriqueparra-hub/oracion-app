@@ -1,0 +1,95 @@
+<div class="page">
+  <header class="page-header">
+    <a routerLink="/prayers" class="back-btn">← Inicio</a>
+    <h1>Super Admin</h1>
+  </header>
+
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab() === 'churches'" (click)="setTab('churches')">
+      Iglesias
+    </button>
+    <button class="tab" [class.active]="activeTab() === 'users'" (click)="setTab('users')">
+      Usuarios
+    </button>
+  </div>
+
+  @if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  }
+
+  <!-- IGLESIAS -->
+  @if (activeTab() === 'churches') {
+    @if (loadingChurches()) {
+      <div class="state-msg">Cargando iglesias...</div>
+    } @else if (churches().length === 0) {
+      <div class="state-msg">No hay iglesias registradas.</div>
+    } @else {
+      <div class="summary-chips">
+        <span class="chip pending">⏳ {{ countByStatus('pending') }} pendientes</span>
+        <span class="chip approved">✅ {{ countByStatus('approved') }} aprobadas</span>
+        <span class="chip rejected">❌ {{ countByStatus('rejected') }} rechazadas</span>
+      </div>
+      <ul class="item-list">
+        @for (church of churches(); track church.id) {
+          <li class="item-card">
+            <div class="item-main">
+              <span class="item-name">{{ church.name }}</span>
+              <span class="status-badge" [class]="church.status">{{ statusLabel(church.status) }}</span>
+            </div>
+            <div class="item-meta">
+              <span>👤 {{ church.adminName }}</span>
+              <span class="meta-email">{{ church.adminEmail }}</span>
+            </div>
+            <div class="item-actions">
+              @if (church.status === 'pending') {
+                <button class="btn-approve" (click)="updateChurchStatus(church.id, 'approved')">Aprobar</button>
+                <button class="btn-reject"  (click)="updateChurchStatus(church.id, 'rejected')">Rechazar</button>
+              }
+              @if (church.status === 'approved') {
+                <button class="btn-suspend" (click)="updateChurchStatus(church.id, 'suspended')">Suspender</button>
+              }
+              @if (church.status === 'suspended') {
+                <button class="btn-approve" (click)="updateChurchStatus(church.id, 'approved')">Reactivar</button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+
+  <!-- USUARIOS -->
+  @if (activeTab() === 'users') {
+    @if (loadingUsers()) {
+      <div class="state-msg">Cargando usuarios...</div>
+    } @else if (users().length === 0) {
+      <div class="state-msg">No hay usuarios.</div>
+    } @else {
+      <ul class="item-list">
+        @for (user of users(); track user.id) {
+          <li class="item-card" [class.suspended-row]="user.suspended">
+            <div class="item-main">
+              <span class="item-name">{{ user.name }}</span>
+              <span class="role-badge">{{ roleLabel(user.role) }}</span>
+            </div>
+            <div class="item-meta">
+              <span class="meta-email">{{ user.email }}</span>
+              @if (user.churchName !== '—') {
+                <span>⛪ {{ user.churchName }}</span>
+              }
+            </div>
+            <div class="item-actions">
+              @if (user.role !== 'super_admin') {
+                @if (user.suspended) {
+                  <button class="btn-approve" (click)="toggleUserSuspended(user)">Reactivar</button>
+                } @else {
+                  <button class="btn-suspend" (click)="toggleUserSuspended(user)">Suspender</button>
+                }
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+</div>

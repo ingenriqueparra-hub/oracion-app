@@ -1,0 +1,277 @@
+.feed-page {
+  min-height: 100vh;
+  padding-bottom: 5rem;
+}
+
+.feed-header {
+  background: #2E7D32;
+  padding: 1.25rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  h1 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.notif-btn {
+  position: relative;
+  font-size: 1.25rem;
+  text-decoration: none;
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: #E53935;
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+.btn-new {
+  background: white;
+  color: #2E7D32;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 0.45rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.85; }
+}
+
+.filter-tabs {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid #E8F5E9;
+  position: sticky;
+  top: 56px;
+  z-index: 9;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.75rem 0.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #757575;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+
+  &.active {
+    color: #2E7D32;
+    border-bottom-color: #2E7D32;
+    font-weight: 600;
+  }
+}
+
+.state-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #757575;
+  &.error { color: #C62828; }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+
+  .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #616161;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover { background: #1B5E20; }
+}
+
+.prayer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.prayer-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: 0 3px 12px rgba(0, 0, 0, 0.11); }
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.author-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #C8E6C9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: #1B5E20;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.author-info {
+  display: flex;
+  flex-direction: column;
+
+  .author-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #212121;
+    text-decoration: none;
+    &:hover { color: #2E7D32; text-decoration: underline; }
+  }
+
+  .time {
+    font-size: 0.75rem;
+    color: #9E9E9E;
+  }
+}
+
+.church-badge {
+  font-size: 0.75rem;
+  color: #558B2F;
+  background: #F1F8E9;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prayer-text {
+  font-size: 0.9375rem;
+  color: #333;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.875rem;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pray-btn {
+  background: #F1F8E9;
+  color: #2E7D32;
+  border: 1.5px solid #C8E6C9;
+  border-radius: 20px;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+
+  &.prayed {
+    background: #2E7D32;
+    color: white;
+    border-color: #2E7D32;
+  }
+
+  &:hover:not(.prayed) { background: #DCEDC8; }
+}
+
+.answered-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #F57F17;
+  background: #FFF8E1;
+  border: 1px solid #FFE082;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  flex-shrink: 0;
+}
+
+.nav-profile {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background: white;
+  color: #2E7D32;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #E8F5E9;
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16); }
+}

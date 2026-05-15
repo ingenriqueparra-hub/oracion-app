@@ -1,0 +1,12 @@
+@if (promise()) {
+  <div class="promise-card">
+    <div class="promise-header">
+      <span class="label">📖 Promesa del día</span>
+      <button class="share-btn" (click)="share()">
+        {{ copied() ? '¡Copiado!' : 'Compartir' }}
+      </button>
+    </div>
+    <blockquote class="promise-text">{{ promise()!.text }}</blockquote>
+    <p class="promise-ref">— {{ promise()!.reference }}</p>
+  </div>
+}
