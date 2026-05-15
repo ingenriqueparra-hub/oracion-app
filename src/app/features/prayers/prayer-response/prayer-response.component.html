@@ -1,82 +1,66 @@
-<div class="response-form">
-  <div class="form-tabs">
-    <button
-      class="tab"
-      [class.active]="activeTab() === 'text'"
-      (click)="activeTab.set('text')"
-    >
-      💬 Texto
-    </button>
-    <button
-      class="tab"
-      [class.active]="activeTab() === 'audio'"
-      (click)="activeTab.set('audio')"
-    >
-      🎤 Audio
-    </button>
+<div class="compose-row">
+  <div class="compose-avatar">
+    @if (userAvatar) {
+      <img [src]="userAvatar" [alt]="userName">
+    } @else {
+      {{ userInitials }}
+    }
   </div>
 
-  @if (activeTab() === 'text') {
-    <div class="text-tab" [formGroup]="textForm">
+  <div class="compose-body">
+
+    @if (composeState() === 'text') {
       <textarea
-        formControlName="text"
-        placeholder="Escribe unas palabras de aliento..."
-        rows="3"
-        [class.invalid]="textCtrl.invalid && textCtrl.touched"
+        #textareaRef
+        class="compose-textarea"
+        placeholder="Escribe palabras de aliento..."
+        [value]="textValue()"
+        (input)="onTextInput($event)"
         maxlength="500"
+        rows="2"
       ></textarea>
-      <span class="char-counter" [class.over]="(textCtrl.value?.length ?? 0) > 500">
-        {{ textCtrl.value?.length ?? 0 }}/500
-      </span>
-      @if (textCtrl.touched && textCtrl.hasError('required')) {
-        <span class="field-error">Escribe tu respuesta</span>
-      } @else if (textCtrl.touched && textCtrl.hasError('minlength')) {
-        <span class="field-error">Mínimo 5 caracteres</span>
-      } @else if (textCtrl.touched && textCtrl.hasError('maxlength')) {
-        <span class="field-error">Máximo 500 caracteres</span>
-      }
-      <button class="btn-send" (click)="sendText()" [disabled]="sending()">
-        @if (sending()) { Enviando... } @else { Enviar aliento }
-      </button>
-    </div>
-  }
+      <div class="compose-footer">
+        <span class="char-count" [class.warn]="textValue().length > 450">
+          @if (textValue().length > 0) { {{ textValue().length }}/500 }
+        </span>
+        <div class="compose-actions">
+          <button class="btn-mic-inline" (click)="startRecording()" title="Grabar audio">🎤</button>
+          @if (hasText) {
+            <button class="btn-send-inline" (click)="sendText()" [disabled]="sending()">
+              {{ sending() ? 'Enviando...' : 'Enviar' }}
+            </button>
+          }
+        </div>
+      </div>
+    }
 
-  @if (activeTab() === 'audio') {
-    <div class="audio-tab">
-      @if (recordingState() === 'idle') {
-        <div class="audio-idle">
-          <button class="btn-record" (click)="startRecording()">
-            🎤 Iniciar grabación
+    @if (composeState() === 'recording') {
+      <div class="recording-row">
+        <span class="rec-dot"></span>
+        <span class="rec-time">{{ formatTime(recordingSeconds()) }}</span>
+        <span class="rec-label">Grabando · máx 0:30</span>
+        <button class="btn-stop-send" (click)="stopAndSend()" [disabled]="sending()">
+          {{ sending() ? 'Enviando...' : '⏹ Detener y enviar' }}
+        </button>
+      </div>
+    }
+
+    @if (composeState() === 'preview') {
+      <div class="preview-row">
+        <audio [src]="audioPreviewUrl()!" controls class="preview-audio"></audio>
+        <div class="preview-actions">
+          <span class="preview-duration">{{ formatTime(recordingSeconds()) }}</span>
+          <button class="btn-discard-sm" (click)="discardAudio()" [disabled]="sending()">Descartar</button>
+          <button class="btn-send-inline" (click)="sendAudio()" [disabled]="sending()">
+            {{ sending() ? 'Enviando...' : 'Enviar audio' }}
           </button>
-          <p class="audio-hint">Máximo 30 segundos</p>
         </div>
-      } @else if (recordingState() === 'recording') {
-        <div class="recording-active">
-          <div class="rec-indicator">
-            <span class="rec-dot"></span>
-            <span class="rec-label">Grabando</span>
-            <span class="rec-time">{{ formatTime(recordingSeconds()) }}</span>
-          </div>
-          <button class="btn-stop" (click)="stopRecording()">⏹ Detener</button>
-        </div>
-      } @else if (recordingState() === 'preview') {
-        <div class="audio-preview">
-          <p class="preview-label">Vista previa — {{ formatTime(recordingSeconds()) }}</p>
-          <audio [src]="audioPreviewUrl()!" controls class="audio-player"></audio>
-          <div class="audio-actions">
-            <button class="btn-discard" (click)="discardAudio()" [disabled]="sending()">
-              Descartar
-            </button>
-            <button class="btn-send" (click)="sendAudio()" [disabled]="sending()">
-              @if (sending()) { Enviando... } @else { Enviar audio }
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-  }
+      </div>
+    }
 
-  @if (error()) {
-    <p class="error-msg">{{ error() }}</p>
-  }
+    @if (error()) {
+      <p class="compose-error">{{ error() }}</p>
+    }
+
+  </div>
 </div>

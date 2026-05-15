@@ -1,220 +1,197 @@
-.response-form {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-}
-
-.form-tabs {
+.compose-row {
   display: flex;
-  border-bottom: 1px solid #F0F0F0;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.875rem 1rem;
 }
 
-.tab {
-  flex: 1;
-  padding: 0.75rem;
-  background: none;
-  border: none;
-  border-bottom: 2.5px solid transparent;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #9E9E9E;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-
-  &.active {
-    color: #2E7D32;
-    border-bottom-color: #2E7D32;
-    font-weight: 600;
-  }
-}
-
-.text-tab {
-  padding: 1rem;
-
-  textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1.5px solid #E0E0E0;
-    border-radius: 8px;
-    font-size: 0.9375rem;
-    font-family: inherit;
-    line-height: 1.5;
-    resize: none;
-    transition: border-color 0.2s;
-
-    &:focus {
-      outline: none;
-      border-color: #2E7D32;
-    }
-
-    &::placeholder { color: #BDBDBD; }
-    &.invalid { border-color: #C62828; }
-  }
-}
-
-.char-counter {
-  display: block;
-  text-align: right;
-  font-size: 0.75rem;
-  color: #9E9E9E;
-  margin-top: 0.25rem;
-
-  &.over { color: #C62828; }
-}
-
-.field-error {
-  display: block;
+.compose-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #C8E6C9;
+  color: #1B5E20;
+  font-weight: 700;
   font-size: 0.8rem;
-  color: #C62828;
-  margin-top: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.btn-send {
-  display: block;
-  width: 100%;
-  margin-top: 0.75rem;
-  padding: 0.75rem;
-  background: #2E7D32;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
-
-  &:hover:not(:disabled) { background: #1B5E20; }
-  &:disabled { opacity: 0.6; cursor: not-allowed; }
-}
-
-.audio-tab {
-  padding: 1.25rem 1rem;
-}
-
-.audio-idle {
-  text-align: center;
-}
-
-.btn-record {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: #E8F5E9;
-  color: #2E7D32;
-  border: 2px solid #A5D6A7;
-  border-radius: 24px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-bottom: 0.5rem;
-
-  &:hover { background: #C8E6C9; }
-}
-
-.audio-hint {
-  font-size: 0.8rem;
-  color: #9E9E9E;
-}
-
-.recording-active {
-  text-align: center;
-}
-
-.rec-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.compose-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.compose-textarea {
+  width: 100%;
+  padding: 0.5rem 0;
+  border: none;
+  border-bottom: 1.5px solid #E0E0E0;
+  background: transparent;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  color: #212121;
+
+  &::placeholder { color: #BDBDBD; }
+  &:focus { border-bottom-color: #2E7D32; }
+}
+
+.compose-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.375rem;
+  min-height: 28px;
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: #BDBDBD;
+  &.warn { color: #E53935; }
+}
+
+.compose-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.btn-mic-inline {
+  background: none;
+  border: none;
+  font-size: 1.125rem;
+  cursor: pointer;
+  padding: 0.125rem 0.25rem;
+  opacity: 0.65;
+  transition: opacity 0.15s;
+  line-height: 1;
+
+  &:hover { opacity: 1; }
+}
+
+.btn-send-inline {
+  padding: 0.35rem 0.875rem;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) { background: #1B5E20; }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+
+/* Recording state */
+.recording-row {
+  display: flex;
+  align-items: center;
   gap: 0.625rem;
-  margin-bottom: 1rem;
+  padding: 0.625rem 0;
+  flex-wrap: wrap;
 }
 
 .rec-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #C62828;
+  flex-shrink: 0;
   animation: blink 1s infinite;
 }
 
 @keyframes blink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.2; }
-}
-
-.rec-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #C62828;
+  50%       { opacity: 0.2; }
 }
 
 .rec-time {
   font-size: 1rem;
   font-weight: 700;
-  color: #212121;
   font-variant-numeric: tabular-nums;
+  color: #212121;
 }
 
-.btn-stop {
-  padding: 0.625rem 1.5rem;
-  background: #FFEBEE;
-  color: #C62828;
-  border: 2px solid #FFCDD2;
-  border-radius: 24px;
-  font-size: 0.9375rem;
+.rec-label {
+  font-size: 0.8rem;
+  color: #9E9E9E;
+  flex: 1;
+}
+
+.btn-stop-send {
+  padding: 0.375rem 0.875rem;
+  background: #C62828;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.15s;
+  white-space: nowrap;
 
-  &:hover { background: #FFCDD2; }
+  &:hover:not(:disabled) { background: #B71C1C; }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
-.audio-preview {
+/* Preview state */
+.preview-row {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
 }
 
-.preview-label {
-  font-size: 0.8125rem;
-  color: #757575;
-  text-align: center;
-}
-
-.audio-player {
+.preview-audio {
   width: 100%;
-  height: 40px;
+  height: 36px;
 }
 
-.audio-actions {
+.preview-actions {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.btn-discard {
+.preview-duration {
+  font-size: 0.8rem;
+  color: #9E9E9E;
   flex: 1;
-  padding: 0.7rem;
+}
+
+.btn-discard-sm {
+  padding: 0.35rem 0.75rem;
   background: transparent;
   color: #9E9E9E;
   border: 1.5px solid #E0E0E0;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.15s;
 
   &:hover:not(:disabled) { background: #F5F5F5; }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
-.error-msg {
-  margin: 0 1rem 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background: #FFEBEE;
+/* Error */
+.compose-error {
+  font-size: 0.8rem;
   color: #C62828;
-  font-size: 0.8125rem;
+  margin-top: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  background: #FFEBEE;
   border-radius: 6px;
 }

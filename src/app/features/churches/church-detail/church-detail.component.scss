@@ -3,39 +3,6 @@
   padding-bottom: 2rem;
 }
 
-.page-header {
-  background: #2E7D32;
-  padding: 1.25rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.back-btn {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 0.9rem;
-
-  &:hover {
-    color: white;
-  }
-}
-
-.admin-btn {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  text-decoration: none;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  border-radius: 8px;
-  padding: 0.4rem 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: background 0.2s;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-}
 
 .state-msg {
   text-align: center;

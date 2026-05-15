@@ -1,47 +1,68 @@
-import { Component, Input, Output, EventEmitter, inject, signal, OnDestroy } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component, Input, Output, EventEmitter,
+  inject, signal,
+  AfterViewInit, OnDestroy,
+  ElementRef, ViewChild,
+} from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { ResponseService } from '../../../core/services/response.service';
 import { IResponse, IResponseWithProfile } from '../../../models/response.model';
 
-type RecordingState = 'idle' | 'recording' | 'preview';
-type ActiveTab = 'text' | 'audio';
+type ComposeState = 'text' | 'recording' | 'preview';
 
 @Component({
   selector: 'app-prayer-response',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [],
   templateUrl: './prayer-response.component.html',
   styleUrl: './prayer-response.component.scss',
 })
-export class PrayerResponseComponent implements OnDestroy {
+export class PrayerResponseComponent implements AfterViewInit, OnDestroy {
   @Input({ required: true }) prayerId!: string;
+  @Input() initMode: 'text' | 'audio' = 'text';
+  @Input() userAvatar: string | null = null;
+  @Input() userName = '';
   @Output() responseAdded = new EventEmitter<IResponseWithProfile>();
 
-  private fb = inject(FormBuilder);
+  @ViewChild('textareaRef') textareaRef?: ElementRef<HTMLTextAreaElement>;
+
   private auth = inject(AuthService);
   private supabase = inject(SupabaseService);
   private responseService = inject(ResponseService);
 
-  activeTab = signal<ActiveTab>('text');
-  sending = signal(false);
-  error = signal('');
-
-  textForm = this.fb.group({
-    text: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
-  });
-  get textCtrl() { return this.textForm.controls.text; }
-
-  recordingState = signal<RecordingState>('idle');
+  textValue = signal('');
+  composeState = signal<ComposeState>('text');
   recordingSeconds = signal(0);
   audioBlob = signal<Blob | null>(null);
   audioPreviewUrl = signal<string | null>(null);
+  sending = signal(false);
+  error = signal('');
+
+  get hasText(): boolean { return this.textValue().trim().length >= 5; }
+  get userInitials(): string {
+    return (this.userName || 'Tú').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  }
 
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: BlobPart[] = [];
   private timerInterval: ReturnType<typeof setInterval> | null = null;
   private stream: MediaStream | null = null;
+  private pendingSend = false;
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (this.initMode === 'audio') {
+        this.startRecording();
+      } else {
+        this.textareaRef?.nativeElement.focus();
+      }
+    }, 150);
+  }
+
+  onTextInput(event: Event) {
+    this.textValue.set((event.target as HTMLTextAreaElement).value);
+  }
 
   async startRecording() {
     this.error.set('');
@@ -57,12 +78,17 @@ export class PrayerResponseComponent implements OnDestroy {
       this.mediaRecorder.onstop = () => {
         const blob = new Blob(this.audioChunks, { type: this.mediaRecorder!.mimeType || 'audio/webm' });
         this.audioBlob.set(blob);
-        this.audioPreviewUrl.set(URL.createObjectURL(blob));
-        this.recordingState.set('preview');
+        if (this.pendingSend) {
+          this.pendingSend = false;
+          this.sendAudio();
+        } else {
+          this.audioPreviewUrl.set(URL.createObjectURL(blob));
+          this.composeState.set('preview');
+        }
       };
 
       this.mediaRecorder.start();
-      this.recordingState.set('recording');
+      this.composeState.set('recording');
       this.recordingSeconds.set(0);
 
       this.timerInterval = setInterval(() => {
@@ -82,22 +108,29 @@ export class PrayerResponseComponent implements OnDestroy {
     this.stream?.getTracks().forEach(t => t.stop());
   }
 
+  stopAndSend() {
+    if (this.sending()) return;
+    this.pendingSend = true;
+    this.stopRecording();
+  }
+
   discardAudio() {
     const url = this.audioPreviewUrl();
     if (url) URL.revokeObjectURL(url);
     this.audioBlob.set(null);
     this.audioPreviewUrl.set(null);
-    this.recordingState.set('idle');
+    this.composeState.set('text');
     this.recordingSeconds.set(0);
+    setTimeout(() => this.textareaRef?.nativeElement.focus(), 50);
   }
 
   async sendText() {
-    this.textForm.markAllAsTouched();
-    if (this.textForm.invalid) return;
+    if (!this.hasText) return;
     await this.send(userId =>
-      this.responseService.createText(this.prayerId, userId, this.textForm.value.text!)
+      this.responseService.createText(this.prayerId, userId, this.textValue())
     );
-    this.textForm.reset();
+    this.textValue.set('');
+    if (this.textareaRef) this.textareaRef.nativeElement.value = '';
   }
 
   async sendAudio() {

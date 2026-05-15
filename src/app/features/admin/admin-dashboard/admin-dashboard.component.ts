@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { IChurch } from '../../../models/church.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 type AdminTab = 'churches' | 'users';
 
@@ -24,7 +25,7 @@ interface IAdminUser {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageHeaderComponent],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss',
 })

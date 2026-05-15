@@ -1,7 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <a routerLink="/prayers" class="back-btn">← Volver</a>
-  </header>
+  <app-page-header backLink="/prayers"></app-page-header>
 
   @if (loading()) {
     <div class="state-msg">Cargando...</div>
@@ -9,66 +7,99 @@
     <div class="state-msg error">{{ error() }}</div>
   } @else if (prayer()) {
 
-    <div class="prayer-card">
-      <div class="author-row">
-        <div class="avatar">
+    <div class="detail-wrap">
+
+      <!-- Author header -->
+      <div class="detail-author">
+        <div class="author-avatar">
           @if (prayer()!.profiles?.avatar_url) {
             <img [src]="prayer()!.profiles.avatar_url" [alt]="prayer()!.profiles.name">
           } @else {
             {{ initials(prayer()!.profiles?.name ?? '') }}
           }
         </div>
-        <div class="author-info">
+        <div class="author-meta">
           <a [routerLink]="['/profile', prayer()!.user_id]" class="author-name">{{ prayer()!.profiles?.name }}</a>
-          <span class="time">{{ prayer()!.profiles?.level }} · {{ timeAgo(prayer()!.created_at) }}</span>
+          <span class="author-sub">{{ prayer()!.profiles?.level }}</span>
           @if (prayer()!.churches?.name) {
-            <span class="church-badge">⛪ {{ prayer()!.churches!.name }}</span>
+            <span class="author-church">⛪ {{ prayer()!.churches!.name }}</span>
           }
         </div>
+        <span class="prayer-time">{{ timeAgo(prayer()!.created_at) }}</span>
       </div>
 
-      <p class="prayer-text">{{ prayer()!.text }}</p>
+      <!-- Prayer text -->
+      <p class="detail-text">{{ prayer()!.text }}</p>
 
-      <div class="pray-section">
-        @if (prayer()!.status === 'answered') {
-          <div class="answered-badge">✨ ¡Dios respondió este pedido!</div>
+      <!-- Status / badges -->
+      @if (prayer()!.status === 'answered') {
+        <div class="answered-band">✨ ¡Dios respondió este pedido!</div>
+      }
+      @if (isOwner()) {
+        <a [routerLink]="['/prayers', prayerId, 'testify']" class="testify-link">
+          ✨ ¡Dios respondió! Compartir testimonio
+        </a>
+      }
+
+      <div class="detail-divider"></div>
+
+      <!-- Pray count line -->
+      <p class="pray-count-line">
+        @if (prayer()!.pray_count > 0) {
+          <strong>{{ prayer()!.pray_count }}</strong>
+          {{ prayer()!.pray_count === 1 ? 'persona ha orado' : 'personas han orado' }}
+        } @else {
+          Sé el primero en orar por este pedido
         }
+      </p>
+
+      <!-- Action bar -->
+      <div class="action-bar">
         <button
-          class="pray-btn"
+          class="action-pray"
           [class.prayed]="prayer()!.has_prayed"
           [disabled]="prayLoading()"
           (click)="onPray()"
         >
-          🙏 {{ prayer()!.pray_count }}
-          {{ prayer()!.has_prayed ? 'Ya oré por esto' : 'Orar por esto' }}
+          🙏
+          <span class="action-count">{{ prayer()!.pray_count }}</span>
+          <span class="action-label">{{ prayer()!.has_prayed ? 'Ya oré' : 'Orar' }}</span>
         </button>
-        <p class="pray-caption">
-          @if (prayer()!.pray_count > 0) {
-            {{ prayer()!.pray_count }}
-            {{ prayer()!.pray_count === 1 ? 'persona ha' : 'personas han' }}
-            orado por este pedido
-          } @else {
-            Sé el primero en orar por este pedido
-          }
-        </p>
-        @if (isOwner()) {
-          <a [routerLink]="['/prayers', prayerId, 'testify']" class="testify-btn">
-            ✨ ¡Dios respondió! Compartir testimonio
-          </a>
-        }
+        <div class="action-spacer"></div>
+        <button
+          class="action-icon"
+          [class.active]="showCompose() && composeInitMode() === 'text'"
+          (click)="openCompose('text')"
+          title="Escribir aliento"
+        >✍️</button>
+        <button
+          class="action-icon"
+          [class.active]="showCompose() && composeInitMode() === 'audio'"
+          (click)="openCompose('audio')"
+          title="Grabar aliento"
+        >🎤</button>
       </div>
-    </div>
 
-    <div class="responses-section">
-      <h2>
-        Respuestas de aliento
-        @if (responses().length > 0) {
-          <span class="response-count">{{ responses().length }}</span>
+      <div class="detail-divider"></div>
+
+      <!-- Inline compose -->
+      @if (showCompose()) {
+        @if (prayJustAdded()) {
+          <p class="compose-hint">¿Quieres dejar palabras de aliento?</p>
         }
-      </h2>
+        <app-prayer-response
+          [prayerId]="prayerId"
+          [initMode]="composeInitMode()"
+          [userAvatar]="user()?.avatar_url ?? null"
+          [userName]="user()?.name ?? ''"
+          (responseAdded)="onResponseAdded($event)"
+        />
+        <div class="detail-divider"></div>
+      }
 
+      <!-- Response history — newest first -->
       @if (responses().length === 0) {
-        <p class="empty-responses">Sé el primero en responder con aliento.</p>
+        <p class="empty-responses">Sé el primero en dejar palabras de aliento.</p>
       } @else {
         <div class="response-list">
           @for (r of responses(); track r.id) {
@@ -96,15 +127,7 @@
           }
         </div>
       }
-    </div>
 
-    <div class="response-form-section">
-      <h2>Tu respuesta</h2>
-      <app-prayer-response
-        [prayerId]="prayerId"
-        (responseAdded)="onResponseAdded($event)"
-      />
     </div>
-
   }
 </div>

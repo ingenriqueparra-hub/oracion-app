@@ -1,0 +1,15 @@
+<header class="page-header">
+  @if (backLink) {
+    <a [routerLink]="backLink" class="back-btn">{{ backLabel }}</a>
+  }
+  @if (title) {
+    <h1>{{ title }}</h1>
+  } @else {
+    <span class="spacer"></span>
+  }
+  @if (actionLabel && actionLink) {
+    <a [routerLink]="actionLink" class="btn-action">{{ actionLabel }}</a>
+  } @else if (actionLabel) {
+    <button type="button" class="btn-action" (click)="actionClick.emit()">{{ actionLabel }}</button>
+  }
+</header>

@@ -9,6 +9,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 import { PrayerService } from '../../../core/services/prayer.service';
 import { IPrayerFeedItem } from '../../../models/prayer.model';
 import { DailyPromiseComponent } from '../../promises/daily-promise/daily-promise.component';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 type MainTab = 'group' | 'church' | 'all';
 type SubTab = 'new' | 'prayed';
@@ -18,7 +19,7 @@ const PAGE_SIZE = 5;
 @Component({
   selector: 'app-prayer-feed',
   standalone: true,
-  imports: [RouterLink, DailyPromiseComponent],
+  imports: [RouterLink, DailyPromiseComponent, PageHeaderComponent],
   templateUrl: './prayer-feed.component.html',
   styleUrl: './prayer-feed.component.scss',
 })

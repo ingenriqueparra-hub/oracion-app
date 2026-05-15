@@ -4,11 +4,12 @@ import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { GamificationService } from '../../../core/services/gamification.service';
 import { IRankingEntry } from '../../../models/badge.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-church-ranking',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageHeaderComponent],
   templateUrl: './church-ranking.component.html',
   styleUrl: './church-ranking.component.scss',
 })

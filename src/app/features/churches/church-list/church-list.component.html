@@ -1,8 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <h1>Iglesias</h1>
-    <button class="btn-register" (click)="goToRegister()">+ Registrar iglesia</button>
-  </header>
+  <app-page-header title="Iglesias" actionLabel="+ Registrar iglesia" actionLink="/churches/register"></app-page-header>
 
   @if (loading()) {
     <div class="state-msg">Cargando iglesias...</div>
@@ -12,7 +9,7 @@
     <div class="empty-state">
       <span class="empty-icon">⛪</span>
       <p>Aún no hay iglesias registradas.</p>
-      <button class="btn-primary" (click)="goToRegister()">Registra la tuya</button>
+      <a routerLink="/churches/register" class="btn-primary">Registra la tuya</a>
     </div>
   } @else {
     <div class="church-grid">

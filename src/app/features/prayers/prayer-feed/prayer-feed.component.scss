@@ -3,22 +3,6 @@
   padding-bottom: 5rem;
 }
 
-.feed-header {
-  background: #2E7D32;
-  padding: 1.25rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-
-  h1 {
-    color: white;
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-}
 
 .header-actions {
   display: flex;
@@ -51,18 +35,6 @@
   padding: 0 3px;
 }
 
-.btn-new {
-  background: white;
-  color: #2E7D32;
-  text-decoration: none;
-  border-radius: 8px;
-  padding: 0.45rem 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  transition: opacity 0.2s;
-
-  &:hover { opacity: 0.85; }
-}
 
 .main-tabs {
   display: flex;

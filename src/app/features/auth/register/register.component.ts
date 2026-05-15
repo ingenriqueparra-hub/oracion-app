@@ -13,6 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class RegisterComponent {
   form: FormGroup;
   loading = signal(false);
+  googleLoading = signal(false);
   error = signal('');
   success = signal(false);
 
@@ -39,6 +40,17 @@ export class RegisterComponent {
       this.error.set(this.mapError(err.message));
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  async onGoogleLogin() {
+    this.googleLoading.set(true);
+    this.error.set('');
+    try {
+      await this.auth.signInWithGoogle();
+    } catch {
+      this.error.set('No se pudo conectar con Google. Inténtalo de nuevo.');
+      this.googleLoading.set(false);
     }
   }
 

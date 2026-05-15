@@ -3,27 +3,6 @@
   padding-bottom: 2rem;
 }
 
-.page-header {
-  background: #2E7D32;
-  padding: 1.25rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  h1 {
-    color: white;
-    font-size: 1.25rem;
-    font-weight: 700;
-    flex: 1;
-  }
-}
-
-.back-btn {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-size: 0.9rem;
-  &:hover { color: white; }
-}
 
 .state-msg {
   text-align: center;

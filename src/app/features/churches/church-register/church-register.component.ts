@@ -3,11 +3,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChurchService } from '../../../core/services/church.service';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-church-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PageHeaderComponent],
   templateUrl: './church-register.component.html',
   styleUrl: './church-register.component.scss',
 })

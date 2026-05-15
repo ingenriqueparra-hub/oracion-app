@@ -4,11 +4,12 @@ import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { INotification } from '../../../models/notification.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-notification-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageHeaderComponent],
   templateUrl: './notification-list.component.html',
   styleUrl: './notification-list.component.scss',
 })

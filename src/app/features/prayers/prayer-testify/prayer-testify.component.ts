@@ -6,11 +6,12 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 import { PrayerService } from '../../../core/services/prayer.service';
 import { TestimonyService } from '../../../core/services/testimony.service';
 import { IPrayerFeedItem } from '../../../models/prayer.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-prayer-testify',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PageHeaderComponent],
   templateUrl: './prayer-testify.component.html',
   styleUrl: './prayer-testify.component.scss',
 })

@@ -3,11 +3,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GamificationService } from '../../../core/services/gamification.service';
 import { IPublicProfile, IBadge } from '../../../models/badge.model';
 import { BadgeListComponent } from '../../gamification/badge-list/badge-list.component';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-public-profile',
   standalone: true,
-  imports: [RouterLink, BadgeListComponent],
+  imports: [RouterLink, BadgeListComponent, PageHeaderComponent],
   templateUrl: './public-profile.component.html',
   styleUrl: './public-profile.component.scss',
 })

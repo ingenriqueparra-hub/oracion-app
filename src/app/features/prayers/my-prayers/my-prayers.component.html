@@ -1,0 +1,37 @@
+<div class="page">
+  <app-page-header backLink="/profile" backLabel="← " title="Mis pedidos" actionLabel="+ Nuevo" actionLink="/prayers/new"></app-page-header>
+
+  @if (loading()) {
+    <div class="state-msg">Cargando...</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (prayers().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">🙏</span>
+      <p>Aún no has publicado ningún pedido de oración.</p>
+      <a routerLink="/prayers/new" class="btn-primary">Publicar mi primer pedido</a>
+    </div>
+  } @else {
+    <div class="prayer-list">
+      @for (prayer of prayers(); track prayer.id) {
+        <div class="prayer-card" (click)="goToDetail(prayer.id)">
+          <div class="card-header">
+            <span class="prayer-time">{{ timeAgo(prayer.created_at) }}</span>
+            @if (prayer.status === 'answered') {
+              <span class="badge-answered">✨ Respondido</span>
+            } @else {
+              <span class="badge-active">🙏 Activo</span>
+            }
+          </div>
+          <p class="prayer-text">{{ prayer.text }}</p>
+          <div class="card-footer">
+            <span class="pray-count">🙏 {{ prayer.pray_count }} {{ prayer.pray_count === 1 ? 'persona oró' : 'personas oraron' }}</span>
+            @if (prayer.churches?.name) {
+              <span class="church-name">⛪ {{ prayer.churches!.name }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

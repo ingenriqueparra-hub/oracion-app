@@ -1,8 +1,5 @@
 <div class="feed-page">
-  <header class="feed-header">
-    <h1>Oración</h1>
-    <a routerLink="/prayers/new" class="btn-new">+ Nueva</a>
-  </header>
+  <app-page-header title="Oración" actionLabel="+ Nueva" actionLink="/prayers/new"></app-page-header>
 
   <div class="main-tabs">
     @if (hasGroup) {

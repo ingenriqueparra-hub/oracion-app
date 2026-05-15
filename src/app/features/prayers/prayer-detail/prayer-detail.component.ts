@@ -7,11 +7,12 @@ import { ResponseService } from '../../../core/services/response.service';
 import { IPrayerFeedItem } from '../../../models/prayer.model';
 import { IResponseWithProfile } from '../../../models/response.model';
 import { PrayerResponseComponent } from '../prayer-response/prayer-response.component';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-prayer-detail',
   standalone: true,
-  imports: [RouterLink, PrayerResponseComponent],
+  imports: [RouterLink, PrayerResponseComponent, PageHeaderComponent],
   templateUrl: './prayer-detail.component.html',
   styleUrl: './prayer-detail.component.scss',
 })
@@ -33,6 +34,9 @@ export class PrayerDetailComponent implements OnInit {
   loading = signal(true);
   prayLoading = signal(false);
   error = signal('');
+  showCompose = signal(false);
+  composeInitMode = signal<'text' | 'audio'>('text');
+  prayJustAdded = signal(false);
 
   get prayerId(): string { return this.route.snapshot.paramMap.get('id')!; }
 
@@ -51,7 +55,8 @@ export class PrayerDetailComponent implements OnInit {
         this.responseService.getByPrayer(this.prayerId),
       ]);
       this.prayer.set(prayer);
-      this.responses.set(responses);
+      // newest first
+      this.responses.set([...responses].reverse());
     } catch (err: any) {
       console.error('[PrayerDetail]', err);
       this.error.set('No se pudo cargar el pedido de oración.');
@@ -65,6 +70,7 @@ export class PrayerDetailComponent implements OnInit {
     const p = this.prayer();
     if (!user || !p || this.prayLoading()) return;
 
+    const wasNotPrayed = !p.has_prayed;
     this.prayLoading.set(true);
     const prev = { has_prayed: p.has_prayed, pray_count: p.pray_count };
     this.prayer.update(cur => cur
@@ -75,8 +81,15 @@ export class PrayerDetailComponent implements OnInit {
     try {
       if (prev.has_prayed) {
         await this.prayerService.removePray(p.id, user.id);
+        this.showCompose.set(false);
+        this.prayJustAdded.set(false);
       } else {
         await this.prayerService.addPray(p.id, user.id);
+        if (wasNotPrayed) {
+          this.composeInitMode.set('text');
+          this.prayJustAdded.set(true);
+          this.showCompose.set(true);
+        }
       }
     } catch {
       this.prayer.update(cur => cur ? { ...cur, ...prev } : cur);
@@ -85,8 +98,18 @@ export class PrayerDetailComponent implements OnInit {
     }
   }
 
+  openCompose(mode: 'text' | 'audio') {
+    if (!this.showCompose()) {
+      this.composeInitMode.set(mode);
+    }
+    this.prayJustAdded.set(false);
+    this.showCompose.set(true);
+  }
+
   onResponseAdded(response: IResponseWithProfile) {
-    this.responses.update(list => [...list, response]);
+    this.responses.update(list => [response, ...list]);
+    this.showCompose.set(false);
+    this.prayJustAdded.set(false);
   }
 
   timeAgo(dateStr: string): string {

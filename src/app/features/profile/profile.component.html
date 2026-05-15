@@ -26,6 +26,36 @@
     </div>
   </div>
 
+  <!-- Mis pedidos -->
+  <div class="profile-card my-prayers-section">
+    <div class="section-header">
+      <h3>Mis pedidos</h3>
+      <a routerLink="/my-prayers" class="see-all">Ver todos →</a>
+    </div>
+    @if (myPrayers().length === 0) {
+      <p class="empty-prayers">No has publicado pedidos aún.</p>
+      <a routerLink="/prayers/new" class="btn-new-prayer">+ Nuevo pedido</a>
+    } @else {
+      <div class="my-prayer-list">
+        @for (p of myPrayers(); track p.id) {
+          <a [routerLink]="['/prayers', p.id]" class="my-prayer-item">
+            <div class="mp-row">
+              <p class="mp-text">{{ p.text }}</p>
+              @if (p.status === 'answered') {
+                <span class="mp-badge answered">✨</span>
+              }
+            </div>
+            <div class="mp-meta">
+              <span class="mp-count">🙏 {{ p.pray_count }}</span>
+              <span class="mp-time">{{ timeAgo(p.created_at) }}</span>
+            </div>
+          </a>
+        }
+      </div>
+      <a routerLink="/prayers/new" class="btn-new-prayer">+ Nuevo pedido</a>
+    }
+  </div>
+
   @if (user()?.role === 'super_admin') {
     <a routerLink="/admin" class="church-link admin-link">
       <span class="church-link-icon">⚙️</span>

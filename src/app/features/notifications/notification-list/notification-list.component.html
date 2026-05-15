@@ -1,8 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <a routerLink="/prayers" class="back-btn">← Feed</a>
-    <h1>Notificaciones</h1>
-  </header>
+  <app-page-header backLink="/prayers" backLabel="← " title="Notificaciones"></app-page-header>
 
   @if (loading()) {
     <div class="state-msg">Cargando...</div>

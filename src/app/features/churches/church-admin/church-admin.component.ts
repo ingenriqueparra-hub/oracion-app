@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChurchService } from '../../../core/services/church.service';
 import { IChurch, IGroup, IChurchMember } from '../../../models/church.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 interface IChurchStats {
   totalMembers: number;
@@ -15,7 +16,7 @@ interface IChurchStats {
 @Component({
   selector: 'app-church-admin',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, DecimalPipe],
+  imports: [RouterLink, ReactiveFormsModule, DecimalPipe, PageHeaderComponent],
   templateUrl: './church-admin.component.html',
   styleUrl: './church-admin.component.scss',
 })

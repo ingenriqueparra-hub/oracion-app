@@ -1,8 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <a routerLink="/prayers" class="back-btn">← Volver</a>
-    <h1>Nueva oración</h1>
-  </header>
+  <app-page-header backLink="/prayers" title="Nueva oración"></app-page-header>
 
   <form class="card" [formGroup]="form" (ngSubmit)="onSubmit()">
     <p class="form-intro">

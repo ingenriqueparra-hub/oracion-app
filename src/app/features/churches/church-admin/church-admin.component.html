@@ -1,8 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <a [routerLink]="['/churches', churchId]" class="back-btn">← Volver</a>
-    <h1>{{ church()?.name ?? 'Panel de administración' }}</h1>
-  </header>
+  <app-page-header [backLink]="['/churches', churchId]" [title]="church()?.name ?? 'Panel de administración'"></app-page-header>
 
   @if (loading()) {
     <div class="state-msg">Cargando...</div>

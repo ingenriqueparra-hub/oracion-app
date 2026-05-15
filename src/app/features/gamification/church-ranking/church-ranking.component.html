@@ -1,8 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <a routerLink="/profile" class="back-btn">← Perfil</a>
-    <h1>Ranking de mi iglesia</h1>
-  </header>
+  <app-page-header backLink="/profile" backLabel="← " title="Ranking de mi iglesia"></app-page-header>
 
   @if (loading()) {
     <div class="state-msg">Cargando ranking...</div>

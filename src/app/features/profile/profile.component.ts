@@ -3,9 +3,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { GamificationService } from '../../core/services/gamification.service';
+import { PrayerService } from '../../core/services/prayer.service';
 import { SupabaseService } from '../../core/services/supabase.service';
 import { BadgeListComponent } from '../gamification/badge-list/badge-list.component';
 import { IBadge } from '../../models/badge.model';
+import { IPrayerFeedItem } from '../../models/prayer.model';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +20,7 @@ export class ProfileComponent implements OnInit {
   private auth = inject(AuthService);
   private fb = inject(FormBuilder);
   private gamificationService = inject(GamificationService);
+  private prayerService = inject(PrayerService);
   private supabase = inject(SupabaseService);
 
   user = this.auth.user;
@@ -26,6 +29,7 @@ export class ProfileComponent implements OnInit {
   saved = signal(false);
   allBadges = signal<IBadge[]>([]);
   earnedIds = signal<Set<string>>(new Set());
+  myPrayers = signal<IPrayerFeedItem[]>([]);
 
   async ngOnInit() {
     const user = this.auth.user();
@@ -36,9 +40,13 @@ export class ProfileComponent implements OnInit {
     }
     if (!userId) return;
     try {
-      const { all, earnedIds } = await this.gamificationService.getUserBadges(userId);
-      this.allBadges.set(all);
-      this.earnedIds.set(earnedIds);
+      const [badges, prayers] = await Promise.all([
+        this.gamificationService.getUserBadges(userId),
+        this.prayerService.getMyPrayers(userId, 3),
+      ]);
+      this.allBadges.set(badges.all);
+      this.earnedIds.set(badges.earnedIds);
+      this.myPrayers.set(prayers);
     } catch { /* non-critical */ }
   }
 
@@ -74,5 +82,16 @@ export class ProfileComponent implements OnInit {
 
   async onLogout() {
     await this.auth.logout();
+  }
+
+  timeAgo(dateStr: string): string {
+    const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
+    if (diff < 1) return 'ahora';
+    if (diff < 60) return `hace ${diff} min`;
+    const h = Math.floor(diff / 60);
+    if (h < 24) return `hace ${h} h`;
+    const d = Math.floor(h / 24);
+    if (d < 7) return `hace ${d} d`;
+    return new Date(dateStr).toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
   }
 }

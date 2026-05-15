@@ -3,11 +3,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChurchService } from '../../../core/services/church.service';
 import { IChurch, IGroup, IChurchMember } from '../../../models/church.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-church-detail',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageHeaderComponent],
   templateUrl: './church-detail.component.html',
   styleUrl: './church-detail.component.scss',
 })

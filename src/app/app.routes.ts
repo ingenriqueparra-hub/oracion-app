@@ -86,6 +86,11 @@ export const routes: Routes = [
           import('./features/gamification/church-ranking/church-ranking.component').then(m => m.ChurchRankingComponent),
       },
       {
+        path: 'my-prayers',
+        loadComponent: () =>
+          import('./features/prayers/my-prayers/my-prayers.component').then(m => m.MyPrayersComponent),
+      },
+      {
         path: 'notifications',
         loadComponent: () =>
           import('./features/notifications/notification-list/notification-list.component').then(m => m.NotificationListComponent),

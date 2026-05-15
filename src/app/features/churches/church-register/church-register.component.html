@@ -1,8 +1,5 @@
 <div class="page">
-  <header class="page-header">
-    <a routerLink="/churches" class="back-btn">← Volver</a>
-    <h1>Registrar iglesia</h1>
-  </header>
+  <app-page-header backLink="/churches" title="Registrar iglesia"></app-page-header>
 
   @if (success()) {
     <div class="card success-card">

@@ -1,12 +1,12 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { TestimonyService } from '../../../core/services/testimony.service';
 import { ITestimonyWithPrayer } from '../../../models/testimony.model';
+import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
   selector: 'app-testimony-feed',
   standalone: true,
-  imports: [RouterLink],
+  imports: [PageHeaderComponent],
   templateUrl: './testimony-feed.component.html',
   styleUrl: './testimony-feed.component.scss',
 })
