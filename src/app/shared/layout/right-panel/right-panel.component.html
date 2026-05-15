@@ -1,0 +1,73 @@
+<div class="right-panel">
+  @if (!user()?.church_id) {
+    <div class="panel-card church-cta">
+      <div class="cta-icon">⛪</div>
+      <h3>Únete a una iglesia</h3>
+      <p>Conéctate con tu comunidad, comparte pedidos y ora junto a otros creyentes.</p>
+      <a routerLink="/churches" class="cta-btn">Buscar iglesia</a>
+    </div>
+  } @else {
+    <!-- Resumen del usuario (siempre visible) -->
+    <div class="panel-card user-summary">
+      <div class="summary-row">
+        <div class="summary-avatar">{{ user()!.name.charAt(0).toUpperCase() }}</div>
+        <div class="summary-info">
+          <span class="summary-name">{{ user()!.name }}</span>
+          <span class="summary-level">{{ user()!.level }}</span>
+        </div>
+      </div>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <span class="stat-val">{{ user()!.points }}</span>
+          <span class="stat-lbl">puntos</span>
+        </div>
+        <div class="summary-stat">
+          <span class="stat-val">🔥 {{ user()!.streak_days }}</span>
+          <span class="stat-lbl">racha</span>
+        </div>
+      </div>
+    </div>
+
+    @if (loadingData()) {
+      <div class="loading-text">Cargando...</div>
+    } @else {
+      <!-- Insignias -->
+      <div class="panel-card">
+        <h3 class="panel-title">Mis insignias</h3>
+        @if (earnedBadges().length === 0) {
+          <p class="empty-hint">Completa pedidos de oración para ganar insignias. 🙏</p>
+        } @else {
+          <div class="badges-grid">
+            @for (badge of earnedBadges(); track badge.id) {
+              <div class="badge-item" [title]="badge.description">
+                <span class="badge-icon">{{ badge.icon }}</span>
+                <span class="badge-name">{{ badge.name }}</span>
+              </div>
+            }
+          </div>
+          <a routerLink="/profile" class="panel-link">Ver todas →</a>
+        }
+      </div>
+
+      <!-- Ranking -->
+      <div class="panel-card">
+        <h3 class="panel-title">Top de la iglesia</h3>
+        @if (ranking().length === 0) {
+          <p class="empty-hint">Sé el primero en acumular puntos. 🏆</p>
+        } @else {
+          <ol class="ranking-list">
+            @for (entry of ranking(); track entry.id; let i = $index) {
+              <li class="ranking-item">
+                <span class="rank-pos">{{ i + 1 }}</span>
+                <div class="rank-avatar">{{ entry.name.charAt(0).toUpperCase() }}</div>
+                <a [routerLink]="['/profile', entry.id]" class="rank-name">{{ entry.name }}</a>
+                <span class="rank-points">{{ entry.points }} pts</span>
+              </li>
+            }
+          </ol>
+          <a routerLink="/ranking" class="panel-link">Ver ranking completo →</a>
+        }
+      </div>
+    }
+  }
+</div>

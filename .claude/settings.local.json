@@ -5,7 +5,9 @@
       "Bash(npx ng *)",
       "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\src\\\\app\\\\features\\\\promises\\\\daily-promise\")",
       "Bash(Out-Null)",
-      "Bash(Write-Output \"ok\")"
+      "Bash(Write-Output \"ok\")",
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\dist\\\\oracion-app\\\\browser\")",
+      "Bash(Select-Object Name)"
     ]
   }
 }

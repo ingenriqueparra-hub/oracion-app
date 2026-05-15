@@ -23,11 +23,17 @@
         placeholder="Escribe unas palabras de aliento..."
         rows="3"
         [class.invalid]="textCtrl.invalid && textCtrl.touched"
+        maxlength="500"
       ></textarea>
+      <span class="char-counter" [class.over]="(textCtrl.value?.length ?? 0) > 500">
+        {{ textCtrl.value?.length ?? 0 }}/500
+      </span>
       @if (textCtrl.touched && textCtrl.hasError('required')) {
         <span class="field-error">Escribe tu respuesta</span>
       } @else if (textCtrl.touched && textCtrl.hasError('minlength')) {
         <span class="field-error">Mínimo 5 caracteres</span>
+      } @else if (textCtrl.touched && textCtrl.hasError('maxlength')) {
+        <span class="field-error">Máximo 500 caracteres</span>
       }
       <button class="btn-send" (click)="sendText()" [disabled]="sending()">
         @if (sending()) { Enviando... } @else { Enviar aliento }
@@ -42,7 +48,7 @@
           <button class="btn-record" (click)="startRecording()">
             🎤 Iniciar grabación
           </button>
-          <p class="audio-hint">Máximo 60 segundos</p>
+          <p class="audio-hint">Máximo 30 segundos</p>
         </div>
       } @else if (recordingState() === 'recording') {
         <div class="recording-active">

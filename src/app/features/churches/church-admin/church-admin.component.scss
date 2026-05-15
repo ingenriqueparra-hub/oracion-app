@@ -267,6 +267,15 @@
   padding: 0.625rem 0.75rem;
   background: #F9FBE7;
   border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: #F0F4C3; }
+
+  &.selected {
+    background: #C8E6C9;
+    outline: 2px solid #81C784;
+  }
 
   .group-icon { font-size: 1rem; }
 
@@ -275,6 +284,30 @@
     font-size: 0.9375rem;
     color: #212121;
   }
+}
+
+.group-members-panel {
+  border-left: 3px solid #81C784;
+  padding-left: 0.75rem;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.btn-close-panel {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #9E9E9E;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.125rem 0.25rem;
+  line-height: 1;
+
+  &:hover { color: #424242; }
 }
 
 .btn-delete {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -36,6 +36,12 @@ export class ChurchAdminComponent implements OnInit {
   churchSaved = signal(false);
   activeTab = signal<'members' | 'groups' | 'stats' | 'church'>('members');
   pendingGroupIds = signal<Record<string, string>>({});
+  selectedGroupId = signal<string | null>(null);
+  selectedGroupMembers = computed(() => {
+    const gid = this.selectedGroupId();
+    if (!gid) return [];
+    return this.approvedMembers().filter(m => m.group_id === gid);
+  });
 
   groupForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -178,5 +184,9 @@ export class ChurchAdminComponent implements OnInit {
 
   setTab(tab: 'members' | 'groups' | 'stats' | 'church') {
     this.activeTab.set(tab);
+  }
+
+  getGroupName(groupId: string): string {
+    return this.groups().find(g => g.id === groupId)?.name ?? '';
   }
 }

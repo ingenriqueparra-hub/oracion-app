@@ -19,8 +19,8 @@
         <li
           class="notif-item"
           [class.unread]="!n.read"
-          [class.clickable]="!!n.prayer_id"
-          (click)="goToPrayer(n)"
+          [class.clickable]="isClickable(n)"
+          (click)="onNotificationClick(n)"
         >
           <span class="notif-icon">{{ icon(n.type) }}</span>
           <div class="notif-body">

@@ -89,8 +89,13 @@ export class ChurchDetailComponent implements OnInit {
     this.joining.set(true);
     this.joinError.set('');
     try {
-      await this.churchService.requestJoin(user.id, this.churchId);
-      this.membership.set({ status: 'pending' } as any);
+      const existing = this.membership();
+      if (existing?.status === 'rejected') {
+        await this.churchService.reRequestJoin(existing.id);
+      } else {
+        await this.churchService.requestJoin(user.id, this.churchId);
+      }
+      this.membership.update(m => ({ ...(m ?? {}), status: 'pending' } as any));
     } catch {
       this.joinError.set('No se pudo enviar la solicitud. Inténtalo de nuevo.');
     } finally {

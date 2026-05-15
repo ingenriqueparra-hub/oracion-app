@@ -12,3 +12,8 @@ html, body {
   background: #F1F8E9;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Inside the shell, .page fills its column instead of forcing viewport height */
+.shell-main .page {
+  min-height: unset;
+}

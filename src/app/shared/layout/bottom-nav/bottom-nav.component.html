@@ -1,0 +1,27 @@
+<nav class="bottom-nav">
+  <a routerLink="/prayers" routerLinkActive="active" class="bottom-item">
+    <span class="bottom-icon">🏠</span>
+    <span class="bottom-label">Oración</span>
+  </a>
+
+  @if (user()?.church_id) {
+    <a [routerLink]="churchLink" routerLinkActive="active" class="bottom-item">
+      <span class="bottom-icon">⛪</span>
+      <span class="bottom-label">Mi Iglesia</span>
+    </a>
+  } @else {
+    <a routerLink="/churches" routerLinkActive="active" class="bottom-item">
+      <span class="bottom-icon">⛪</span>
+      <span class="bottom-label">Iglesias</span>
+    </a>
+  }
+
+  <a routerLink="/testimonies" routerLinkActive="active" class="bottom-item">
+    <span class="bottom-icon">⭐</span>
+    <span class="bottom-label">Testimonios</span>
+  </a>
+  <a routerLink="/profile" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="bottom-item">
+    <span class="bottom-icon">👤</span>
+    <span class="bottom-label">Perfil</span>
+  </a>
+</nav>

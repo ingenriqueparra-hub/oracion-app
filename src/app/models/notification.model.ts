@@ -1,4 +1,4 @@
-export type NotificationType = 'prayer_prayed' | 'prayer_response';
+export type NotificationType = 'prayer_prayed' | 'prayer_response' | 'join_request';
 
 export interface INotification {
   id: string;

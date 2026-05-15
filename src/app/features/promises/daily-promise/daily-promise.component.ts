@@ -15,10 +15,17 @@ export class DailyPromiseComponent implements OnInit {
   promise = signal<IDailyPromise | null>(null);
   copied = signal(false);
 
+  private readonly storageKey = 'promise_shown_date';
+
   async ngOnInit() {
+    const today = new Date().toLocaleDateString('en-CA');
+    if (localStorage.getItem(this.storageKey) === today) return;
     try {
       const data = await this.promiseService.getToday();
-      this.promise.set(data);
+      if (data) {
+        this.promise.set(data);
+        localStorage.setItem(this.storageKey, today);
+      }
     } catch (err) {
       console.error('[DailyPromise]', err);
     }

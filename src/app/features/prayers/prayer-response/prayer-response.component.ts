@@ -29,7 +29,7 @@ export class PrayerResponseComponent implements OnDestroy {
   error = signal('');
 
   textForm = this.fb.group({
-    text: ['', [Validators.required, Validators.minLength(5)]],
+    text: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
   });
   get textCtrl() { return this.textForm.controls.text; }
 
@@ -67,7 +67,7 @@ export class PrayerResponseComponent implements OnDestroy {
 
       this.timerInterval = setInterval(() => {
         this.recordingSeconds.update(s => {
-          if (s >= 60) { this.stopRecording(); return s; }
+          if (s >= 30) { this.stopRecording(); return s; }
           return s + 1;
         });
       }, 1000);

@@ -64,6 +64,14 @@ export class ChurchService {
     if (error) throw error;
   }
 
+  async reRequestJoin(memberId: string): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('church_members')
+      .update({ status: 'pending' })
+      .eq('id', memberId);
+    if (error) throw error;
+  }
+
   async requestJoin(userId: string, churchId: string): Promise<void> {
     const { error } = await this.supabase.client
       .from('church_members')
@@ -165,15 +173,11 @@ export class ChurchService {
   }
 
   async removeMember(memberId: string, userId: string): Promise<void> {
-    const { error } = await this.supabase.client
-      .from('church_members')
-      .delete()
-      .eq('id', memberId);
+    const { error } = await this.supabase.client.rpc('remove_church_member', {
+      p_member_id: memberId,
+      p_user_id:   userId,
+    });
     if (error) throw error;
-    await this.supabase.client
-      .from('profiles')
-      .update({ church_id: null, group_id: null })
-      .eq('id', userId);
   }
 
   async getChurchStats(churchId: string): Promise<{

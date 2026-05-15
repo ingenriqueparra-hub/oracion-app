@@ -20,7 +20,7 @@ export interface IChurchMember {
   user_id: string;
   church_id: string;
   group_id: string | null;
-  status: 'pending' | 'approved';
+  status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   profiles?: {
     name: string;

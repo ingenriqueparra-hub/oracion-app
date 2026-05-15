@@ -5,8 +5,6 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 import { PrayerService } from '../../../core/services/prayer.service';
 import { IPrayerFeedItem } from '../../../models/prayer.model';
 import { DailyPromiseComponent } from '../../promises/daily-promise/daily-promise.component';
-import { NotificationService } from '../../../core/services/notification.service';
-
 type FeedFilter = 'all' | 'church' | 'group';
 
 @Component({
@@ -21,32 +19,14 @@ export class PrayerFeedComponent implements OnInit {
   private auth = inject(AuthService);
   private supabase = inject(SupabaseService);
   private router = inject(Router);
-  private notificationService = inject(NotificationService);
-
   user = this.auth.user;
   prayers = signal<IPrayerFeedItem[]>([]);
   loading = signal(true);
   error = signal('');
   filter = signal<FeedFilter>('all');
-  unreadCount = signal(0);
 
   async ngOnInit() {
     await this.loadFeed();
-    this.loadUnreadCount();
-  }
-
-  private async loadUnreadCount() {
-    const user = this.user();
-    let userId = user?.id;
-    if (!userId) {
-      const { data: { session } } = await this.supabase.client.auth.getSession();
-      userId = session?.user?.id;
-    }
-    if (!userId) return;
-    try {
-      const count = await this.notificationService.getUnreadCount(userId);
-      this.unreadCount.set(count);
-    } catch { /* non-critical */ }
   }
 
   async loadFeed() {

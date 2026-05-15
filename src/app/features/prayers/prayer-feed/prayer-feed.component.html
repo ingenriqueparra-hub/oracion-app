@@ -1,15 +1,7 @@
 <div class="feed-page">
   <header class="feed-header">
-    <h1>Feed de Oración</h1>
-    <div class="header-actions">
-      <a routerLink="/notifications" class="notif-btn" aria-label="Notificaciones">
-        🔔
-        @if (unreadCount() > 0) {
-          <span class="notif-badge">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
-        }
-      </a>
-      <a routerLink="/prayers/new" class="btn-new">+ Nueva</a>
-    </div>
+    <h1>Oración</h1>
+    <a routerLink="/prayers/new" class="btn-new">+ Nueva</a>
   </header>
 
   <div class="filter-tabs">

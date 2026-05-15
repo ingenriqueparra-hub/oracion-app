@@ -134,15 +134,45 @@
         } @else {
           <div class="group-list">
             @for (group of groups(); track group.id) {
-              <div class="group-item">
+              <div
+                class="group-item"
+                [class.selected]="selectedGroupId() === group.id"
+                (click)="selectedGroupId.set(selectedGroupId() === group.id ? null : group.id)"
+              >
                 <span class="group-icon">👥</span>
                 <span class="group-name">{{ group.name }}</span>
-                <button class="btn-delete" (click)="onDeleteGroup(group)">✕</button>
+                <button class="btn-delete" (click)="$event.stopPropagation(); onDeleteGroup(group)">✕</button>
               </div>
             }
           </div>
         }
       </div>
+
+      @if (selectedGroupId()) {
+        <div class="section group-members-panel">
+          <h2>
+            Miembros — {{ getGroupName(selectedGroupId()!) }}
+            <button class="btn-close-panel" (click)="selectedGroupId.set(null)">✕</button>
+          </h2>
+          @if (selectedGroupMembers().length === 0) {
+            <p class="empty-text">Ningún miembro pertenece a este grupo aún.</p>
+          } @else {
+            <div class="member-list">
+              @for (member of selectedGroupMembers(); track member.id) {
+                <div class="member-card">
+                  <div class="member-avatar">
+                    {{ member.profiles?.name?.charAt(0)?.toUpperCase() ?? '?' }}
+                  </div>
+                  <div class="member-info">
+                    <strong>{{ member.profiles?.name }}</strong>
+                    <span>{{ member.profiles?.email }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
     }
 
     @if (activeTab() === 'stats') {
