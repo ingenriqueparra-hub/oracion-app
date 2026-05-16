@@ -1,7 +1,7 @@
 # CLAUDE.md — Reglas de trabajo para oracion-app
 
 ## Stack
-- Frontend: Angular + PWA
+- Frontend: Angular + PWA (nombre de la app: **Intercede**)
 - Backend/DB: Supabase (auth, base de datos, storage de audio)
 - Hosting: Vercel
 - Lenguaje: TypeScript, SCSS
@@ -60,12 +60,15 @@ src/
     shared/         # componentes reutilizables, pipes, directivas
     features/
       auth/         # login, registro
-      prayers/      # feed, crear pedido, detalle
+      prayers/      # feed, crear pedido, detalle, mis pedidos
       churches/     # iglesias, grupos
       profile/      # perfil de usuario
       admin/        # panel super admin
-      church-admin/ # panel admin de iglesia
+      church-admin/ # panel admin de iglesia (dentro de churches/)
       gamification/ # insignias, puntos, ranking
+      promises/     # promesa del día
+      notifications/# lista de notificaciones
+      testimonies/  # feed de testimonios
     models/         # interfaces TypeScript
 ```
 
@@ -76,13 +79,85 @@ Siempre tenlo en cuenta antes de tomar decisiones de arquitectura.
 ## Módulos completados
 
 - **Módulo 1 — Estructura base + Supabase:** `SupabaseService`, `environments/environment.ts`, configuración PWA (`ngsw-config.json`, `manifest.webmanifest`).
-- **Módulo 2 — Autenticación:** `AuthService` (signals, `waitForInit`), `authGuard`, `guestGuard`, `IUser`, `LoginComponent`, `RegisterComponent`, `ProfileComponent`.
+- **Módulo 2 — Autenticación:** `AuthService` (signals, `waitForInit`, `refreshProfile()`), `authGuard`, `guestGuard`, `IUser`, `LoginComponent`, `RegisterComponent`, `ProfileComponent`.
 - **Módulo 3 — Iglesias y grupos:** `ChurchService`, `churchAdminGuard`, `IChurch`/`IGroup`/`IChurchMember`, `ChurchListComponent`, `ChurchRegisterComponent`, `ChurchDetailComponent`, `ChurchAdminComponent`.
-- **Módulo 4 — Pedidos de oración:** `PrayerService`, `IPrayer`/`IPrayerFeedItem`, `PrayerFeedComponent` (filtros + actualización optimista del contador 🙏), `PrayerCreateComponent`, `PrayerDetailComponent`. Tablas: `prayers`, `prayer_prays`. Patrón: guards usan `getSession()`, componentes usan signal `user()` con fallback a `getSession()` para el `ngOnInit`.
-- **Módulo 5 — Respuestas:** `ResponseService` (two-query pattern, upload a Storage), `IResponse`/`IResponseWithProfile`, `PrayerResponseComponent` (tabs Texto/Audio, MediaRecorder con cleanup en `ngOnDestroy`). Tabla: `responses`. Bucket Storage: `audio-responses`.
+- **Módulo 4 — Pedidos de oración:** `PrayerService` (`getFeedScoped`, `getById`, `create`, `getMyPrayers`, `addPray`, `removePray`), `IPrayer`/`IPrayerFeedItem`, `PrayerFeedComponent` (tabs/sub-tabs + infinite scroll), `PrayerCreateComponent`, `PrayerDetailComponent`, `MyPrayersComponent`. Tablas: `prayers`, `prayer_prays`. Patrón: guards usan `getSession()`, componentes usan signal `user()` con fallback a `getSession()` para el `ngOnInit`.
+- **Módulo 5 — Respuestas:** `ResponseService` (two-query pattern, upload a Storage), `IResponse`/`IResponseWithProfile`, `PrayerResponseComponent` (tabs Texto/Audio, MediaRecorder con cleanup en `ngOnDestroy`, límite 30s automático). Tabla: `responses`. Bucket Storage: `audio-responses`.
 - **Módulo 6 — Testimonios:** `TestimonyService`, `ITestimony`/`ITestimonyWithPrayer`, `PrayerTestifyComponent` (solo owner + status=active), `TestimonyFeedComponent`. Al crear testimonio se marca la oración como `status='answered'`. Badge "Respondido" en feed. Botón "¡Dios respondió!" en `PrayerDetailComponent` (visible solo al owner si status=active). Rutas: `/prayers/:id/testify`, `/testimonies`.
 - **Módulo 7 — Oración en cadena:** Ya implementado en Módulo 4. Tabla `prayer_prays`, `PrayerService.addPray/removePray`, botón 🙏 con contador optimista en feed y detalle.
-- **Módulo 8 — Promesa del día:** `PromiseService.getToday()` (busca por fecha exacta, fallback a más reciente), `IDailyPromise`, `DailyPromiseComponent` (tarjeta verde con versículo + botón compartir vía Web Share API / clipboard). Tabla: `promises`. Integrado en el feed encima de la lista.
-- **Módulo 9 — Notificaciones (in-app):** `NotificationService` (`getAll`, `getUnreadCount`, `markAllRead`), `INotification`, `NotificationListComponent`. Campana 🔔 con badge rojo en el feed. Al abrir la lista se marcan todas como leídas. Tabla: `notifications`. Triggers SQL en `prayer_prays` y `responses` generan notificaciones automáticamente.
-- **Módulo 11 — Panel Super Admin:** `superAdminGuard`, `AdminDashboardComponent` (tabs Iglesias/Usuarios). Iglesias: aprobar, rechazar, suspender, reactivar. Usuarios: ver rol e iglesia, suspender/reactivar (`suspended boolean` en profiles). Link visible en perfil solo para super_admin. Rol se asigna manualmente vía SQL. Ruta: `/admin`.
+- **Módulo 8 — Promesa del día:** `PromiseService.getToday()` (busca por fecha exacta, fallback a más reciente), `IDailyPromise`, `DailyPromiseComponent` (tarjeta verde con versículo + botón compartir vía Web Share API / clipboard). Tabla: `promises`. Integrado en el feed encima de la lista. **Oculta si ya se vio hoy** (persiste en `localStorage` con key `promise_shown_date`).
+- **Módulo 9 — Notificaciones (in-app):** `NotificationService` (`getAll`, `getUnreadCount`, `markAllRead`), `INotification`, `NotificationListComponent`. Campana 🔔 con badge rojo en `LeftNavComponent`. Al abrir la lista se marcan todas como leídas. Tabla: `notifications`. Triggers SQL en `prayer_prays` y `responses` generan notificaciones automáticamente.
 - **Módulo 10 — Gamificación:** `GamificationService` (`getUserBadges`, `getPublicProfile`, `getChurchRanking`), `IBadge`/`IUserBadge`/`IPublicProfile`/`IRankingEntry`, `BadgeListComponent` (grid ganadas+bloqueadas, reutilizable), `PublicProfileComponent` (ruta `/profile/:id`, solo insignias ganadas + iglesia + grupo), `ChurchRankingComponent` (ruta `/ranking`, top 10 por puntos). Nivel visible en tarjetas del feed y detalle. Nombres clickables. Tablas: `badges`, `user_badges`. Triggers SQL para puntos y nivel.
+- **Módulo 11 — Panel Super Admin:** `superAdminGuard`, `AdminDashboardComponent` (tabs Iglesias/Usuarios). Iglesias: aprobar, rechazar, suspender, reactivar. Usuarios: ver rol e iglesia, suspender/reactivar (`suspended boolean` en profiles). Link visible en perfil solo para super_admin. Rol se asigna manualmente vía SQL. Ruta: `/admin`.
+- **Módulo 12 — Panel Admin de Iglesia:** `ChurchAdminComponent` (tabs Miembros/Grupos/Estadísticas/Iglesia). Miembros pendientes: aprobar (RPC `approve_church_member`)/rechazar. Miembros aprobados: ver, asignar grupo (RPC `assign_member_group`), expulsar (RPC `remove_church_member`). Grupos: crear/eliminar. Estadísticas: totalMembers, prayersThisWeek, totalPrayers, answeredPrayers. Editar nombre/descripción de la iglesia. Ruta: `/churches/:id/admin`.
+
+## Reglas de negocio implementadas
+
+### Feed de oración — Tabs y sub-tabs
+```
+MainTab: 'group' | 'church' | 'all'
+  └─ SubTab: 'new' | 'prayed'
+```
+- **Tab por defecto:** Si `user.group_id` → 'group'; si `user.church_id` → 'church'; si ninguno → 'all'
+- **Tab Mi grupo** (`group`): pedidos del `group_id` del usuario
+- **Tab Mi iglesia** (`church`): pedidos del `church_id` del usuario
+- **Tab Otros** (`all`): pedidos de otras iglesias (`church_id IS NULL OR church_id != user.church_id`)
+- **Sub-tab Nuevos** (`new`): pedidos donde `!has_prayed && user_id !== currentUser`
+- **Sub-tab Ya oré** (`prayed`): pedidos donde `has_prayed === true`
+- Al cambiar `mainTab` se resetea `subTab` a 'new' y se recarga el feed
+
+### Infinite scroll
+- `PAGE_SIZE = 5` pedidos por página
+- Sentinel div al final de la lista; listener de scroll en el contenedor padre
+- Al detectar que el sentinel está a ≤300px del borde inferior se llama `loadMore()`
+- Se desactiva si `loading`, `loadingMore` o `!hasMore`
+
+### Límites de contenido
+- **Texto de pedido:** mínimo 10 chars, máximo **1000** chars
+- **Respuesta de audio:** máximo **30 segundos** (se detiene automáticamente con `setInterval` + `stopRecording()`)
+
+### Promesa del día
+- Se guarda en `localStorage` la fecha ISO en que se mostró (`promise_shown_date`)
+- Si `localStorage.getItem('promise_shown_date') === hoy (en-CA)` → no se vuelve a mostrar
+
+### Flujo de membresía en iglesias
+1. Usuario ve lista de iglesias aprobadas (`/churches`)
+2. Entra al detalle (`/churches/:id`) y pulsa "Solicitar unirse"
+3. Se crea registro en `church_members` con `status: 'pending'`
+4. Si fue rechazado previamente, puede volver a solicitar con `reRequestJoin()` (cambia a 'pending')
+5. El admin de la iglesia ve la solicitud en `/churches/:id/admin` → tab Miembros
+6. Al aprobar se llama RPC `approve_church_member` que actualiza `church_members.status = 'approved'` y escribe `church_id` en el `profile` del usuario
+7. Al rechazar se elimina el registro de `church_members`
+8. El admin puede asignar al miembro aprobado a un grupo con `assign_member_group` (RPC)
+9. El admin puede expulsar con `remove_church_member` (RPC)
+
+## Estructura de menú por rol
+
+### Left Nav (desktop)
+| Ítem | Rol/condición |
+|------|---------------|
+| 🏠 Oración | Siempre |
+| 🏛️ Mi Iglesia | Solo `church_admin` con `church_id` (link al panel admin) |
+| ⛪ Mi Iglesia | Solo `member` con `church_id` (link al detalle) |
+| 📋 Mis pedidos | Siempre |
+| ⭐ Testimonios | Siempre |
+| 🏆 Ranking | Siempre |
+| 🔔 Notificaciones | Siempre (con badge de no leídas) |
+| 👤 Perfil | Siempre |
+| 🗺️ Iglesias | Si `church_admin` O si no tiene `church_id` |
+| ⚙️ Admin | Solo `super_admin` |
+
+### Bottom Nav (mobile)
+| Ítem | Condición |
+|------|-----------|
+| 🏠 Oración | Siempre |
+| ⛪ Mi Iglesia | Si tiene `church_id` (link al detalle) |
+| ⛪ Iglesias | Si NO tiene `church_id` |
+| ⭐ Testimonios | Siempre |
+| 👤 Perfil | Siempre |
+
+## Componentes shared relevantes
+- `ShellComponent`: layout de 3 columnas (left-nav + router-outlet + right-panel) + bottom-nav mobile
+- `PageHeaderComponent`: cabecera de página con `backLink` y `title`
+- `RightPanelComponent`: panel derecho en desktop (contenido complementario)
+- `BadgeListComponent`: grid de insignias (reutilizable en perfil propio y público)
