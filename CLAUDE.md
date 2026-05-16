@@ -80,6 +80,7 @@ Siempre tenlo en cuenta antes de tomar decisiones de arquitectura.
 
 - **Módulo 1 — Estructura base + Supabase:** `SupabaseService`, `environments/environment.ts`, configuración PWA (`ngsw-config.json`, `manifest.webmanifest`).
 - **Módulo 2 — Autenticación:** `AuthService` (signals, `waitForInit`, `refreshProfile()`), `authGuard`, `guestGuard`, `IUser`, `LoginComponent`, `RegisterComponent`, `ProfileComponent`.
+- **Módulo 2b — Cuenta rápida con PIN:** `WelcomeComponent` (pantalla de entrada unificada, ruta `/welcome`), `PinRegisterComponent` (flujo 2 pasos nombre→PIN, ruta `/pin-register`), `PinLoginComponent` (login nombre+PIN + selector de duplicados, ruta `/pin-login`). Métodos en `AuthService`: `registerWithPin()`, `findPinAccounts()`, `loginWithPinEmail()`, `addEmailToAccount()`, `normalizeNameSlug()`, `generateRandomSuffix()`. Tabla: `pin_accounts`. Campo nuevo en `profiles`: `is_pin_account boolean`. `authGuard` redirige a `/welcome`. `logout()` navega a `/welcome`. Sección "Asegurar cuenta" en `ProfileComponent` (visible si `is_pin_account`). Requiere "Confirm email" desactivado en Supabase Auth.
 - **Módulo 3 — Iglesias y grupos:** `ChurchService`, `churchAdminGuard`, `IChurch`/`IGroup`/`IChurchMember`, `ChurchListComponent`, `ChurchRegisterComponent`, `ChurchDetailComponent`, `ChurchAdminComponent`.
 - **Módulo 4 — Pedidos de oración:** `PrayerService` (`getFeedScoped`, `getById`, `create`, `getMyPrayers`, `addPray`, `removePray`), `IPrayer`/`IPrayerFeedItem`, `PrayerFeedComponent` (tabs/sub-tabs + infinite scroll), `PrayerCreateComponent`, `PrayerDetailComponent`, `MyPrayersComponent`. Tablas: `prayers`, `prayer_prays`. Patrón: guards usan `getSession()`, componentes usan signal `user()` con fallback a `getSession()` para el `ngOnInit`.
 - **Módulo 5 — Respuestas:** `ResponseService` (two-query pattern, upload a Storage), `IResponse`/`IResponseWithProfile`, `PrayerResponseComponent` (tabs Texto/Audio, MediaRecorder con cleanup en `ngOnDestroy`, límite 30s automático). Tabla: `responses`. Bucket Storage: `audio-responses`.
@@ -155,6 +156,18 @@ MainTab: 'group' | 'church' | 'all'
 | ⛪ Iglesias | Si NO tiene `church_id` |
 | ⭐ Testimonios | Siempre |
 | 👤 Perfil | Siempre |
+
+### Cuenta rápida con PIN
+- **Email ficticio:** `${nameSlug}.${randomSuffix4}@intercede.app` — nunca visible para el usuario
+- **Contraseña:** `PIN + environment.pinSalt` (`'intrc_s4lt_2025'`) — el PIN nunca se guarda en texto plano
+- **`normalizeNameSlug`:** minúsculas → quitar tildes (NFD) → quitar espacios → solo `[a-z0-9]`
+- **Registro:** `signUp` con fake email → update `profiles` (`name`, `is_pin_account=true`) → insert `pin_accounts`
+- **Login:** buscar en `pin_accounts` por `name_slug` → si 1 resultado, login directo; si >1, mostrar selector (nombre + "Con iglesia" / "Sin iglesia")
+- **Recuperar cuenta:** si `accounts.length === 0` → error "Cuenta no encontrada"; PIN incorrecto → `signInWithPassword` falla
+- **Añadir email real:** `supabase.auth.updateUser({ email })` (envía confirmación al email real) + `is_pin_account = false` en profiles
+- **Solo para `role = 'member'`** — church_admin y super_admin siempre usan email
+- **Tabla `pin_accounts`:** RLS con dos políticas SELECT: `auth.uid() = user_id` (owner) y `true` (búsqueda pública para login)
+- **Supabase Auth:** "Confirm email" debe estar **desactivado** para que el registro PIN funcione
 
 ## Componentes shared relevantes
 - `ShellComponent`: layout de 3 columnas (left-nav + router-outlet + right-panel) + bottom-nav mobile

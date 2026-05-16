@@ -72,6 +72,8 @@ Orientada a iglesias evangélicas/protestantes de Latinoamérica, con foco inici
 - Ver sus propios pedidos en "Mis pedidos"
 - Ver perfil público de otros usuarios
 - Editar su perfil
+- **Registrarse con cuenta rápida** (nombre + PIN de 4 dígitos, sin email)
+- Opcionalmente añadir email real desde el perfil para asegurar la cuenta
 
 ---
 
@@ -168,6 +170,40 @@ Iglesia (status: pending → approved)
 - **Ranking**: Top 10 de iglesias por puntos en `/ranking`
 - **Perfil público**: `/profile/:id` — insignias, iglesia y grupo
 
+### Cuenta rápida con PIN
+
+Flujo de registro alternativo para miembros comunes (no admins). El usuario nunca ve ni escribe un email.
+
+**Registro (`/pin-register`):**
+1. Paso 1: usuario escribe su nombre (2–40 chars)
+2. Paso 2: crea un PIN de 4 dígitos y lo confirma
+3. Se genera un email ficticio: `${nameSlug}.${random4}@intercede.app`
+4. La contraseña enviada a Supabase Auth es `PIN + pinSalt` (salt fijo en `environment.ts`)
+5. Se insertan `name` e `is_pin_account=true` en `profiles`; se registra en tabla `pin_accounts`
+
+**Login (`/pin-login`):**
+1. Usuario escribe su nombre y PIN
+2. Se busca en `pin_accounts` por `name_slug` (nombre normalizado)
+3. Si 1 cuenta → login directo
+4. Si >1 cuenta → selector "¿Cuál eres tú?" (muestra nombre + "Con iglesia" / "Sin iglesia")
+5. PIN incorrecto → `signInWithPassword` falla con mensaje claro
+
+**Recuperación de cuenta:**
+- Desde `/profile`, sección "Asegurar cuenta" (visible solo si `is_pin_account`)
+- El usuario añade su email real → Supabase envía confirmación → `is_pin_account` pasa a `false`
+
+**Pantalla de entrada (`/welcome`):**
+- Botón primario: "Entrar con cuenta rápida" → `/pin-login`
+- Botones secundarios: "Entrar con Gmail o Correo" → `/login`, "Registrarme Gmail o Correo" → `/register`
+- Link: "Crear cuenta rápida" → `/pin-register`
+
+**Restricciones:**
+- Solo para `role = 'member'`; admins y super_admin usan email
+- "Confirm email" debe estar desactivado en Supabase Auth Settings
+- El PIN nunca se guarda en texto plano en ninguna tabla
+
+---
+
 ### Flujo de membresía completo
 1. Usuario solicita unirse a una iglesia → `church_members.status = 'pending'`
 2. Si fue rechazado antes, puede re-solicitar (vuelve a 'pending')
@@ -185,6 +221,7 @@ Iglesia (status: pending → approved)
 profiles
   - id, name, email, avatar_url, church_id, group_id
   - level, points, role (member|church_admin|super_admin), suspended
+  - is_pin_account (boolean, default false)
 
 churches
   - id, name, description, photo_url, status (pending|approved|rejected|suspended), admin_id
@@ -218,6 +255,9 @@ badges
 
 user_badges
   - id, user_id, badge_id, earned_at
+
+pin_accounts
+  - id, user_id (→ profiles), fake_email, name_slug, created_at
 ```
 
 **RPCs implementadas:**
