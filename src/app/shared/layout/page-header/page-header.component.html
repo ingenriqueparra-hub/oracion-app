@@ -1,6 +1,6 @@
 <header class="page-header">
-  @if (backLink) {
-    <a [routerLink]="backLink" class="back-btn">{{ backLabel }}</a>
+  @if (backLink != null || showBack) {
+    <button class="back-button" (click)="goBack()">←</button>
   }
   @if (title) {
     <h1>{{ title }}</h1>

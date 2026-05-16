@@ -5,8 +5,8 @@
   left: 0;
   right: 0;
   height: 64px;
-  background: white;
-  border-top: 1px solid #E0E0E0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-light);
   z-index: 100;
   justify-content: space-around;
   align-items: center;
@@ -21,16 +21,16 @@
   flex: 1;
   padding: 0.5rem;
   text-decoration: none;
-  color: #9E9E9E;
+  color: var(--color-border-muted);
   border-radius: 8px;
   transition: color 0.15s;
 
   &.active {
-    color: #2E7D32;
+    color: var(--color-primary);
   }
 
   &:hover {
-    color: #2E7D32;
+    color: var(--color-primary);
   }
 }
 

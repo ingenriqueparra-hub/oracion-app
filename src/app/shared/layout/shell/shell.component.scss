@@ -17,15 +17,15 @@
   top: 0;
   height: 100dvh;
   overflow-y: auto;
-  background: white;
-  border-right: 1px solid #E0E0E0;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border-light);
   z-index: 10;
 }
 
 .shell-main {
   min-height: 100vh;
-  background: #F1F8E9;
-  border-right: 1px solid #E0E0E0;
+  background: var(--color-primary-light);
+  border-right: 1px solid var(--color-border-light);
 }
 
 .shell-right {
@@ -33,7 +33,7 @@
   top: 0;
   height: 100dvh;
   overflow-y: auto;
-  background: white;
+  background: var(--color-surface);
 }
 
 /* Tablet: left nav icon-only, no right panel */
