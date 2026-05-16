@@ -31,6 +31,14 @@ export class ProfileComponent implements OnInit {
   earnedIds = signal<Set<string>>(new Set());
   myPrayers = signal<IPrayerFeedItem[]>([]);
 
+  emailSaving = signal(false);
+  emailSaved = signal(false);
+  emailError = signal('');
+
+  emailForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+  });
+
   async ngOnInit() {
     const user = this.auth.user();
     let userId = user?.id;
@@ -82,6 +90,22 @@ export class ProfileComponent implements OnInit {
 
   async onLogout() {
     await this.auth.logout();
+  }
+
+  async onAddEmail() {
+    this.emailForm.markAllAsTouched();
+    if (this.emailForm.invalid) return;
+    this.emailSaving.set(true);
+    this.emailError.set('');
+    this.emailSaved.set(false);
+    try {
+      await this.auth.addEmailToAccount(this.emailForm.value.email!);
+      this.emailSaved.set(true);
+    } catch {
+      this.emailError.set('No se pudo guardar el email. Inténtalo de nuevo.');
+    } finally {
+      this.emailSaving.set(false);
+    }
   }
 
   timeAgo(dateStr: string): string {

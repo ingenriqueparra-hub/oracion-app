@@ -102,6 +102,38 @@
     <span class="arrow">›</span>
   </a>
 
+  @if (user()?.is_pin_account) {
+    <div class="profile-card secure-account-card">
+      <h3>🔒 Asegura tu cuenta</h3>
+      <p class="secure-desc">Añade tu email para no perder tu cuenta si cambias de celular.</p>
+      <form [formGroup]="emailForm" (ngSubmit)="onAddEmail()">
+        <div class="field">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="tucorreo@gmail.com"
+            autocomplete="email"
+            [class.invalid]="emailForm.controls.email.touched && emailForm.controls.email.invalid"
+          >
+          @if (emailForm.controls.email.touched && emailForm.controls.email.hasError('required')) {
+            <span class="field-error">Escribe tu email</span>
+          } @else if (emailForm.controls.email.touched && emailForm.controls.email.hasError('email')) {
+            <span class="field-error">Email no válido</span>
+          }
+        </div>
+        @if (emailError()) {
+          <p class="error-msg">{{ emailError() }}</p>
+        }
+        @if (emailSaved()) {
+          <p class="success-msg">Email guardado. Revisa tu bandeja para confirmarlo.</p>
+        }
+        <button type="submit" class="btn-primary" [disabled]="emailSaving()">
+          @if (emailSaving()) { Guardando... } @else { Guardar email }
+        </button>
+      </form>
+    </div>
+  }
+
   <form class="profile-card" [formGroup]="form" (ngSubmit)="onSave()">
     <h3>Editar perfil</h3>
 

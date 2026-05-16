@@ -6,6 +6,24 @@ import { superAdminGuard } from './core/guards/super-admin.guard';
 
 export const routes: Routes = [
   {
+    path: 'welcome',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/auth/welcome/welcome.component').then(m => m.WelcomeComponent),
+  },
+  {
+    path: 'pin-register',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/auth/pin-register/pin-register.component').then(m => m.PinRegisterComponent),
+  },
+  {
+    path: 'pin-login',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/auth/pin-login/pin-login.component').then(m => m.PinLoginComponent),
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>

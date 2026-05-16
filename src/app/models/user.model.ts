@@ -10,5 +10,6 @@ export interface IUser {
   streak_days: number;
   role: 'member' | 'church_admin' | 'super_admin';
   suspended: boolean;
+  is_pin_account: boolean;
   created_at: string;
 }

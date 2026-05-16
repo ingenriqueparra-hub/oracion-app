@@ -1,0 +1,82 @@
+<div class="pin-page">
+  <div class="pin-header">
+    <a routerLink="/welcome" class="back-link">← Volver</a>
+    <span class="brand-icon">🙏</span>
+  </div>
+
+  <!-- Paso 1: Nombre -->
+  @if (step() === 1) {
+    <div class="pin-card">
+      <h2>¿Cómo te llaman?</h2>
+      <p class="pin-subtitle">Así te verán en la comunidad</p>
+
+      <div class="field">
+        <input
+          type="text"
+          placeholder="Tu nombre completo"
+          autocomplete="name"
+          [value]="name()"
+          (input)="onNameInput($event)"
+          (keydown.enter)="goToStep2()"
+          [class.invalid]="nameError()"
+          maxlength="40"
+        >
+        @if (nameError()) {
+          <span class="field-error">{{ nameError() }}</span>
+        }
+      </div>
+
+      <button class="btn-primary" (click)="goToStep2()">Siguiente →</button>
+
+      <p class="login-link">¿Ya tienes cuenta? <a routerLink="/pin-login">Entrar con PIN</a></p>
+    </div>
+  }
+
+  <!-- Paso 2: Crear PIN -->
+  @if (step() === 2) {
+    <div class="pin-card">
+      <button class="back-step" (click)="step.set(1)">← {{ name() }}</button>
+      <h2>Crea tu PIN de 4 dígitos</h2>
+      <p class="pin-subtitle">Lo necesitarás para entrar desde otro celular</p>
+
+      <div class="pin-group">
+        <label>Tu PIN</label>
+        <div class="pin-inputs">
+          <input #p0 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('pin', 0, $event)" (keydown)="onBack('pin', 0, $event)">
+          <input #p1 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('pin', 1, $event)" (keydown)="onBack('pin', 1, $event)">
+          <input #p2 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('pin', 2, $event)" (keydown)="onBack('pin', 2, $event)">
+          <input #p3 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('pin', 3, $event)" (keydown)="onBack('pin', 3, $event)">
+        </div>
+      </div>
+
+      <div class="pin-group">
+        <label>Confirma tu PIN</label>
+        <div class="pin-inputs">
+          <input #c0 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('confirm', 0, $event)" (keydown)="onBack('confirm', 0, $event)">
+          <input #c1 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('confirm', 1, $event)" (keydown)="onBack('confirm', 1, $event)">
+          <input #c2 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('confirm', 2, $event)" (keydown)="onBack('confirm', 2, $event)">
+          <input #c3 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit('confirm', 3, $event)" (keydown)="onBack('confirm', 3, $event)">
+        </div>
+      </div>
+
+      @if (pinError()) {
+        <p class="field-error center">{{ pinError() }}</p>
+      }
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <button class="btn-primary" (click)="onSubmit()" [disabled]="loading()">
+        @if (loading()) { Creando cuenta... } @else { 🙏 Crear cuenta }
+      </button>
+    </div>
+  }
+</div>

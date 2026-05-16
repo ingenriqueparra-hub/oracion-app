@@ -1,0 +1,245 @@
+.pin-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(160deg, #f0f4ff 0%, #faf8ff 100%);
+}
+
+.pin-header {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .back-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.9rem;
+
+    &:hover { color: #374151; }
+  }
+
+  .brand-icon { font-size: 1.75rem; }
+}
+
+.pin-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0 0 0.4rem;
+  }
+}
+
+.pin-subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0 0 1.75rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.4rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #f9fafb;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+
+    &:focus {
+      outline: none;
+      border-color: #4f46e5;
+      background: #fff;
+    }
+
+    &.invalid { border-color: #ef4444; }
+  }
+}
+
+.field-error {
+  display: block;
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+
+  &.center { text-align: center; }
+}
+
+.pin-group {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.pin-inputs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pin-digit {
+  width: 56px;
+  height: 64px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  background: #f9fafb;
+  transition: border-color 0.15s, background 0.15s;
+
+  &:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  }
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 0.875rem;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover:not(:disabled) { background: #4338ca; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.btn-ghost {
+  display: block;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem 0 0;
+  text-align: center;
+  width: 100%;
+
+  &:hover { color: #374151; }
+}
+
+.error-msg {
+  color: #ef4444;
+  font-size: 0.875rem;
+  text-align: center;
+  margin: 0 0 0.75rem;
+}
+
+.register-link {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 1.25rem 0 0;
+
+  a {
+    color: #4f46e5;
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+}
+
+// Selector de cuentas duplicadas
+.account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.account-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  width: 100%;
+
+  &:hover:not(:disabled) {
+    border-color: #4f46e5;
+    background: #f0f4ff;
+  }
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.account-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #4f46e5;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.account-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.account-name {
+  font-weight: 600;
+  color: #1a1a2e;
+  font-size: 0.95rem;
+}
+
+.account-church {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.account-arrow {
+  color: #9ca3af;
+  font-size: 1.25rem;
+}

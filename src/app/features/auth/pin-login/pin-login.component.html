@@ -1,0 +1,88 @@
+<div class="pin-page">
+  <div class="pin-header">
+    <a routerLink="/welcome" class="back-link">← Volver</a>
+    <span class="brand-icon">🙏</span>
+  </div>
+
+  <!-- Selector de cuenta (nombres duplicados) -->
+  @if (showSelector()) {
+    <div class="pin-card">
+      <h2>¿Cuál eres tú?</h2>
+      <p class="pin-subtitle">Hay varias cuentas con ese nombre. Elige la tuya:</p>
+
+      <div class="account-list">
+        @for (account of accounts(); track account.fake_email) {
+          <button class="account-item" (click)="onSelectAccount(account)" [disabled]="loading()">
+            <div class="account-avatar">{{ account.name.charAt(0).toUpperCase() }}</div>
+            <div class="account-info">
+              <span class="account-name">{{ account.name }}</span>
+              <span class="account-church">
+                @if (account.church_id) { Con iglesia } @else { Sin iglesia }
+              </span>
+            </div>
+            <span class="account-arrow">›</span>
+          </button>
+        }
+      </div>
+
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <button class="btn-ghost" (click)="cancelSelector()">← Volver</button>
+    </div>
+  }
+
+  <!-- Formulario de login -->
+  @if (!showSelector()) {
+    <div class="pin-card">
+      <h2>Entrar con nombre y PIN</h2>
+      <p class="pin-subtitle">Escribe tu nombre exactamente como te registraste</p>
+
+      <div class="field">
+        <label for="nameInput">Tu nombre</label>
+        <input
+          id="nameInput"
+          type="text"
+          placeholder="Tu nombre completo"
+          autocomplete="name"
+          [value]="name()"
+          (input)="onNameInput($event)"
+          [class.invalid]="nameError()"
+        >
+        @if (nameError()) {
+          <span class="field-error">{{ nameError() }}</span>
+        }
+      </div>
+
+      <div class="pin-group">
+        <label>Tu PIN de 4 dígitos</label>
+        <div class="pin-inputs">
+          <input #p0 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit(0, $event)" (keydown)="onBack(0, $event)">
+          <input #p1 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit(1, $event)" (keydown)="onBack(1, $event)">
+          <input #p2 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit(2, $event)" (keydown)="onBack(2, $event)">
+          <input #p3 type="password" inputmode="numeric" maxlength="1" class="pin-digit"
+            (input)="onDigit(3, $event)" (keydown)="onBack(3, $event)">
+        </div>
+        @if (pinError()) {
+          <span class="field-error center">{{ pinError() }}</span>
+        }
+      </div>
+
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <button class="btn-primary" (click)="onSubmit()" [disabled]="loading()">
+        @if (loading()) { Buscando cuenta... } @else { Entrar }
+      </button>
+
+      <p class="register-link">
+        ¿Sin cuenta aún? <a routerLink="/pin-register">Crear cuenta rápida</a>
+      </p>
+    </div>
+  }
+</div>
