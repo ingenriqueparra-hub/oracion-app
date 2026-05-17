@@ -58,12 +58,6 @@
         <span class="nav-label">Notificaciones</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/profile" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon"><mat-icon>person</mat-icon></span>
-        <span class="nav-label">Perfil</span>
-      </a>
-    </li>
 
     @if (user()?.role === 'church_admin') {
       <li>
@@ -93,17 +87,38 @@
 
   <div class="nav-footer">
     @if (user()) {
-      <div class="user-chip">
-        <div class="user-avatar">{{ user()!.name.charAt(0).toUpperCase() }}</div>
-        <div class="user-info">
-          <span class="user-name">{{ user()!.name }}</span>
-          <span class="user-level">{{ user()!.level }}</span>
-        </div>
+      <div class="user-menu-wrap">
+        <button class="user-chip" (click)="toggleMenu($event)">
+          <div class="user-avatar">{{ user()!.name.charAt(0).toUpperCase() }}</div>
+          <div class="user-info">
+            <span class="user-name">{{ user()!.name }}</span>
+            <span class="user-level">{{ user()!.level }}</span>
+          </div>
+        </button>
+
+        @if (showMenu()) {
+          <div class="user-popup" (click)="$event.stopPropagation()">
+            <div class="popup-header">
+              <div class="popup-avatar">{{ user()!.name.charAt(0).toUpperCase() }}</div>
+              <div>
+                <div class="popup-name">{{ user()!.name }}</div>
+                <div class="popup-level">{{ user()!.level }}</div>
+              </div>
+            </div>
+            <div class="popup-divider"></div>
+            <a routerLink="/profile" class="popup-item" (click)="closeMenu()">
+              <mat-icon>person</mat-icon> Ver perfil
+            </a>
+            <a routerLink="/profile/edit" class="popup-item" (click)="closeMenu()">
+              <mat-icon>edit</mat-icon> Editar perfil
+            </a>
+            <div class="popup-divider"></div>
+            <button class="popup-item popup-logout" (click)="auth.logout()">
+              <mat-icon>logout</mat-icon> Cerrar sesión
+            </button>
+          </div>
+        }
       </div>
     }
-    <button class="nav-item logout-btn" (click)="auth.logout()">
-      <span class="nav-icon"><mat-icon>logout</mat-icon></span>
-      <span class="nav-label">Salir</span>
-    </button>
   </div>
 </nav>

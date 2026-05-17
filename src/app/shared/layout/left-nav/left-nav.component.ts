@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect } from '@angular/core';
+import { Component, inject, signal, effect, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
@@ -17,6 +17,7 @@ export class LeftNavComponent {
 
   user = this.auth.user;
   unreadCount = signal(0);
+  showMenu = signal(false);
 
   constructor() {
     effect(() => {
@@ -35,5 +36,19 @@ export class LeftNavComponent {
 
   get churchMemberLink(): string[] {
     return ['/churches', this.user()?.church_id ?? ''];
+  }
+
+  toggleMenu(event: MouseEvent) {
+    event.stopPropagation();
+    this.showMenu.update(v => !v);
+  }
+
+  closeMenu() {
+    this.showMenu.set(false);
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.showMenu.set(false);
   }
 }

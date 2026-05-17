@@ -91,7 +91,12 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () =>
-          import('./features/profile/profile.component').then(m => m.ProfileComponent),
+          import('./features/profile/profile-view/profile-view.component').then(m => m.ProfileViewComponent),
+      },
+      {
+        path: 'profile/edit',
+        loadComponent: () =>
+          import('./features/profile/profile-edit/profile-edit.component').then(m => m.ProfileEditComponent),
       },
       {
         path: 'profile/:id',

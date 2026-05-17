@@ -1,0 +1,45 @@
+<div class="profile-page">
+  <header class="profile-header">
+    <div class="avatar">
+      @if (user()?.avatar_url) {
+        <img [src]="user()?.avatar_url" [alt]="user()?.name">
+      } @else {
+        <span class="initials">{{ initials }}</span>
+      }
+    </div>
+    <h2>{{ user()?.name }}</h2>
+    <span class="level-chip">{{ user()?.level }}</span>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-value">{{ user()?.points ?? 0 }}</span>
+      <span class="stat-label">Puntos</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">🔥 {{ user()?.streak_days ?? 0 }}</span>
+      <span class="stat-label">Días de racha</span>
+    </div>
+  </div>
+
+  <div class="profile-card">
+    <h3>Mis insignias</h3>
+    <app-badge-list [allBadges]="allBadges()" [earnedIds]="earnedIds()" [showLocked]="true" />
+  </div>
+
+  <a routerLink="/prayers" class="quick-link">
+    <span class="link-icon">🙏</span>
+    <span>Feed de oración</span>
+    <span class="arrow">›</span>
+  </a>
+  <a routerLink="/testimonies" class="quick-link">
+    <span class="link-icon">✨</span>
+    <span>Testimonios</span>
+    <span class="arrow">›</span>
+  </a>
+  <a routerLink="/ranking" class="quick-link">
+    <span class="link-icon">🏆</span>
+    <span>Ranking de mi iglesia</span>
+    <span class="arrow">›</span>
+  </a>
+</div>

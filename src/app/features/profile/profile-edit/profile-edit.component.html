@@ -1,0 +1,85 @@
+<div class="edit-page">
+  <app-page-header title="Editar perfil" backLink="/profile"></app-page-header>
+
+  <!-- Avatar -->
+  <div class="edit-card avatar-card">
+    <div class="avatar-preview">
+      @if (avatarPreview()) {
+        <img [src]="avatarPreview()!" alt="Avatar">
+      } @else {
+        <span class="initials">{{ initials }}</span>
+      }
+    </div>
+    <label class="btn-change-avatar" for="avatar-input">
+      Cambiar foto
+    </label>
+    <input
+      id="avatar-input"
+      type="file"
+      accept="image/*"
+      class="file-input"
+      (change)="onFileSelected($event)"
+    >
+  </div>
+
+  <!-- Nombre -->
+  <form class="edit-card" [formGroup]="form" (ngSubmit)="onSave()">
+    <h3>Nombre</h3>
+    <div class="field">
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        autocomplete="name"
+        placeholder="Tu nombre"
+      >
+    </div>
+    @if (error()) {
+      <p class="error-msg">{{ error() }}</p>
+    }
+    @if (saved()) {
+      <p class="success-msg">¡Cambios guardados!</p>
+    }
+    <button type="submit" class="btn-primary" [disabled]="loading()">
+      @if (loading()) { Guardando... } @else { Guardar cambios }
+    </button>
+  </form>
+
+  <!-- Asegurar cuenta (solo PIN) -->
+  @if (user()?.is_pin_account) {
+    <div class="edit-card">
+      <h3>🔒 Asegura tu cuenta</h3>
+      <p class="card-desc">Añade tu email para no perder tu cuenta si cambias de celular.</p>
+      <form [formGroup]="emailForm" (ngSubmit)="onAddEmail()">
+        <div class="field">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="tucorreo@gmail.com"
+            autocomplete="email"
+            [class.invalid]="emailForm.controls.email.touched && emailForm.controls.email.invalid"
+          >
+          @if (emailForm.controls.email.touched && emailForm.controls.email.hasError('required')) {
+            <span class="field-error">Escribe tu email</span>
+          } @else if (emailForm.controls.email.touched && emailForm.controls.email.hasError('email')) {
+            <span class="field-error">Email no válido</span>
+          }
+        </div>
+        @if (emailError()) {
+          <p class="error-msg">{{ emailError() }}</p>
+        }
+        @if (emailSaved()) {
+          <p class="success-msg">Email guardado. Revisa tu bandeja para confirmarlo.</p>
+        }
+        <button type="submit" class="btn-primary" [disabled]="emailSaving()">
+          @if (emailSaving()) { Guardando... } @else { Guardar email }
+        </button>
+      </form>
+    </div>
+  }
+
+  <!-- Cerrar sesión -->
+  <div class="logout-section">
+    <button class="btn-logout" (click)="onLogout()">Cerrar sesión</button>
+  </div>
+</div>
