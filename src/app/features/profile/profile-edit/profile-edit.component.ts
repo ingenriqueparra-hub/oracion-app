@@ -73,8 +73,9 @@ export class ProfileEditComponent implements OnInit {
       this.selectedFile.set(null);
       this.saved.set(true);
       setTimeout(() => this.saved.set(false), 3000);
-    } catch {
-      this.error.set('No se pudo guardar. Inténtalo de nuevo.');
+    } catch (err: any) {
+      console.error('Avatar/profile save error:', err);
+      this.error.set(err?.message ?? 'No se pudo guardar. Inténtalo de nuevo.');
     } finally {
       this.loading.set(false);
     }
@@ -88,7 +89,7 @@ export class ProfileEditComponent implements OnInit {
     const { error } = await this.supabase.client.storage
       .from('avatars')
       .upload(path, file, { upsert: true, contentType: file.type });
-    if (error) throw error;
+    if (error) throw new Error(`Error al subir imagen: ${error.message}`);
     const { data } = this.supabase.client.storage.from('avatars').getPublicUrl(path);
     return data.publicUrl;
   }
