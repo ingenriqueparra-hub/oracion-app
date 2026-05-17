@@ -3,14 +3,13 @@
   padding-bottom: 2rem;
 }
 
-
 .state-msg {
   text-align: center;
   padding: 3rem 1rem;
-  color: #757575;
+  color: var(--color-text-secondary);
 
   &.error {
-    color: #C62828;
+    color: var(--color-danger);
   }
 }
 
@@ -27,7 +26,7 @@
   width: 80px;
   height: 80px;
   border-radius: 16px;
-  background: #E8F5E9;
+  background: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,12 +47,12 @@
 h1 {
   font-size: 1.375rem;
   font-weight: 700;
-  color: #1B5E20;
+  color: var(--color-primary);
   margin-bottom: 0.5rem;
 }
 
 .description {
-  color: #616161;
+  color: var(--color-text-body);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -68,13 +67,13 @@ h1 {
   h2 {
     font-size: 1rem;
     font-weight: 600;
-    color: #1B5E20;
+    color: var(--color-primary);
     margin-bottom: 1rem;
   }
 }
 
 .empty-text {
-  color: #9E9E9E;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
 }
 
@@ -89,7 +88,7 @@ h1 {
   align-items: center;
   gap: 0.625rem;
   padding: 0.625rem 0.75rem;
-  background: #F9FBE7;
+  background: var(--color-primary-light);
   border-radius: 8px;
   font-size: 0.9375rem;
 
@@ -105,7 +104,7 @@ h1 {
 .btn-primary {
   width: 100%;
   padding: 0.875rem;
-  background: #2E7D32;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -115,7 +114,7 @@ h1 {
   transition: background 0.2s, opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #1B5E20;
+    background: var(--color-primary-dark);
   }
 
   &:disabled {
@@ -132,13 +131,13 @@ h1 {
   font-size: 0.9375rem;
 
   &.approved {
-    background: #E8F5E9;
-    color: #2E7D32;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
   }
 
   &.pending {
-    background: #FFF8E1;
-    color: #F57F17;
+    background: #fff8e1;
+    color: #f57f17;
   }
 }
 
@@ -147,8 +146,8 @@ h1 {
   margin-top: 0.625rem;
   padding: 0.75rem;
   background: none;
-  color: #C62828;
-  border: 1.5px solid #FFCDD2;
+  color: var(--color-danger);
+  border: 1.5px solid #ffcdd2;
   border-radius: 8px;
   font-size: 0.9375rem;
   font-weight: 500;
@@ -156,8 +155,8 @@ h1 {
   transition: background 0.2s, border-color 0.2s;
 
   &:hover:not(:disabled) {
-    background: #FFEBEE;
-    border-color: #EF9A9A;
+    background: #fef2f2;
+    border-color: #fca5a5;
   }
 
   &:disabled {
@@ -167,10 +166,10 @@ h1 {
 }
 
 .error-msg {
-  color: #C62828;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-bottom: 0.75rem;
   padding: 0.625rem 0.75rem;
-  background: #FFEBEE;
+  background: #fef2f2;
   border-radius: 6px;
 }

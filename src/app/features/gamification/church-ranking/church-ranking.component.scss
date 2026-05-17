@@ -3,12 +3,11 @@
   padding-bottom: 2rem;
 }
 
-
 .state-msg {
   text-align: center;
   padding: 3rem 1rem;
-  color: #757575;
-  &.error { color: #C62828; }
+  color: var(--color-text-secondary);
+  &.error { color: var(--color-danger); }
 }
 
 .ranking-list {
@@ -36,8 +35,8 @@
   &:hover { box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1); }
 
   &.top3 {
-    background: linear-gradient(135deg, #F9FBE7 0%, #F1F8E9 100%);
-    border: 1.5px solid #C8E6C9;
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, #ede9fe 100%);
+    border: 1.5px solid var(--color-border-light);
   }
 }
 
@@ -47,20 +46,20 @@
   text-align: center;
   flex-shrink: 0;
   font-weight: 700;
-  color: #757575;
+  color: var(--color-text-secondary);
 }
 
 .avatar {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #C8E6C9;
+  background: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 0.875rem;
-  color: #1B5E20;
+  color: var(--color-primary);
   flex-shrink: 0;
   overflow: hidden;
 
@@ -77,18 +76,18 @@
 .entry-name {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #212121;
+  color: var(--color-text-primary);
 }
 
 .entry-level {
   font-size: 0.75rem;
-  color: #558B2F;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .entry-points {
   font-size: 0.9375rem;
   font-weight: 700;
-  color: #2E7D32;
+  color: var(--color-primary);
   flex-shrink: 0;
 }

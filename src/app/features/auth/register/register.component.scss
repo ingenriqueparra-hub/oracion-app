@@ -17,13 +17,13 @@
 
   h1 {
     font-size: 2rem;
-    color: #1B5E20;
+    color: var(--color-primary);
     margin-bottom: 0.25rem;
     font-weight: 700;
   }
 
   p {
-    color: #558B2F;
+    color: var(--color-text-secondary);
     font-size: 0.95rem;
   }
 }
@@ -38,7 +38,7 @@
 
   h2 {
     font-size: 1.25rem;
-    color: #1B5E20;
+    color: var(--color-primary);
     margin-bottom: 1.5rem;
     font-weight: 600;
   }
@@ -51,26 +51,26 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #424242;
+    color: var(--color-text-body);
     margin-bottom: 0.375rem;
   }
 
   input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1.5px solid #E0E0E0;
+    border: 1.5px solid var(--color-border);
     border-radius: 8px;
     font-size: 1rem;
-    color: #212121;
+    color: var(--color-text-primary);
     transition: border-color 0.2s;
 
     &:focus {
       outline: none;
-      border-color: #2E7D32;
+      border-color: var(--color-primary);
     }
 
     &::placeholder {
-      color: #BDBDBD;
+      color: var(--color-border-muted);
     }
   }
 }
@@ -108,7 +108,7 @@
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 1.25rem;
-  color: #9E9E9E;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
 
   &::before,
@@ -116,7 +116,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: #E0E0E0;
+    background: var(--color-border);
   }
 }
 
@@ -124,7 +124,7 @@
   display: block;
   width: 100%;
   padding: 0.875rem;
-  background: #2E7D32;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -137,7 +137,7 @@
   margin-top: 0.25rem;
 
   &:hover:not(:disabled) {
-    background: #1B5E20;
+    background: var(--color-primary-dark);
   }
 
   &:disabled {
@@ -147,11 +147,11 @@
 }
 
 .error-msg {
-  color: #C62828;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   padding: 0.625rem 0.75rem;
-  background: #FFEBEE;
+  background: #fef2f2;
   border-radius: 6px;
 }
 
@@ -159,10 +159,10 @@
   text-align: center;
   margin-top: 1.25rem;
   font-size: 0.9rem;
-  color: #616161;
+  color: var(--color-text-body);
 
   a {
-    color: #2E7D32;
+    color: var(--color-primary);
     font-weight: 600;
     text-decoration: none;
 
@@ -185,7 +185,7 @@
   }
 
   p {
-    color: #616161;
+    color: var(--color-text-body);
     margin-bottom: 1.5rem;
     line-height: 1.5;
   }

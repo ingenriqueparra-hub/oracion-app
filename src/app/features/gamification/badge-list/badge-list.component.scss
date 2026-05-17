@@ -1,6 +1,6 @@
 .empty {
   font-size: 0.875rem;
-  color: #9E9E9E;
+  color: var(--color-text-secondary);
   text-align: center;
   padding: 1rem 0;
 }
@@ -19,8 +19,8 @@
   text-align: center;
   padding: 1rem 0.75rem;
   border-radius: 12px;
-  border: 1.5px solid #E8F5E9;
-  background: #F9FBE7;
+  border: 1.5px solid var(--color-border-light);
+  background: var(--color-primary-light);
   transition: opacity 0.2s;
 
   &.locked {
@@ -29,8 +29,8 @@
   }
 
   &.earned {
-    border-color: #A5D6A7;
-    background: #F1F8E9;
+    border-color: var(--color-primary);
+    background: #e0e7ff;
   }
 }
 
@@ -42,13 +42,13 @@
 .badge-name {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #1B5E20;
+  color: var(--color-primary);
   margin-bottom: 0.25rem;
 }
 
 .badge-desc {
   font-size: 0.75rem;
-  color: #757575;
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 

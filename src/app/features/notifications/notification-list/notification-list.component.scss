@@ -3,12 +3,11 @@
   padding-bottom: 2rem;
 }
 
-
 .state-msg {
   text-align: center;
   padding: 3rem 1rem;
-  color: #757575;
-  &.error { color: #C62828; }
+  color: var(--color-text-secondary);
+  &.error { color: var(--color-danger); }
 }
 
 .empty-state {
@@ -21,7 +20,7 @@
     margin-bottom: 1rem;
   }
 
-  p { color: #616161; }
+  p { color: var(--color-text-body); }
 }
 
 .notif-list {
@@ -35,13 +34,13 @@
   align-items: flex-start;
   gap: 0.875rem;
   padding: 1rem;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1px solid var(--color-border-light);
   position: relative;
   transition: background 0.15s;
 
-  &.unread { background: #F1F8E9; }
+  &.unread { background: var(--color-primary-light); }
   &.clickable { cursor: pointer; }
-  &.clickable:hover { background: #E8F5E9; }
+  &.clickable:hover { background: #e0e7ff; }
 }
 
 .notif-icon {
@@ -58,13 +57,13 @@
 .notif-title {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #212121;
+  color: var(--color-text-primary);
   margin-bottom: 0.2rem;
 }
 
 .notif-text {
   font-size: 0.875rem;
-  color: #555;
+  color: var(--color-text-body);
   line-height: 1.45;
   margin-bottom: 0.3rem;
   white-space: nowrap;
@@ -74,14 +73,14 @@
 
 .notif-time {
   font-size: 0.75rem;
-  color: #9E9E9E;
+  color: var(--color-text-secondary);
 }
 
 .unread-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #2E7D32;
+  background: var(--color-primary);
   flex-shrink: 0;
   margin-top: 0.4rem;
 }

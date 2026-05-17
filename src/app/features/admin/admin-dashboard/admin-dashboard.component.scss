@@ -1,13 +1,13 @@
 .page {
   min-height: 100vh;
   padding-bottom: 2rem;
-  background: #F5F5F5;
+  background: var(--color-surface-hover);
 }
 
 .tabs {
   display: flex;
   background: white;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid var(--color-border-light);
   position: sticky;
   top: 56px;
   z-index: 9;
@@ -21,18 +21,18 @@
   border-bottom: 3px solid transparent;
   font-size: 0.9375rem;
   font-weight: 500;
-  color: #757575;
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 
-  &.active { color: #1B5E20; border-bottom-color: #1B5E20; font-weight: 600; }
+  &.active { color: var(--color-primary); border-bottom-color: var(--color-primary); font-weight: 600; }
 }
 
 .state-msg {
   text-align: center;
   padding: 3rem 1rem;
-  color: #757575;
-  &.error { color: #C62828; }
+  color: var(--color-text-secondary);
+  &.error { color: var(--color-danger); }
 }
 
 .summary-chips {
@@ -48,9 +48,9 @@
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
 
-  &.pending  { background: #FFF8E1; color: #F57F17; }
-  &.approved { background: #E8F5E9; color: #2E7D32; }
-  &.rejected { background: #FFEBEE; color: #C62828; }
+  &.pending  { background: #fff8e1; color: #f57f17; }
+  &.approved { background: var(--color-primary-light); color: var(--color-primary); }
+  &.rejected { background: #fef2f2; color: var(--color-danger); }
 }
 
 .item-list {
@@ -82,7 +82,7 @@
 .item-name {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #212121;
+  color: var(--color-text-primary);
 }
 
 .status-badge {
@@ -92,10 +92,10 @@
   border-radius: 20px;
   flex-shrink: 0;
 
-  &.pending  { background: #FFF8E1; color: #F57F17; }
-  &.approved { background: #E8F5E9; color: #2E7D32; }
-  &.rejected { background: #FFEBEE; color: #C62828; }
-  &.suspended{ background: #F3E5F5; color: #7B1FA2; }
+  &.pending  { background: #fff8e1; color: #f57f17; }
+  &.approved { background: var(--color-primary-light); color: var(--color-primary); }
+  &.rejected { background: #fef2f2; color: var(--color-danger); }
+  &.suspended{ background: #f3e5f5; color: #7b1fa2; }
 }
 
 .role-badge {
@@ -103,8 +103,8 @@
   font-weight: 600;
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
-  background: #E3F2FD;
-  color: #1565C0;
+  background: #e3f2fd;
+  color: #1565c0;
   flex-shrink: 0;
 }
 
@@ -113,11 +113,11 @@
   flex-direction: column;
   gap: 0.2rem;
   font-size: 0.8125rem;
-  color: #616161;
+  color: var(--color-text-body);
   margin-bottom: 0.75rem;
 }
 
-.meta-email { color: #9E9E9E; font-size: 0.8rem; }
+.meta-email { color: var(--color-text-secondary); font-size: 0.8rem; }
 
 .item-actions {
   display: flex;
@@ -136,6 +136,6 @@
   &:hover { opacity: 0.85; }
 }
 
-.btn-approve { background: #E8F5E9; color: #2E7D32; }
-.btn-reject  { background: #FFEBEE; color: #C62828; }
-.btn-suspend { background: #FFF8E1; color: #E65100; }
+.btn-approve { background: var(--color-primary-light); color: var(--color-primary); }
+.btn-reject  { background: #fef2f2; color: var(--color-danger); }
+.btn-suspend { background: #fff8e1; color: #e65100; }

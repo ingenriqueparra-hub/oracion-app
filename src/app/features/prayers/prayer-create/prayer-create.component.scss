@@ -3,7 +3,6 @@
   padding-bottom: 2rem;
 }
 
-
 .card {
   background: white;
   margin: 1rem;
@@ -14,7 +13,7 @@
 
 .form-intro {
   font-size: 0.9rem;
-  color: #616161;
+  color: var(--color-text-body);
   line-height: 1.55;
   margin-bottom: 1.25rem;
 }
@@ -25,22 +24,22 @@
   textarea {
     width: 100%;
     padding: 0.875rem 1rem;
-    border: 1.5px solid #E0E0E0;
+    border: 1.5px solid var(--color-border);
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
-    color: #212121;
+    color: var(--color-text-primary);
     line-height: 1.6;
     resize: none;
     transition: border-color 0.2s;
 
     &:focus {
       outline: none;
-      border-color: #2E7D32;
+      border-color: var(--color-primary);
     }
 
-    &::placeholder { color: #BDBDBD; }
-    &.invalid { border-color: #C62828; }
+    &::placeholder { color: var(--color-border-muted); }
+    &.invalid { border-color: var(--color-danger); }
   }
 }
 
@@ -53,28 +52,28 @@
 
 .field-error {
   font-size: 0.8rem;
-  color: #C62828;
+  color: var(--color-danger);
 }
 
 .char-count {
   font-size: 0.8rem;
-  color: #9E9E9E;
-  &.over { color: #C62828; }
+  color: var(--color-text-secondary);
+  &.over { color: var(--color-danger); }
 }
 
 .error-msg {
-  color: #C62828;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   padding: 0.625rem 0.75rem;
-  background: #FFEBEE;
+  background: #fef2f2;
   border-radius: 6px;
 }
 
 .btn-primary {
   width: 100%;
   padding: 0.9rem;
-  background: #2E7D32;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -83,6 +82,6 @@
   cursor: pointer;
   transition: background 0.2s, opacity 0.2s;
 
-  &:hover:not(:disabled) { background: #1B5E20; }
+  &:hover:not(:disabled) { background: var(--color-primary-dark); }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
