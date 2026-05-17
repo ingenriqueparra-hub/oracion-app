@@ -89,7 +89,13 @@
     @if (user()) {
       <div class="user-menu-wrap">
         <button class="user-chip" (click)="toggleMenu($event)">
-          <div class="user-avatar">{{ user()!.name.charAt(0).toUpperCase() }}</div>
+          <div class="user-avatar">
+            @if (user()?.avatar_url) {
+              <img [src]="user()!.avatar_url + '?t=' + timestamp" [alt]="user()!.name">
+            } @else {
+              {{ user()!.name.charAt(0).toUpperCase() }}
+            }
+          </div>
           <div class="user-info">
             <span class="user-name">{{ user()!.name }}</span>
             <span class="user-level">{{ user()!.level }}</span>
@@ -99,7 +105,13 @@
         @if (showMenu()) {
           <div class="user-popup" (click)="$event.stopPropagation()">
             <div class="popup-header">
-              <div class="popup-avatar">{{ user()!.name.charAt(0).toUpperCase() }}</div>
+              <div class="popup-avatar">
+                @if (user()?.avatar_url) {
+                  <img [src]="user()!.avatar_url + '?t=' + timestamp" [alt]="user()!.name">
+                } @else {
+                  {{ user()!.name.charAt(0).toUpperCase() }}
+                }
+              </div>
               <div>
                 <div class="popup-name">{{ user()!.name }}</div>
                 <div class="popup-level">{{ user()!.level }}</div>

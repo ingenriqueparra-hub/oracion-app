@@ -16,6 +16,7 @@ export class LeftNavComponent {
   private notificationService = inject(NotificationService);
 
   user = this.auth.user;
+  timestamp = Date.now();
   unreadCount = signal(0);
   showMenu = signal(false);
 
