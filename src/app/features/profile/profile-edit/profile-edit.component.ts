@@ -81,14 +81,46 @@ export class ProfileEditComponent implements OnInit {
     }
   }
 
+  private compressImage(file: File): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const MAX = 400;
+        let { width, height } = img;
+        if (width > height) {
+          if (width > MAX) { height = Math.round(height * MAX / width); width = MAX; }
+        } else {
+          if (height > MAX) { width = Math.round(width * MAX / height); height = MAX; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Canvas toBlob failed')), 'image/webp', 0.8);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo cargar la imagen')); };
+      img.src = url;
+    });
+  }
+
   private async uploadAvatarFile(file: File): Promise<string> {
     const userId = this.user()?.id;
     if (!userId) throw new Error('No user');
-    const ext = file.name.split('.').pop() ?? 'jpg';
-    const path = `${userId}/avatar.${ext}`;
+    const path = `${userId}/avatar.webp`;
+
+    // Remove previous avatar if it exists
+    const prevUrl = this.user()?.avatar_url;
+    if (prevUrl) {
+      const prevPath = prevUrl.split('/avatars/')[1];
+      if (prevPath) await this.supabase.client.storage.from('avatars').remove([decodeURIComponent(prevPath)]);
+    }
+
+    const blob = await this.compressImage(file);
     const { error } = await this.supabase.client.storage
       .from('avatars')
-      .upload(path, file, { upsert: true, contentType: file.type });
+      .upload(path, blob, { upsert: true, contentType: 'image/webp' });
     if (error) throw new Error(`Error al subir imagen: ${error.message}`);
     const { data } = this.supabase.client.storage.from('avatars').getPublicUrl(path);
     return data.publicUrl;
