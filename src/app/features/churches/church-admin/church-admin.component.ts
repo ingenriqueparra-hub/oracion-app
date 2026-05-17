@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChurchService } from '../../../core/services/church.service';
-import { IChurch, IGroup, IChurchMember } from '../../../models/church.model';
+import { IChurch, IGroup, IChurchMember, IGroupRequest } from '../../../models/church.model';
 import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 interface IChurchStats {
@@ -28,6 +28,7 @@ export class ChurchAdminComponent implements OnInit {
   church = signal<IChurch | null>(null);
   pendingMembers = signal<IChurchMember[]>([]);
   approvedMembers = signal<IChurchMember[]>([]);
+  pendingGroupRequests = signal<IGroupRequest[]>([]);
   groups = signal<IGroup[]>([]);
   stats = signal<IChurchStats | null>(null);
   loading = signal(true);
@@ -43,6 +44,9 @@ export class ChurchAdminComponent implements OnInit {
     if (!gid) return [];
     return this.approvedMembers().filter(m => m.group_id === gid);
   });
+  totalPendingCount = computed(() =>
+    this.pendingMembers().length + this.pendingGroupRequests().length
+  );
 
   groupForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -59,18 +63,20 @@ export class ChurchAdminComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      const [church, pending, approved, groups, stats] = await Promise.all([
+      const [church, pending, approved, groups, stats, groupRequests] = await Promise.all([
         this.churchService.getChurchById(this.churchId),
         this.churchService.getPendingMembers(this.churchId),
         this.churchService.getApprovedMembers(this.churchId),
         this.churchService.getGroups(this.churchId),
         this.churchService.getChurchStats(this.churchId),
+        this.churchService.getPendingGroupRequests(this.churchId),
       ]);
       this.church.set(church);
       this.pendingMembers.set(pending);
       this.approvedMembers.set(approved);
       this.groups.set(groups);
       this.stats.set(stats);
+      this.pendingGroupRequests.set(groupRequests);
       this.churchForm.setValue({
         name: church.name,
         description: church.description ?? '',
@@ -110,6 +116,29 @@ export class ChurchAdminComponent implements OnInit {
       this.stats.update(s => s ? { ...s, totalMembers: s.totalMembers - 1 } : s);
     } catch {
       this.error.set('No se pudo expulsar al miembro.');
+    }
+  }
+
+  async onApproveGroupRequest(request: IGroupRequest) {
+    const member = this.approvedMembers().find(m => m.user_id === request.user_id);
+    if (!member) { this.error.set('No se encontró el miembro.'); return; }
+    try {
+      await this.churchService.approveGroupRequest(request, member.id);
+      this.pendingGroupRequests.update(list => list.filter(r => r.id !== request.id));
+      this.approvedMembers.update(list =>
+        list.map(m => m.id === member.id ? { ...m, group_id: request.requested_group_id } : m)
+      );
+    } catch {
+      this.error.set('No se pudo aprobar la solicitud de grupo.');
+    }
+  }
+
+  async onRejectGroupRequest(request: IGroupRequest) {
+    try {
+      await this.churchService.rejectGroupRequest(request.id);
+      this.pendingGroupRequests.update(list => list.filter(r => r.id !== request.id));
+    } catch {
+      this.error.set('No se pudo rechazar la solicitud de grupo.');
     }
   }
 

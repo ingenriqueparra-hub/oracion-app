@@ -15,6 +15,17 @@ export interface IGroup {
   created_at: string;
 }
 
+export interface IGroupRequest {
+  id: string;
+  user_id: string;
+  church_id: string;
+  requested_group_id: string;
+  notification_id: string | null;
+  created_at: string;
+  profiles?: { name: string; email: string; avatar_url: string | null };
+  groups?: { name: string };
+}
+
 export interface IChurchMember {
   id: string;
   user_id: string;

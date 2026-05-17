@@ -43,6 +43,75 @@
     <div class="join-section">
       @if (isApprovedMember) {
         <div class="status-badge approved">✓ Eres miembro de esta iglesia</div>
+
+        <!-- Group section -->
+        <div class="group-section">
+          <div class="current-group-row">
+            <span class="group-label">Tu grupo:</span>
+            @if (membership()?.group_id) {
+              <span class="group-value">👥 {{ getGroupName(membership()!.group_id!) }}</span>
+            } @else {
+              <span class="group-value muted">Sin grupo asignado</span>
+            }
+          </div>
+
+          @if (groupRequest() && groupRequest()!.id !== 'pending') {
+            <div class="group-request-pending">
+              <span>⏳ Solicitud enviada: <strong>{{ groupRequest()!.groups?.name }}</strong></span>
+              <button
+                class="btn-text-danger"
+                (click)="onCancelGroupRequest()"
+                [disabled]="cancellingGroupRequest()"
+              >
+                {{ cancellingGroupRequest() ? 'Cancelando...' : 'Cancelar solicitud' }}
+              </button>
+            </div>
+          } @else if (groupRequest()?.id === 'pending') {
+            <div class="group-request-pending sent">
+              <span>✓ Solicitud enviada: <strong>{{ groupRequest()!.groups?.name }}</strong></span>
+              <span class="pending-hint">Esperando aprobación del admin</span>
+            </div>
+          } @else if (!showGroupPicker()) {
+            @if (groups().length > 0 && !isAdmin) {
+              <button class="btn-secondary" (click)="showGroupPicker.set(true)">
+                {{ membership()?.group_id ? '🔄 Cambiar de grupo' : '👥 Unirme a un grupo' }}
+              </button>
+            }
+          } @else {
+            <div class="group-picker">
+              <p class="picker-label">Selecciona un grupo:</p>
+              <div class="group-options">
+                @for (group of groups(); track group.id) {
+                  <button
+                    class="group-option"
+                    [class.selected]="selectedGroupForRequest() === group.id"
+                    [class.current]="group.id === membership()?.group_id"
+                    (click)="selectedGroupForRequest.set(group.id)"
+                  >
+                    <span>👥 {{ group.name }}</span>
+                    @if (group.id === membership()?.group_id) {
+                      <span class="current-tag">actual</span>
+                    }
+                  </button>
+                }
+              </div>
+              @if (groupRequestError()) {
+                <p class="error-msg">{{ groupRequestError() }}</p>
+              }
+              <div class="picker-actions">
+                <button class="btn-ghost" (click)="closeGroupPicker()">Cancelar</button>
+                <button
+                  class="btn-confirm"
+                  (click)="onRequestGroup()"
+                  [disabled]="!selectedGroupForRequest() || requestingGroup() || selectedGroupForRequest() === membership()?.group_id"
+                >
+                  {{ requestingGroup() ? 'Enviando...' : 'Enviar solicitud' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
         @if (!isAdmin) {
           <button class="btn-leave" (click)="onLeave()" [disabled]="leaving()">
             {{ leaving() ? 'Saliendo...' : 'Salir de esta iglesia' }}

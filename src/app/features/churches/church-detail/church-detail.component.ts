@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChurchService } from '../../../core/services/church.service';
-import { IChurch, IGroup, IChurchMember } from '../../../models/church.model';
+import { IChurch, IGroup, IChurchMember, IGroupRequest } from '../../../models/church.model';
 import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
 @Component({
@@ -20,11 +20,19 @@ export class ChurchDetailComponent implements OnInit {
   church = signal<IChurch | null>(null);
   groups = signal<IGroup[]>([]);
   membership = signal<IChurchMember | null>(null);
+  groupRequest = signal<IGroupRequest | null>(null);
   loading = signal(true);
   joining = signal(false);
   leaving = signal(false);
   error = signal('');
   joinError = signal('');
+
+  // Group picker state
+  showGroupPicker = signal(false);
+  selectedGroupForRequest = signal('');
+  requestingGroup = signal(false);
+  cancellingGroupRequest = signal(false);
+  groupRequestError = signal('');
 
   user = this.auth.user;
 
@@ -46,6 +54,16 @@ export class ChurchDetailComponent implements OnInit {
     return this.membership()?.status === 'pending';
   }
 
+  getGroupName(groupId: string): string {
+    return this.groups().find(g => g.id === groupId)?.name ?? '';
+  }
+
+  closeGroupPicker() {
+    this.showGroupPicker.set(false);
+    this.selectedGroupForRequest.set('');
+    this.groupRequestError.set('');
+  }
+
   async ngOnInit() {
     try {
       const [church, groups] = await Promise.all([
@@ -59,6 +77,11 @@ export class ChurchDetailComponent implements OnInit {
       if (user) {
         const membership = await this.churchService.getMembershipStatus(user.id, this.churchId);
         this.membership.set(membership);
+
+        if (membership?.status === 'approved') {
+          const groupRequest = await this.churchService.getMyGroupRequest(user.id, this.churchId);
+          this.groupRequest.set(groupRequest);
+        }
       }
     } catch {
       this.error.set('No se pudo cargar la iglesia.');
@@ -101,6 +124,47 @@ export class ChurchDetailComponent implements OnInit {
       this.joinError.set('No se pudo enviar la solicitud. Inténtalo de nuevo.');
     } finally {
       this.joining.set(false);
+    }
+  }
+
+  async onRequestGroup() {
+    const groupId = this.selectedGroupForRequest();
+    if (!groupId || groupId === this.membership()?.group_id) return;
+    const user = this.user();
+    if (!user) return;
+    this.requestingGroup.set(true);
+    this.groupRequestError.set('');
+    try {
+      await this.churchService.requestGroup(user.id, this.churchId, groupId);
+      const groupName = this.getGroupName(groupId);
+      this.groupRequest.set({
+        id: 'pending',
+        user_id: user.id,
+        church_id: this.churchId,
+        requested_group_id: groupId,
+        notification_id: null,
+        created_at: new Date().toISOString(),
+        groups: { name: groupName },
+      });
+      this.closeGroupPicker();
+    } catch {
+      this.groupRequestError.set('No se pudo enviar la solicitud. Inténtalo de nuevo.');
+    } finally {
+      this.requestingGroup.set(false);
+    }
+  }
+
+  async onCancelGroupRequest() {
+    const req = this.groupRequest();
+    if (!req || req.id === 'pending') return;
+    this.cancellingGroupRequest.set(true);
+    try {
+      await this.churchService.cancelGroupRequest(req.id);
+      this.groupRequest.set(null);
+    } catch {
+      this.groupRequestError.set('No se pudo cancelar la solicitud.');
+    } finally {
+      this.cancellingGroupRequest.set(false);
     }
   }
 }

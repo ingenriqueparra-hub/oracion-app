@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { IChurch, IGroup, IChurchMember } from '../../models/church.model';
+import { IChurch, IGroup, IChurchMember, IGroupRequest } from '../../models/church.model';
 
 @Injectable({ providedIn: 'root' })
 export class ChurchService {
@@ -177,6 +177,70 @@ export class ChurchService {
       p_member_id: memberId,
       p_user_id:   userId,
     });
+    if (error) throw error;
+  }
+
+  async getMyGroupRequest(userId: string, churchId: string): Promise<IGroupRequest | null> {
+    const { data } = await this.supabase.client
+      .from('group_requests')
+      .select('*, groups(name)')
+      .eq('user_id', userId)
+      .eq('church_id', churchId)
+      .maybeSingle();
+    return data as IGroupRequest | null;
+  }
+
+  async requestGroup(userId: string, churchId: string, groupId: string): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('group_requests')
+      .insert({ user_id: userId, church_id: churchId, requested_group_id: groupId });
+    if (error) throw error;
+  }
+
+  async cancelGroupRequest(requestId: string): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('group_requests')
+      .delete()
+      .eq('id', requestId);
+    if (error) throw error;
+  }
+
+  async getPendingGroupRequests(churchId: string): Promise<IGroupRequest[]> {
+    const { data, error } = await this.supabase.client
+      .from('group_requests')
+      .select('*, groups(name)')
+      .eq('church_id', churchId)
+      .order('created_at');
+    if (error) throw error;
+    if (!data?.length) return [];
+
+    const userIds = data.map((r: any) => r.user_id);
+    const { data: profiles } = await this.supabase.client
+      .from('profiles')
+      .select('id, name, email, avatar_url')
+      .in('id', userIds);
+    const profileMap = new Map((profiles ?? []).map((p: any) => [p.id, p]));
+
+    return data.map((r: any) => ({
+      ...r,
+      profiles: profileMap.get(r.user_id) ?? null,
+    })) as IGroupRequest[];
+  }
+
+  async approveGroupRequest(request: IGroupRequest, memberId: string): Promise<void> {
+    await this.assignGroup(memberId, request.requested_group_id, request.user_id);
+    const { error } = await this.supabase.client
+      .from('group_requests')
+      .delete()
+      .eq('id', request.id);
+    if (error) throw error;
+  }
+
+  async rejectGroupRequest(requestId: string): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('group_requests')
+      .delete()
+      .eq('id', requestId);
     if (error) throw error;
   }
 

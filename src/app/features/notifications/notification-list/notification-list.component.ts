@@ -42,7 +42,7 @@ export class NotificationListComponent implements OnInit {
   }
 
   onNotificationClick(notification: INotification) {
-    if (notification.type === 'join_request') {
+    if (notification.type === 'join_request' || notification.type === 'group_request') {
       const churchId = this.auth.user()?.church_id;
       if (churchId) this.router.navigate(['/churches', churchId, 'admin']);
     } else if (notification.prayer_id) {
@@ -70,14 +70,16 @@ export class NotificationListComponent implements OnInit {
   }
 
   isClickable(n: INotification): boolean {
-    return n.type === 'join_request' ? !!this.auth.user()?.church_id : !!n.prayer_id;
+    if (n.type === 'join_request' || n.type === 'group_request') return !!this.auth.user()?.church_id;
+    return !!n.prayer_id;
   }
 
   icon(type: INotification['type']): string {
     const icons: Record<INotification['type'], string> = {
-      prayer_prayed:  '🙏',
+      prayer_prayed:   '🙏',
       prayer_response: '💬',
-      join_request:   '⛪',
+      join_request:    '⛪',
+      group_request:   '👥',
     };
     return icons[type] ?? '🔔';
   }

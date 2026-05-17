@@ -13,8 +13,8 @@
         (click)="setTab('members')"
       >
         Miembros
-        @if (pendingMembers().length > 0) {
-          <span class="badge">{{ pendingMembers().length }}</span>
+        @if (totalPendingCount() > 0) {
+          <span class="badge">{{ totalPendingCount() }}</span>
         }
       </button>
       <button
@@ -57,6 +57,29 @@
                 <div class="member-actions">
                   <button class="btn-approve" (click)="onApprove(member)" title="Aprobar">✓</button>
                   <button class="btn-reject" (click)="onReject(member)" title="Rechazar">✕</button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (pendingGroupRequests().length > 0) {
+        <div class="section">
+          <h2>Solicitudes de grupo pendientes</h2>
+          <div class="member-list">
+            @for (req of pendingGroupRequests(); track req.id) {
+              <div class="member-card">
+                <div class="member-avatar">
+                  {{ req.profiles?.name?.charAt(0)?.toUpperCase() ?? '?' }}
+                </div>
+                <div class="member-info">
+                  <strong>{{ req.profiles?.name }}</strong>
+                  <span>Quiere unirse a <em>{{ req.groups?.name }}</em></span>
+                </div>
+                <div class="member-actions">
+                  <button class="btn-approve" (click)="onApproveGroupRequest(req)" title="Aprobar">✓</button>
+                  <button class="btn-reject" (click)="onRejectGroupRequest(req)" title="Rechazar">✕</button>
                 </div>
               </div>
             }
