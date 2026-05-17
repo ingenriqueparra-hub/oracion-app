@@ -70,4 +70,13 @@
       </div>
     }
   }
+
+  @if (user()?.is_pin_account) {
+    <div class="panel-card church-cta">
+      <div class="cta-icon">🔒</div>
+      <h3>Asegura tu cuenta</h3>
+      <p>Añade tu email para no perder tu cuenta si cambias de celular.</p>
+      <a routerLink="/profile" class="cta-btn">Añadir email</a>
+    </div>
+  }
 </div>
