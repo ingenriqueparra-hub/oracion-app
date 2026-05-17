@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
   private supabase = inject(SupabaseService);
 
   user = this.auth.user;
+  timestamp = Date.now();
   loading = signal(false);
   error = signal('');
   saved = signal(false);

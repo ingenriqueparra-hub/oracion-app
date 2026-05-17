@@ -22,6 +22,7 @@ export class ProfileViewComponent implements OnInit {
   private supabase = inject(SupabaseService);
 
   user = this.auth.user;
+  timestamp = Date.now();
   allBadges = signal<IBadge[]>([]);
   earnedIds = signal<Set<string>>(new Set());
   myPrayers = signal<IPrayerFeedItem[]>([]);

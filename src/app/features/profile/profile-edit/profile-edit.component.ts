@@ -123,7 +123,7 @@ export class ProfileEditComponent implements OnInit {
       .upload(path, blob, { upsert: true, contentType: 'image/webp' });
     if (error) throw new Error(`Error al subir imagen: ${error.message}`);
     const { data } = this.supabase.client.storage.from('avatars').getPublicUrl(path);
-    return `${data.publicUrl}?t=${Date.now()}`;
+    return data.publicUrl;
   }
 
   async onAddEmail() {

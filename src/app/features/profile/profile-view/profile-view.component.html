@@ -2,7 +2,7 @@
   <header class="profile-header">
     <div class="avatar">
       @if (user()?.avatar_url) {
-        <img [src]="user()?.avatar_url" [alt]="user()?.name">
+        <img [src]="user()?.avatar_url ? user()!.avatar_url + '?t=' + timestamp : null" [alt]="user()?.name">
       } @else {
         <span class="initials">{{ initials }}</span>
       }
