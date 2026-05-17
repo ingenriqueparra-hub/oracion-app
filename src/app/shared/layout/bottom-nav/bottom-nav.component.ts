@@ -14,6 +14,7 @@ export class BottomNavComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
   user = this.auth.user;
+  timestamp = Date.now();
   showSheet = signal(false);
 
   get churchLink(): string[] {

@@ -31,25 +31,43 @@
   <div class="sheet-backdrop" (click)="closeSheet()"></div>
   <div class="bottom-sheet">
     <div class="sheet-handle"></div>
+
+    @if (user()) {
+      <div class="sheet-header">
+        <div class="sheet-avatar">
+          @if (user()?.avatar_url) {
+            <img [src]="user()!.avatar_url + '?t=' + timestamp" [alt]="user()!.name">
+          } @else {
+            {{ user()!.name.charAt(0).toUpperCase() }}
+          }
+        </div>
+        <div class="sheet-user-info">
+          <span class="sheet-user-name">{{ user()!.name }}</span>
+          <span class="sheet-user-level">{{ user()!.level }}</span>
+        </div>
+      </div>
+      <div class="sheet-divider"></div>
+    }
+
     <button class="sheet-item" (click)="navigate('/profile')">
-      <span class="sheet-icon">👤</span>
+      <mat-icon class="sheet-icon">person</mat-icon>
       <span>Ver mi perfil</span>
     </button>
     <button class="sheet-item" (click)="navigate('/profile/edit')">
-      <span class="sheet-icon">✏️</span>
+      <mat-icon class="sheet-icon">edit</mat-icon>
       <span>Editar perfil</span>
     </button>
     <button class="sheet-item" (click)="navigate('/my-prayers')">
-      <span class="sheet-icon">📋</span>
+      <mat-icon class="sheet-icon">list</mat-icon>
       <span>Mis pedidos</span>
     </button>
     <button class="sheet-item" (click)="navigate('/ranking')">
-      <span class="sheet-icon">🏆</span>
+      <mat-icon class="sheet-icon">emoji_events</mat-icon>
       <span>Ranking</span>
     </button>
     <div class="sheet-divider"></div>
     <button class="sheet-item sheet-logout" (click)="logout()">
-      <span class="sheet-icon">🚪</span>
+      <mat-icon class="sheet-icon">logout</mat-icon>
       <span>Cerrar sesión</span>
     </button>
   </div>
