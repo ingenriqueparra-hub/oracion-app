@@ -20,8 +20,37 @@
     <mat-icon class="bottom-icon">auto_awesome</mat-icon>
     <span class="bottom-label">Testimonios</span>
   </a>
-  <a routerLink="/profile" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="bottom-item">
+
+  <button class="bottom-item" (click)="openSheet()">
     <mat-icon class="bottom-icon">person</mat-icon>
     <span class="bottom-label">Perfil</span>
-  </a>
+  </button>
 </nav>
+
+@if (showSheet()) {
+  <div class="sheet-backdrop" (click)="closeSheet()"></div>
+  <div class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-item" (click)="navigate('/profile')">
+      <span class="sheet-icon">👤</span>
+      <span>Ver mi perfil</span>
+    </button>
+    <button class="sheet-item" (click)="navigate('/profile/edit')">
+      <span class="sheet-icon">✏️</span>
+      <span>Editar perfil</span>
+    </button>
+    <button class="sheet-item" (click)="navigate('/my-prayers')">
+      <span class="sheet-icon">📋</span>
+      <span>Mis pedidos</span>
+    </button>
+    <button class="sheet-item" (click)="navigate('/ranking')">
+      <span class="sheet-icon">🏆</span>
+      <span>Ranking</span>
+    </button>
+    <div class="sheet-divider"></div>
+    <button class="sheet-item sheet-logout" (click)="logout()">
+      <span class="sheet-icon">🚪</span>
+      <span>Cerrar sesión</span>
+    </button>
+  </div>
+}

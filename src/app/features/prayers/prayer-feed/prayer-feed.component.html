@@ -32,8 +32,6 @@
     </button>
   </div>
 
-  <app-daily-promise />
-
   @if (loading()) {
     <div class="state-msg">Cargando pedidos...</div>
   } @else if (error()) {
@@ -48,7 +46,7 @@
     </div>
   } @else {
     <div class="prayer-list">
-      @for (prayer of visiblePrayers(); track prayer.id) {
+      @for (prayer of visiblePrayers(); track prayer.id; let i = $index) {
         <div class="prayer-card" (click)="goToDetail(prayer.id)">
           <div class="card-top">
             <div class="author-row">
@@ -88,6 +86,34 @@
             </button>
           </div>
         </div>
+
+        @if (i === 2) {
+          <div class="feed-mobile-card">
+            <app-daily-promise [alwaysShow]="true" />
+          </div>
+        }
+
+        @if (i === 6 && !user()?.church_id) {
+          <a routerLink="/churches" class="feed-mobile-card feed-cta-card" (click)="$event.stopPropagation()">
+            <span class="feed-cta-icon">⛪</span>
+            <div class="feed-cta-body">
+              <strong>Únete a una iglesia</strong>
+              <p>Conéctate con tu comunidad y ora junto a otros creyentes.</p>
+            </div>
+            <span class="feed-cta-arrow">›</span>
+          </a>
+        }
+
+        @if (i === 10 && user()?.is_pin_account) {
+          <a routerLink="/profile/edit" class="feed-mobile-card feed-cta-card" (click)="$event.stopPropagation()">
+            <span class="feed-cta-icon">🔒</span>
+            <div class="feed-cta-body">
+              <strong>Agrega tu email</strong>
+              <p>Protege tu cuenta para no perderla si cambias de celular.</p>
+            </div>
+            <span class="feed-cta-arrow">›</span>
+          </a>
+        }
       }
     </div>
   }

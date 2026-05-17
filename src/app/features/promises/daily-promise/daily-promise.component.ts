@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, Input } from '@angular/core';
 import { PromiseService } from '../../../core/services/promise.service';
 import { IDailyPromise } from '../../../models/promise.model';
 
@@ -12,6 +12,8 @@ import { IDailyPromise } from '../../../models/promise.model';
 export class DailyPromiseComponent implements OnInit {
   private promiseService = inject(PromiseService);
 
+  @Input() alwaysShow = false;
+
   promise = signal<IDailyPromise | null>(null);
   copied = signal(false);
 
@@ -19,12 +21,12 @@ export class DailyPromiseComponent implements OnInit {
 
   async ngOnInit() {
     const today = new Date().toLocaleDateString('en-CA');
-    if (localStorage.getItem(this.storageKey) === today) return;
+    if (!this.alwaysShow && localStorage.getItem(this.storageKey) === today) return;
     try {
       const data = await this.promiseService.getToday();
       if (data) {
         this.promise.set(data);
-        localStorage.setItem(this.storageKey, today);
+        if (!this.alwaysShow) localStorage.setItem(this.storageKey, today);
       }
     } catch (err) {
       console.error('[DailyPromise]', err);

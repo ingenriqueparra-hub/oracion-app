@@ -1,4 +1,6 @@
 <div class="right-panel">
+  <app-daily-promise [alwaysShow]="true" />
+
   @if (!user()?.church_id) {
     <div class="panel-card church-cta">
       <div class="cta-icon">⛪</div>

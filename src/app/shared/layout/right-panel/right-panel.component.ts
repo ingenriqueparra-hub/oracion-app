@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { GamificationService } from '../../../core/services/gamification.service';
 import { IBadge, IRankingEntry } from '../../../models/badge.model';
+import { DailyPromiseComponent } from '../../../features/promises/daily-promise/daily-promise.component';
 
 @Component({
   selector: 'app-right-panel',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DailyPromiseComponent],
   templateUrl: './right-panel.component.html',
   styleUrl: './right-panel.component.scss',
 })
