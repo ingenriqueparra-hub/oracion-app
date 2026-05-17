@@ -62,7 +62,19 @@
   }
 }
 
-.nav-icon { font-size: 1.375rem; flex-shrink: 0; line-height: 1; }
+.nav-icon {
+  font-size: 1.375rem;
+  flex-shrink: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+
+  mat-icon {
+    font-size: 1.375rem;
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+}
 
 .notif-wrap {
   position: relative;

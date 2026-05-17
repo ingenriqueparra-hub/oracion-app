@@ -4,7 +4,7 @@
 }
 
 .profile-header {
-  background: #2E7D32;
+  background: linear-gradient(160deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   padding: 2rem 1rem 1.5rem;
   text-align: center;
   color: white;
@@ -13,7 +13,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: #1B5E20;
+    background: var(--color-primary-dark);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,28 +61,28 @@
     text-align: center;
 
     &:not(:last-child) {
-      border-right: 1px solid #F5F5F5;
+      border-right: 1px solid var(--color-border-light);
     }
 
     .stat-value {
       display: block;
       font-size: 1.125rem;
       font-weight: 700;
-      color: #1B5E20;
+      color: var(--color-primary);
     }
 
     .stat-label {
       display: block;
       font-size: 0.75rem;
-      color: #757575;
+      color: var(--color-text-secondary);
       margin-top: 0.25rem;
     }
   }
 }
 
 .admin-link {
-  border: 1.5px solid #C8E6C9;
-  background: #F1F8E9;
+  border: 1.5px solid var(--color-border-light);
+  background: var(--color-primary-light);
 }
 
 .church-link {
@@ -95,7 +95,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   text-decoration: none;
-  color: #1B5E20;
+  color: var(--color-primary);
   font-weight: 500;
   font-size: 0.9375rem;
   transition: box-shadow 0.2s;
@@ -111,7 +111,7 @@
   .arrow {
     margin-left: auto;
     font-size: 1.25rem;
-    color: #BDBDBD;
+    color: var(--color-border);
   }
 }
 
@@ -125,7 +125,7 @@
   h3 {
     font-size: 1rem;
     font-weight: 600;
-    color: #1B5E20;
+    color: var(--color-primary);
     margin-bottom: 1.25rem;
   }
 }
@@ -143,7 +143,7 @@
 
 .see-all {
   font-size: 0.8125rem;
-  color: #2E7D32;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
   &:hover { text-decoration: underline; }
@@ -151,7 +151,7 @@
 
 .empty-prayers {
   font-size: 0.875rem;
-  color: #9E9E9E;
+  color: var(--color-text-secondary);
   margin-bottom: 0.875rem;
 }
 
@@ -159,14 +159,14 @@
   display: inline-block;
   margin-top: 0.75rem;
   padding: 0.45rem 0.875rem;
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   border-radius: 8px;
   font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
   transition: background 0.15s;
-  &:hover { background: #C8E6C9; }
+  &:hover { background: #c7d2fe; }
 }
 
 .my-prayer-list {
@@ -178,7 +178,7 @@
 .my-prayer-item {
   display: block;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #F5F5F5;
+  border-bottom: 1px solid var(--color-border-light);
   text-decoration: none;
   transition: background 0.15s;
   border-radius: 6px;
@@ -187,7 +187,7 @@
   padding-right: 0.375rem;
 
   &:last-child { border-bottom: none; }
-  &:hover { background: #F9FBE7; }
+  &:hover { background: var(--color-primary-light); }
 }
 
 .mp-row {
@@ -199,7 +199,7 @@
 .mp-text {
   flex: 1;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-text-body);
   line-height: 1.45;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -224,13 +224,13 @@
 
 .mp-count {
   font-size: 0.75rem;
-  color: #2E7D32;
+  color: var(--color-primary);
   font-weight: 500;
 }
 
 .mp-time {
   font-size: 0.75rem;
-  color: #BDBDBD;
+  color: var(--color-border);
 }
 
 .field {
@@ -240,22 +240,22 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #424242;
+    color: var(--color-text-body);
     margin-bottom: 0.375rem;
   }
 
   input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1.5px solid #E0E0E0;
+    border: 1.5px solid var(--color-border);
     border-radius: 8px;
     font-size: 1rem;
-    color: #212121;
+    color: var(--color-text-primary);
     transition: border-color 0.2s;
 
     &:focus {
       outline: none;
-      border-color: #2E7D32;
+      border-color: var(--color-primary);
     }
   }
 }
@@ -263,7 +263,7 @@
 .btn-primary {
   width: 100%;
   padding: 0.875rem;
-  background: #2E7D32;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -273,7 +273,7 @@
   transition: background 0.2s, opacity 0.2s;
 
   &:hover:not(:disabled) {
-    background: #1B5E20;
+    background: var(--color-primary-dark);
   }
 
   &:disabled {
@@ -283,20 +283,20 @@
 }
 
 .error-msg {
-  color: #C62828;
+  color: var(--color-danger);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   padding: 0.625rem 0.75rem;
-  background: #FFEBEE;
+  background: #fef2f2;
   border-radius: 6px;
 }
 
 .success-msg {
-  color: #2E7D32;
+  color: var(--color-success);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   padding: 0.625rem 0.75rem;
-  background: #E8F5E9;
+  background: #f0fdf4;
   border-radius: 6px;
 }
 
@@ -308,8 +308,8 @@
   width: 100%;
   padding: 0.875rem;
   background: transparent;
-  color: #C62828;
-  border: 1.5px solid #C62828;
+  color: var(--color-danger);
+  border: 1.5px solid var(--color-danger);
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
@@ -317,6 +317,6 @@
   transition: background 0.2s;
 
   &:hover {
-    background: #FFEBEE;
+    background: #fef2f2;
   }
 }

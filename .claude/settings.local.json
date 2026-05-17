@@ -8,7 +8,8 @@
       "Bash(Write-Output \"ok\")",
       "Bash(Get-ChildItem \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\dist\\\\oracion-app\\\\browser\")",
       "Bash(Select-Object Name)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(Get-Content *)"
     ]
   }
 }

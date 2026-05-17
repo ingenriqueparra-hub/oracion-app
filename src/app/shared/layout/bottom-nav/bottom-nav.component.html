@@ -1,27 +1,27 @@
 <nav class="bottom-nav">
   <a routerLink="/prayers" routerLinkActive="active" class="bottom-item">
-    <span class="bottom-icon">🏠</span>
+    <mat-icon class="bottom-icon">home</mat-icon>
     <span class="bottom-label">Oración</span>
   </a>
 
   @if (user()?.church_id) {
     <a [routerLink]="churchLink" routerLinkActive="active" class="bottom-item">
-      <span class="bottom-icon">⛪</span>
+      <mat-icon class="bottom-icon">church</mat-icon>
       <span class="bottom-label">Mi Iglesia</span>
     </a>
   } @else {
     <a routerLink="/churches" routerLinkActive="active" class="bottom-item">
-      <span class="bottom-icon">⛪</span>
+      <mat-icon class="bottom-icon">explore</mat-icon>
       <span class="bottom-label">Iglesias</span>
     </a>
   }
 
   <a routerLink="/testimonies" routerLinkActive="active" class="bottom-item">
-    <span class="bottom-icon">⭐</span>
+    <mat-icon class="bottom-icon">auto_awesome</mat-icon>
     <span class="bottom-label">Testimonios</span>
   </a>
   <a routerLink="/profile" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="bottom-item">
-    <span class="bottom-icon">👤</span>
+    <mat-icon class="bottom-icon">person</mat-icon>
     <span class="bottom-label">Perfil</span>
   </a>
 </nav>

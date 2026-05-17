@@ -7,7 +7,7 @@
   <ul class="nav-links">
     <li>
       <a routerLink="/prayers" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">🏠</span>
+        <span class="nav-icon"><mat-icon>home</mat-icon></span>
         <span class="nav-label">Oración</span>
       </a>
     </li>
@@ -15,14 +15,14 @@
     @if (user()?.role === 'church_admin' && user()?.church_id) {
       <li>
         <a [routerLink]="churchAdminLink" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">🏛️</span>
+          <span class="nav-icon"><mat-icon>church</mat-icon></span>
           <span class="nav-label">Mi Iglesia</span>
         </a>
       </li>
     } @else if (user()?.church_id) {
       <li>
         <a [routerLink]="churchMemberLink" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">⛪</span>
+          <span class="nav-icon"><mat-icon>church</mat-icon></span>
           <span class="nav-label">Mi Iglesia</span>
         </a>
       </li>
@@ -30,27 +30,27 @@
 
     <li>
       <a routerLink="/my-prayers" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">📋</span>
+        <span class="nav-icon"><mat-icon>list</mat-icon></span>
         <span class="nav-label">Mis pedidos</span>
       </a>
     </li>
 
     <li>
       <a routerLink="/testimonies" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">⭐</span>
+        <span class="nav-icon"><mat-icon>auto_awesome</mat-icon></span>
         <span class="nav-label">Testimonios</span>
       </a>
     </li>
     <li>
       <a routerLink="/ranking" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">🏆</span>
+        <span class="nav-icon"><mat-icon>emoji_events</mat-icon></span>
         <span class="nav-label">Ranking</span>
       </a>
     </li>
     <li>
       <a routerLink="/notifications" routerLinkActive="active" class="nav-item">
         <span class="nav-icon notif-wrap">
-          🔔
+          <mat-icon>notifications</mat-icon>
           @if (unreadCount() > 0) {
             <span class="notif-badge">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
           }
@@ -60,7 +60,7 @@
     </li>
     <li>
       <a routerLink="/profile" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">👤</span>
+        <span class="nav-icon"><mat-icon>person</mat-icon></span>
         <span class="nav-label">Perfil</span>
       </a>
     </li>
@@ -68,14 +68,14 @@
     @if (user()?.role === 'church_admin') {
       <li>
         <a routerLink="/churches" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">🗺️</span>
+          <span class="nav-icon"><mat-icon>explore</mat-icon></span>
           <span class="nav-label">Iglesias</span>
         </a>
       </li>
     } @else if (!user()?.church_id) {
       <li>
         <a routerLink="/churches" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">🗺️</span>
+          <span class="nav-icon"><mat-icon>explore</mat-icon></span>
           <span class="nav-label">Iglesias</span>
         </a>
       </li>
@@ -84,7 +84,7 @@
     @if (user()?.role === 'super_admin') {
       <li>
         <a routerLink="/admin" routerLinkActive="active" class="nav-item">
-          <span class="nav-icon">⚙️</span>
+          <span class="nav-icon"><mat-icon>settings</mat-icon></span>
           <span class="nav-label">Admin</span>
         </a>
       </li>
@@ -102,7 +102,7 @@
       </div>
     }
     <button class="nav-item logout-btn" (click)="auth.logout()">
-      <span class="nav-icon">🚪</span>
+      <span class="nav-icon"><mat-icon>logout</mat-icon></span>
       <span class="nav-label">Salir</span>
     </button>
   </div>

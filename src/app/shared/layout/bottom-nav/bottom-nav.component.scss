@@ -34,7 +34,12 @@
   }
 }
 
-.bottom-icon { font-size: 1.375rem; line-height: 1; }
+.bottom-icon {
+  font-size: 1.375rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  line-height: 1;
+}
 .bottom-label { font-size: 0.6875rem; font-weight: 500; }
 
 @media (max-width: 680px) {
