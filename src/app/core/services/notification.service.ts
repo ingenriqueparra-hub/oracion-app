@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RealtimeChannel } from '@supabase/supabase-js';
 import { SupabaseService } from './supabase.service';
 import { INotification } from '../../models/notification.model';
 
@@ -25,6 +26,26 @@ export class NotificationService {
       .eq('read', false);
     if (error) throw error;
     return count ?? 0;
+  }
+
+  subscribeToNotifications(userId: string, onNew: () => void): RealtimeChannel {
+    return this.supabase.client
+      .channel(`notifications:${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${userId}`,
+        },
+        () => onNew()
+      )
+      .subscribe();
+  }
+
+  unsubscribe(channel: RealtimeChannel): void {
+    this.supabase.client.removeChannel(channel);
   }
 
   async markAllRead(userId: string): Promise<void> {

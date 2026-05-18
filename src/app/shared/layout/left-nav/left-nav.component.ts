@@ -1,6 +1,7 @@
-import { Component, inject, signal, effect, HostListener } from '@angular/core';
+import { Component, inject, signal, effect, HostListener, OnDestroy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { RealtimeChannel } from '@supabase/supabase-js';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
@@ -11,7 +12,7 @@ import { NotificationService } from '../../../core/services/notification.service
   templateUrl: './left-nav.component.html',
   styleUrl: './left-nav.component.scss',
 })
-export class LeftNavComponent {
+export class LeftNavComponent implements OnDestroy {
   auth = inject(AuthService);
   private notificationService = inject(NotificationService);
 
@@ -20,6 +21,8 @@ export class LeftNavComponent {
   unreadCount = signal(0);
   showMenu = signal(false);
 
+  private channel: RealtimeChannel | null = null;
+
   constructor() {
     effect(() => {
       const user = this.user();
@@ -27,8 +30,25 @@ export class LeftNavComponent {
         this.notificationService.getUnreadCount(user.id)
           .then(count => this.unreadCount.set(count))
           .catch(() => {});
+
+        if (this.channel) {
+          this.notificationService.unsubscribe(this.channel);
+        }
+
+        this.channel = this.notificationService.subscribeToNotifications(
+          user.id,
+          () => this.notificationService.getUnreadCount(user.id)
+            .then(count => this.unreadCount.set(count))
+            .catch(() => {})
+        );
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.channel) {
+      this.notificationService.unsubscribe(this.channel);
+    }
   }
 
   get churchAdminLink(): string[] {
