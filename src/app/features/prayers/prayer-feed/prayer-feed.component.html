@@ -15,8 +15,12 @@
     <button class="tab" [class.active]="mainTab() === 'all'" (click)="setMainTab('all')">
       Global
     </button>
+    <button class="tab" [class.active]="mainTab() === 'mine'" (click)="setMainTab('mine')">
+      Míos
+    </button>
   </div>
 
+  @if (mainTab() !== 'mine') {
   <div class="sub-tabs">
     <button class="sub-tab" [class.active]="subTab() === 'new'" (click)="subTab.set('new')">
       Nuevos
@@ -31,6 +35,7 @@
       }
     </button>
   </div>
+  }
 
   @if (loading()) {
     <div class="state-msg">Cargando pedidos...</div>
@@ -40,7 +45,7 @@
     <div class="empty-state">
       <span class="empty-icon">🙏</span>
       <p>{{ emptyMessage() }}</p>
-      @if (subTab() === 'new') {
+      @if (subTab() === 'new' || mainTab() === 'mine') {
         <a routerLink="/prayers/new" class="btn-primary">Publicar un pedido</a>
       }
     </div>

@@ -68,13 +68,13 @@ export class PrayerService {
     return data as IPrayer;
   }
 
-  async getMyPrayers(userId: string, limit = 50): Promise<IPrayerFeedItem[]> {
+  async getMyPrayers(userId: string, limit = 50, offset = 0): Promise<IPrayerFeedItem[]> {
     const { data, error } = await this.supabase.client
       .from('prayers')
       .select('*, profiles(name, avatar_url, level), churches(name), prayer_prays(user_id)')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
-      .limit(limit);
+      .range(offset, offset + limit - 1);
     if (error) throw error;
     return (data as any[]).map(p => ({
       ...p,

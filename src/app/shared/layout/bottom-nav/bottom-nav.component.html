@@ -16,9 +16,14 @@
     </a>
   }
 
-  <a routerLink="/testimonies" routerLinkActive="active" class="bottom-item">
-    <mat-icon class="bottom-icon">auto_awesome</mat-icon>
-    <span class="bottom-label">Testimonios</span>
+  <a routerLink="/notifications" routerLinkActive="active" class="bottom-item">
+    <span class="notif-wrap">
+      <mat-icon class="bottom-icon">notifications</mat-icon>
+      @if (unreadCount() > 0) {
+        <span class="notif-badge">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
+      }
+    </span>
+    <span class="bottom-label">Notificaciones</span>
   </a>
 
   <button class="bottom-item" (click)="openSheet()">

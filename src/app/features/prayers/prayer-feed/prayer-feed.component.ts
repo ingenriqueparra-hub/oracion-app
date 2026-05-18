@@ -11,7 +11,7 @@ import { IPrayerFeedItem } from '../../../models/prayer.model';
 import { DailyPromiseComponent } from '../../promises/daily-promise/daily-promise.component';
 import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
 
-type MainTab = 'group' | 'church' | 'all';
+type MainTab = 'group' | 'church' | 'all' | 'mine';
 type SubTab = 'new' | 'prayed';
 
 const PAGE_SIZE = 5;
@@ -50,9 +50,10 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
   yaOre = computed(() =>
     this.prayers().filter(p => p.has_prayed)
   );
-  visiblePrayers = computed(() =>
-    this.subTab() === 'new' ? this.nuevos() : this.yaOre()
-  );
+  visiblePrayers = computed(() => {
+    if (this.mainTab() === 'mine') return this.prayers();
+    return this.subTab() === 'new' ? this.nuevos() : this.yaOre();
+  });
 
   get hasGroup(): boolean { return !!this.user()?.group_id; }
   get hasChurch(): boolean { return !!this.user()?.church_id; }
@@ -109,12 +110,16 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async loadFeedPage(offset: number): Promise<IPrayerFeedItem[]> {
+    const tab = this.mainTab();
+    if (tab === 'mine') {
+      return this.prayerService.getMyPrayers(this.userId, PAGE_SIZE, offset);
+    }
     const user = this.user();
     return this.prayerService.getFeedScoped(
       this.userId,
       user?.church_id ?? null,
       user?.group_id ?? null,
-      this.mainTab(),
+      tab,
       offset,
       PAGE_SIZE
     );
@@ -158,7 +163,7 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async setMainTab(tab: MainTab) {
     this.mainTab.set(tab);
-    this.subTab.set('new');
+    if (tab !== 'mine') this.subTab.set('new');
     await this.loadFeed();
   }
 
@@ -198,6 +203,7 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
   emptyMessage(): string {
     const tab = this.mainTab();
     const sub = this.subTab();
+    if (tab === 'mine') return 'Aún no has publicado ningún pedido.';
     if (tab === 'group') {
       return sub === 'new'
         ? 'No hay nuevos pedidos en tu grupo para orar.'
