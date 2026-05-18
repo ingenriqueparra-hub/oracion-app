@@ -24,23 +24,18 @@
       }
     </div>
 
-    <div class="section">
-      <h2>Grupos / Células</h2>
-      @if (groups().length === 0) {
-        <p class="empty-text">Esta iglesia aún no tiene grupos registrados.</p>
-      } @else {
-        <div class="group-list">
-          @for (group of groups(); track group.id) {
-            <div class="group-item">
-              <span class="group-icon">👥</span>
-              <span>{{ group.name }}</span>
-            </div>
-          }
-        </div>
-      }
+    <div class="stats-section">
+      <div class="stat-item">
+        <span class="stat-number">{{ stats().members }}</span>
+        <span class="stat-label">Miembros</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ stats().answered }}</span>
+        <span class="stat-label">Oraciones respondidas</span>
+      </div>
     </div>
 
-    <div class="join-section">
+    <div class="join-card">
       @if (isApprovedMember) {
         <div class="status-badge approved">✓ Eres miembro de esta iglesia</div>
 
@@ -130,3 +125,4 @@
     </div>
   }
 </div>
+

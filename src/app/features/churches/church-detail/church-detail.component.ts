@@ -21,6 +21,7 @@ export class ChurchDetailComponent implements OnInit {
   groups = signal<IGroup[]>([]);
   membership = signal<IChurchMember | null>(null);
   groupRequest = signal<IGroupRequest | null>(null);
+  stats = signal<{ members: number; answered: number }>({ members: 0, answered: 0 });
   loading = signal(true);
   joining = signal(false);
   leaving = signal(false);
@@ -66,12 +67,14 @@ export class ChurchDetailComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      const [church, groups] = await Promise.all([
+      const [church, groups, churchStats] = await Promise.all([
         this.churchService.getChurchById(this.churchId),
         this.churchService.getGroups(this.churchId),
+        this.churchService.getChurchStats(this.churchId),
       ]);
       this.church.set(church);
       this.groups.set(groups);
+      this.stats.set({ members: churchStats.totalMembers, answered: churchStats.answeredPrayers });
 
       const user = this.user();
       if (user) {
