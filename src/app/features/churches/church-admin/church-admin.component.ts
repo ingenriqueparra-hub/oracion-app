@@ -48,6 +48,10 @@ export class ChurchAdminComponent implements OnInit {
     this.pendingMembers().length + this.pendingGroupRequests().length
   );
 
+  photoUploading = signal(false);
+  photoError = signal('');
+  churchTimestamp = signal(Date.now());
+
   groupForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
   });
@@ -209,6 +213,22 @@ export class ChurchAdminComponent implements OnInit {
       this.error.set('No se pudo guardar los cambios.');
     } finally {
       this.churchSaving.set(false);
+    }
+  }
+
+  async onPhotoSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.photoUploading.set(true);
+    this.photoError.set('');
+    try {
+      const url = await this.churchService.uploadChurchPhoto(this.churchId, file);
+      this.church.update(c => c ? { ...c, photo_url: url } : c);
+      this.churchTimestamp.set(Date.now());
+    } catch {
+      this.photoError.set('No se pudo subir la foto. Inténtalo de nuevo.');
+    } finally {
+      this.photoUploading.set(false);
     }
   }
 

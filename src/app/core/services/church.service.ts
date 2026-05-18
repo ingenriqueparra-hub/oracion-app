@@ -236,6 +236,25 @@ export class ChurchService {
     if (error) throw error;
   }
 
+  // Requiere bucket 'church-photos' público en Supabase Storage
+  async uploadChurchPhoto(churchId: string, file: File): Promise<string> {
+    const ext = file.name.split('.').pop();
+    const path = `churches/${churchId}.${ext}`;
+    const { error } = await this.supabase.client.storage
+      .from('church-photos')
+      .upload(path, file, { upsert: true });
+    if (error) throw error;
+    const { data } = this.supabase.client.storage
+      .from('church-photos')
+      .getPublicUrl(path);
+    const { error: updateError } = await this.supabase.client
+      .from('churches')
+      .update({ photo_url: data.publicUrl })
+      .eq('id', churchId);
+    if (updateError) throw updateError;
+    return data.publicUrl;
+  }
+
   async rejectGroupRequest(requestId: string): Promise<void> {
     const { error } = await this.supabase.client
       .from('group_requests')

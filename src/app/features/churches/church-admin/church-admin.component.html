@@ -238,6 +238,26 @@
 
     @if (activeTab() === 'church') {
       <div class="section">
+        <h2>Foto de la iglesia</h2>
+        <div class="photo-upload-row">
+          <div class="church-photo-preview">
+            @if (church()?.photo_url) {
+              <img [src]="church()!.photo_url + '?t=' + churchTimestamp()" alt="Foto de la iglesia">
+            } @else {
+              <span class="photo-placeholder">⛪</span>
+            }
+          </div>
+          <label class="btn-secondary" [class.disabled]="photoUploading()">
+            {{ photoUploading() ? 'Subiendo...' : 'Cambiar foto' }}
+            <input type="file" accept="image/*" hidden (change)="onPhotoSelected($event)" [disabled]="photoUploading()">
+          </label>
+        </div>
+        @if (photoError()) {
+          <p class="error-msg">{{ photoError() }}</p>
+        }
+      </div>
+
+      <div class="section">
         <h2>Información de la iglesia</h2>
         <form [formGroup]="churchForm" (ngSubmit)="onSaveChurch()" class="church-form">
           <div class="field">
