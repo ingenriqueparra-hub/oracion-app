@@ -5,17 +5,38 @@
     <p>Ora con tu comunidad</p>
   </div>
 
-  <div class="welcome-actions">
-    <a routerLink="/pin-login" class="btn-primary">Entrar con cuenta rápida</a>
-
-    <div class="divider"><span>o también</span></div>
-
-    <a routerLink="/login" class="btn-outline">Entrar con Gmail o Correo</a>
-    <a routerLink="/register" class="btn-outline">Registrarme Gmail o Correo</a>
-
-    <div class="create-section">
-      <p>¿Primera vez?</p>
-      <a routerLink="/pin-register" class="btn-ghost">Crear cuenta rápida →</a>
+  @if (step() === 'root') {
+    <div class="welcome-actions">
+      <button class="btn-primary" (click)="step.set('login')">Ya tengo cuenta, ingresar</button>
+      <button class="btn-outline" (click)="step.set('register')">Soy nuevo, registrarme</button>
     </div>
-  </div>
+  }
+
+  @if (step() === 'login') {
+    <div class="welcome-actions">
+      <button class="btn-google" (click)="onGoogleLogin()" [disabled]="googleLoading()">
+        @if (googleLoading()) { Conectando... } @else { Continuar con Google }
+      </button>
+      <a routerLink="/login" class="btn-primary">Ingresar con correo</a>
+      <a routerLink="/pin-login" class="btn-outline">Entrar sin correo</a>
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+      <a class="btn-ghost" (click)="step.set('root')">← Volver</a>
+    </div>
+  }
+
+  @if (step() === 'register') {
+    <div class="welcome-actions">
+      <button class="btn-google" (click)="onGoogleLogin()" [disabled]="googleLoading()">
+        @if (googleLoading()) { Conectando... } @else { Registrarme con Google }
+      </button>
+      <a routerLink="/register" class="btn-primary">Registrarme con correo</a>
+      <a routerLink="/pin-register" class="btn-outline">Registrarme sin correo</a>
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+      <a class="btn-ghost" (click)="step.set('root')">← Volver</a>
+    </div>
+  }
 </div>
