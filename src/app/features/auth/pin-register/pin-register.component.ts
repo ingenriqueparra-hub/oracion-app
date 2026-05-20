@@ -1,9 +1,10 @@
 import {
   Component, inject, signal,
-  ViewChild, ElementRef, AfterViewInit,
+  ViewChild, ElementRef,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ChurchService } from '../../../core/services/church.service';
 
 @Component({
   selector: 'app-pin-register',
@@ -14,6 +15,8 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class PinRegisterComponent {
   private auth = inject(AuthService);
+  private churchService = inject(ChurchService);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
 
   step = signal<1 | 2>(1);
@@ -106,6 +109,18 @@ export class PinRegisterComponent {
     this.error.set('');
     try {
       await this.auth.registerWithPin(this.name().trim(), pin);
+      const inviteToken = this.route.snapshot.queryParams['invite'];
+      if (inviteToken) {
+        const userId = this.auth.user()?.id;
+        if (userId) {
+          const invite = await this.churchService.getAdminInvite(inviteToken);
+          if (invite) {
+            await this.churchService.acceptAdminInvite(inviteToken, userId, invite.church_id);
+            this.router.navigate(['/churches', invite.church_id, 'admin']);
+            return;
+          }
+        }
+      }
       this.router.navigate(['/prayers']);
     } catch (err: any) {
       console.error('[PinRegister]', err);

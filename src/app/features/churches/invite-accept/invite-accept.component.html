@@ -1,0 +1,61 @@
+<div class="invite-page">
+  <div class="invite-brand">
+    <span class="brand-icon">🙏</span>
+    <h1>Intercede</h1>
+  </div>
+
+  <div class="invite-card">
+    @if (loading()) {
+      <p class="invite-state">Verificando invitación...</p>
+    } @else if (error() && !churchName()) {
+      <div class="invite-block">
+        <span class="block-icon">⚠️</span>
+        <h2>Link inválido</h2>
+        <p class="block-desc">{{ error() }}</p>
+        <a routerLink="/welcome" class="btn-outline">Ir al inicio</a>
+      </div>
+    } @else {
+      <div class="invite-header">
+        <span class="church-icon">⛪</span>
+        <h2>{{ churchName() }}</h2>
+        <p class="invite-desc">Fuiste invitado/a a ser <strong>administrador/a</strong> de esta iglesia en Intercede.</p>
+      </div>
+
+      @if (accepted()) {
+        <div class="invite-success">
+          <span class="success-icon">✅</span>
+          <p>¡Bienvenido/a al equipo! Redirigiendo...</p>
+        </div>
+      } @else if (isAlreadyAdmin()) {
+        <div class="invite-info">
+          <p>Ya sos administrador/a de esta iglesia.</p>
+          <a [routerLink]="['/churches', churchId, 'admin']" class="btn-primary">Ir al panel</a>
+        </div>
+      } @else if (isBlockedAdmin()) {
+        <div class="invite-block">
+          <span class="block-icon">⚠️</span>
+          <p class="block-desc">Ya sos administrador de otra iglesia. No podés aceptar esta invitación.</p>
+          <a routerLink="/prayers" class="btn-outline">Volver al inicio</a>
+        </div>
+      } @else if (user()) {
+        <button class="btn-primary btn-full" (click)="onAccept()" [disabled]="accepting()">
+          {{ accepting() ? 'Procesando...' : 'Unirme como administrador' }}
+        </button>
+        @if (error()) {
+          <p class="field-error">{{ error() }}</p>
+        }
+      } @else {
+        <p class="invite-cta">Para aceptar la invitación, creá tu cuenta o iniciá sesión:</p>
+        <div class="invite-actions">
+          <a routerLink="/register" [queryParams]="{ invite: token }" class="btn-primary">
+            Registrarme con correo
+          </a>
+          <a routerLink="/pin-register" [queryParams]="{ invite: token }" class="btn-outline">
+            Registrarme sin correo
+          </a>
+          <a routerLink="/welcome" class="btn-ghost">Ya tengo cuenta, ingresar</a>
+        </div>
+      }
+    }
+  </div>
+</div>

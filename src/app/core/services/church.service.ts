@@ -255,6 +255,53 @@ export class ChurchService {
     return data.publicUrl;
   }
 
+  async createAdminInvite(churchId: string, createdBy: string): Promise<string> {
+    const { data, error } = await this.supabase.client
+      .from('admin_invites')
+      .insert({ church_id: churchId, created_by: createdBy })
+      .select('token')
+      .single();
+    if (error) throw error;
+    return `https://www.intercede.pe/invite/${data.token}`;
+  }
+
+  async getAdminInvite(token: string): Promise<{ church_id: string; church_name: string } | null> {
+    const { data, error } = await this.supabase.client
+      .from('admin_invites')
+      .select('church_id, used_at, expires_at, churches(name)')
+      .eq('token', token)
+      .single();
+    if (error) return null;
+    if (data.used_at) return null;
+    if (new Date(data.expires_at) < new Date()) return null;
+    return { church_id: data.church_id, church_name: (data as any).churches.name };
+  }
+
+  async acceptAdminInvite(token: string, userId: string, churchId: string): Promise<void> {
+    await this.supabase.client
+      .from('admin_invites')
+      .update({ used_by: userId, used_at: new Date().toISOString() })
+      .eq('token', token);
+
+    await this.supabase.client
+      .from('profiles')
+      .update({ role: 'church_admin', church_id: churchId })
+      .eq('id', userId);
+
+    const { data: existing } = await this.supabase.client
+      .from('church_members')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('church_id', churchId)
+      .single();
+
+    if (!existing) {
+      await this.supabase.client
+        .from('church_members')
+        .insert({ user_id: userId, church_id: churchId, status: 'approved' });
+    }
+  }
+
   async rejectGroupRequest(requestId: string): Promise<void> {
     const { error } = await this.supabase.client
       .from('group_requests')

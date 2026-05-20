@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
 import { ChurchService } from '../../../core/services/church.service';
 import { IChurch, IGroup, IChurchMember, IGroupRequest } from '../../../models/church.model';
 import { PageHeaderComponent } from '../../../shared/layout/page-header/page-header.component';
@@ -22,6 +23,7 @@ interface IChurchStats {
 })
 export class ChurchAdminComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private auth = inject(AuthService);
   private churchService = inject(ChurchService);
   private fb = inject(FormBuilder);
 
@@ -51,6 +53,10 @@ export class ChurchAdminComponent implements OnInit {
   photoUploading = signal(false);
   photoError = signal('');
   churchTimestamp = signal(Date.now());
+
+  inviteLink = signal('');
+  inviteLoading = signal(false);
+  inviteCopied = signal(false);
 
   groupForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -229,6 +235,36 @@ export class ChurchAdminComponent implements OnInit {
       this.photoError.set('No se pudo subir la foto. Inténtalo de nuevo.');
     } finally {
       this.photoUploading.set(false);
+    }
+  }
+
+  async onGenerateInvite() {
+    const user = this.auth.user();
+    if (!user) return;
+    this.inviteLoading.set(true);
+    this.error.set('');
+    try {
+      const link = await this.churchService.createAdminInvite(this.churchId, user.id);
+      this.inviteLink.set(link);
+    } catch {
+      this.error.set('No se pudo generar el link.');
+    } finally {
+      this.inviteLoading.set(false);
+    }
+  }
+
+  onCopyInvite() {
+    navigator.clipboard.writeText(this.inviteLink());
+    this.inviteCopied.set(true);
+    setTimeout(() => this.inviteCopied.set(false), 3000);
+  }
+
+  onShareInvite() {
+    const link = this.inviteLink();
+    if (navigator.share) {
+      navigator.share({ text: 'Te invito a ser administrador de mi iglesia en Intercede 🙏', url: link });
+    } else {
+      this.onCopyInvite();
     }
   }
 

@@ -36,6 +36,11 @@ export const routes: Routes = [
       import('./features/auth/register/register.component').then(m => m.RegisterComponent),
   },
   {
+    path: 'invite/:token',
+    loadComponent: () =>
+      import('./features/churches/invite-accept/invite-accept.component').then(m => m.InviteAcceptComponent),
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () =>

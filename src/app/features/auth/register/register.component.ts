@@ -1,7 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ChurchService } from '../../../core/services/church.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,13 @@ export class RegisterComponent {
   error = signal('');
   success = signal(false);
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private churchService: ChurchService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
@@ -30,11 +37,20 @@ export class RegisterComponent {
     this.loading.set(true);
     this.error.set('');
     try {
-      await this.auth.register(
+      const data = await this.auth.register(
         this.form.value.name,
         this.form.value.email,
         this.form.value.password
       );
+      const inviteToken = this.route.snapshot.queryParams['invite'];
+      if (inviteToken && data.session) {
+        const invite = await this.churchService.getAdminInvite(inviteToken);
+        if (invite && data.user) {
+          await this.churchService.acceptAdminInvite(inviteToken, data.user.id, invite.church_id);
+          this.router.navigate(['/churches', invite.church_id, 'admin']);
+          return;
+        }
+      }
       this.success.set(true);
     } catch (err: any) {
       this.error.set(this.mapError(err.message));

@@ -9,7 +9,10 @@
       "Bash(Get-ChildItem \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\dist\\\\oracion-app\\\\browser\")",
       "Bash(Select-Object Name)",
       "Bash(node *)",
-      "Bash(Get-Content *)"
+      "Bash(Get-Content *)",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\supabase\\\\migrations\")",
+      "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\src\\\\app\\\\features\\\\churches\\\\invite-accept\")",
+      "Bash(Write-Output \"OK\")"
     ]
   }
 }

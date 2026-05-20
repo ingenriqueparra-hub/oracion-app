@@ -238,6 +238,27 @@
 
     @if (activeTab() === 'church') {
       <div class="section">
+        <h2>Invitar coadministrador</h2>
+        <p class="section-desc">Genera un link de 24 horas para que otra persona se registre como administrador de esta iglesia.</p>
+        @if (!inviteLink()) {
+          <button class="btn-primary" (click)="onGenerateInvite()" [disabled]="inviteLoading()">
+            {{ inviteLoading() ? 'Generando...' : 'Generar link de invitación' }}
+          </button>
+        } @else {
+          <div class="invite-link-box">
+            <span class="invite-link-text">{{ inviteLink() }}</span>
+          </div>
+          <div class="invite-link-actions">
+            <button class="btn-secondary" (click)="onCopyInvite()">
+              {{ inviteCopied() ? '¡Copiado!' : 'Copiar link' }}
+            </button>
+            <button class="btn-primary" (click)="onShareInvite()">Compartir</button>
+          </div>
+          <p class="invite-hint">⏱ Este link expira en 24 horas y solo puede usarse una vez.</p>
+        }
+      </div>
+
+      <div class="section">
         <h2>Foto de la iglesia</h2>
         <div class="photo-upload-row">
           <div class="church-photo-preview">
