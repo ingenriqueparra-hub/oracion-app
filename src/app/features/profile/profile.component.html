@@ -91,6 +91,12 @@
     />
   </div>
 
+  <div class="profile-card invite-section">
+    <h3>🤝 Invita a un hermano/a</h3>
+    <p class="invite-desc">Comparte Intercede con alguien que necesita oración en comunidad.</p>
+    <button class="btn-primary" (click)="onInvite()">Compartir invitación</button>
+  </div>
+
   <a routerLink="/churches" class="church-link">
     @if (user()?.church_id) {
       <span class="church-link-icon">⛪</span>

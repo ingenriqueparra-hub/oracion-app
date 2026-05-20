@@ -109,6 +109,15 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  onInvite() {
+    const msg = '¡Te invito a Intercede, la app donde oramos juntos en comunidad! 🙏 https://www.intercede.pe';
+    if (navigator.share) {
+      navigator.share({ text: msg, url: 'https://www.intercede.pe' });
+    } else {
+      navigator.clipboard.writeText(msg);
+    }
+  }
+
   timeAgo(dateStr: string): string {
     const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 60000);
     if (diff < 1) return 'ahora';

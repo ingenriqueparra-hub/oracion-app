@@ -321,6 +321,69 @@
   padding: 0.5rem 1rem;
 }
 
+.invite-card {
+  position: relative;
+  margin: 0.75rem 1rem 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #ede9fe 0%, #dbeafe 100%);
+  border: 1px solid #c4b5fd;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.invite-dismiss {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.625rem;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  color: #7c3aed;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  opacity: 0.6;
+  &:hover { opacity: 1; }
+}
+
+.invite-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-right: 1.5rem;
+}
+
+.invite-icon { font-size: 1.75rem; flex-shrink: 0; }
+
+.invite-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #4c1d95;
+  margin: 0 0 0.125rem;
+}
+
+.invite-subtitle {
+  font-size: 0.8125rem;
+  color: #5b21b6;
+  margin: 0;
+}
+
+.btn-invite {
+  align-self: flex-start;
+  padding: 0.5rem 1.25rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover { background: #6d28d9; }
+}
+
 /* Intercalated mobile-only cards */
 .feed-mobile-card {
   display: none;

@@ -50,6 +50,19 @@
       }
     </div>
   } @else {
+    @if (showInviteCard()) {
+      <div class="invite-card">
+        <button class="invite-dismiss" (click)="onDismissInvite()">✕</button>
+        <div class="invite-content">
+          <span class="invite-icon">🤝</span>
+          <div>
+            <p class="invite-title">¿Conoces a alguien que necesita oración?</p>
+            <p class="invite-subtitle">Invítalo a Intercede</p>
+          </div>
+        </div>
+        <button class="btn-invite" (click)="onInvite()">Compartir invitación</button>
+      </div>
+    }
     <div class="prayer-list">
       @for (prayer of visiblePrayers(); track prayer.id; let i = $index) {
         <div class="prayer-card" (click)="goToDetail(prayer.id)">

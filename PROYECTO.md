@@ -13,6 +13,7 @@ Orientada a iglesias evangélicas/protestantes de Latinoamérica, con foco inici
 | Frontend | Angular (PWA) |
 | Backend / Base de datos | Supabase |
 | Almacenamiento de audio | Supabase Storage (bucket: `audio-responses`) |
+| Fotos de iglesias | Supabase Storage (bucket: `church-photos`, público) |
 | Autenticación | Supabase Auth |
 | Hosting | Vercel |
 | App móvil (Fase 2) | TWA empaquetado desde la PWA para Google Play |
@@ -56,7 +57,7 @@ Orientada a iglesias evangélicas/protestantes de Latinoamérica, con foco inici
 - Accede al panel desde `/admin`
 
 ### Admin de Iglesia (pastor o líder)
-- Gestionar iglesia propia: editar nombre y descripción
+- Gestionar iglesia propia: editar nombre, descripción y foto (upload a `church-photos`)
 - Aprobar o rechazar solicitudes de membresía
 - Asignar miembros a grupos
 - Expulsar miembros
@@ -158,6 +159,7 @@ Iglesia (status: pending → approved)
 - Triggers SQL generan notificaciones automáticas al:
   - Alguien orar por tu pedido (`prayer_prays`)
   - Alguien responder tu pedido (`responses`)
+- **Realtime activo**: el badge se actualiza en tiempo real sin recargar. Canal `notifications:${userId}` vía Supabase Realtime. Requiere SQL: `alter publication supabase_realtime add table notifications`
 
 ### Mis pedidos
 - Vista `/my-prayers` con todos los pedidos del usuario autenticado
@@ -193,9 +195,10 @@ Flujo de registro alternativo para miembros comunes (no admins). El usuario nunc
 - El usuario añade su email real → Supabase envía confirmación → `is_pin_account` pasa a `false`
 
 **Pantalla de entrada (`/welcome`):**
-- Botón primario: "Entrar con cuenta rápida" → `/pin-login`
-- Botones secundarios: "Entrar con Gmail o Correo" → `/login`, "Registrarme Gmail o Correo" → `/register`
-- Link: "Crear cuenta rápida" → `/pin-register`
+- Refactorizado a 3 pasos internos: root | login | register (sin rutas separadas para cada paso)
+- "Cuenta rápida" renombrado a "sin correo" en toda la UI
+- Opción principal: "Entrar sin correo" (PIN) → `/pin-login`
+- Google y email como opciones separadas; "Crear cuenta sin correo" → `/pin-register`
 
 **Restricciones:**
 - Solo para `role = 'member'`; admins y super_admin usan email
