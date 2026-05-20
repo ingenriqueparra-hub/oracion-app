@@ -30,6 +30,15 @@ export class RightPanelComponent {
     });
   }
 
+  onInvite() {
+    const msg = '¡Te invito a Intercede, la app donde oramos juntos en comunidad! 🙏 https://www.intercede.pe';
+    if (navigator.share) {
+      navigator.share({ text: msg, url: 'https://www.intercede.pe' });
+    } else {
+      navigator.clipboard.writeText(msg);
+    }
+  }
+
   private async loadData(userId: string, churchId: string) {
     this.loadingData.set(true);
     try {

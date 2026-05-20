@@ -39,7 +39,6 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
   error = signal('');
   mainTab = signal<MainTab>('all');
   subTab = signal<SubTab>('new');
-  showInviteCard = signal(false);
   private userId = '';
   private currentOffset = 0;
   private scrollContainer: Element | null = null;
@@ -77,7 +76,6 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mainTab.set('all');
     }
 
-    this.checkInviteCard();
     await this.loadFeed();
   }
 
@@ -195,27 +193,6 @@ export class PrayerFeedComponent implements OnInit, AfterViewInit, OnDestroy {
           : p
         )
       );
-    }
-  }
-
-  private checkInviteCard() {
-    const today = new Date().toLocaleDateString('en-CA');
-    const seen = localStorage.getItem('invite_shown_date');
-    this.showInviteCard.set(seen !== today);
-  }
-
-  onDismissInvite() {
-    const today = new Date().toLocaleDateString('en-CA');
-    localStorage.setItem('invite_shown_date', today);
-    this.showInviteCard.set(false);
-  }
-
-  onInvite() {
-    const msg = '¡Te invito a Intercede, la app donde oramos juntos en comunidad! 🙏 https://www.intercede.pe';
-    if (navigator.share) {
-      navigator.share({ text: msg, url: 'https://www.intercede.pe' });
-    } else {
-      navigator.clipboard.writeText(msg);
     }
   }
 

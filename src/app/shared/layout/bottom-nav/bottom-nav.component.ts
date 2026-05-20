@@ -63,6 +63,16 @@ export class BottomNavComponent implements OnDestroy {
     this.router.navigate([path]);
   }
 
+  onInvite() {
+    this.closeSheet();
+    const msg = '¡Te invito a Intercede, la app donde oramos juntos en comunidad! 🙏 https://www.intercede.pe';
+    if (navigator.share) {
+      navigator.share({ text: msg, url: 'https://www.intercede.pe' });
+    } else {
+      navigator.clipboard.writeText(msg);
+    }
+  }
+
   async logout() {
     this.closeSheet();
     await this.auth.logout();
