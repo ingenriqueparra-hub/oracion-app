@@ -65,45 +65,65 @@
     }
     <div class="prayer-list">
       @for (prayer of visiblePrayers(); track prayer.id; let i = $index) {
-        <div class="prayer-card" (click)="goToDetail(prayer.id)">
-          <div class="card-top">
-            <div class="author-row">
-              <div class="avatar">
-                @if (prayer.profiles?.avatar_url) {
-                  <img [src]="prayer.profiles.avatar_url" [alt]="prayer.profiles.name">
-                } @else {
-                  {{ initials(prayer.profiles?.name ?? '') }}
-                }
-              </div>
-              <div class="author-info">
-                <a [routerLink]="['/profile', prayer.user_id]" class="author-name" (click)="$event.stopPropagation()">{{ prayer.profiles?.name }}</a>
-                <span class="time">{{ prayer.profiles?.level }} · {{ timeAgo(prayer.created_at) }}</span>
-              </div>
-            </div>
-            @if (prayer.churches?.name) {
-              <span class="church-badge">⛪ {{ prayer.churches!.name }}</span>
-            }
-          </div>
-
-          <p class="prayer-text">{{ prayer.text }}</p>
-
-          <div class="card-footer">
-            @if (prayer.status === 'answered') {
-              <span class="answered-badge">✨ Respondido</span>
-            }
-            <button
-              class="pray-btn"
-              [class.prayed]="prayer.has_prayed"
-              (click)="onPray(prayer, $event)"
-            >
-              🙏
-              @if (mainTab() !== 'all') {
-                {{ prayer.pray_count }}
+        @if (mainTab() === 'mine') {
+          <div class="prayer-card" (click)="goToDetail(prayer.id)">
+            <div class="card-header">
+              <span class="prayer-time">{{ timeAgo(prayer.created_at) }}</span>
+              @if (prayer.status === 'answered') {
+                <span class="badge-answered">✨ Respondido</span>
+              } @else {
+                <span class="badge-active">🙏 Activo</span>
               }
-              {{ prayer.has_prayed ? 'Ya oré' : 'Orar' }}
-            </button>
+            </div>
+            <p class="prayer-text">{{ prayer.text }}</p>
+            <div class="card-footer">
+              <span class="pray-count">🙏 {{ prayer.pray_count }} {{ prayer.pray_count === 1 ? 'persona oró' : 'personas oraron' }}</span>
+              @if (prayer.churches?.name) {
+                <span class="church-name">⛪ {{ prayer.churches!.name }}</span>
+              }
+            </div>
           </div>
-        </div>
+        } @else {
+          <div class="prayer-card" (click)="goToDetail(prayer.id)">
+            <div class="card-top">
+              <div class="author-row">
+                <div class="avatar">
+                  @if (prayer.profiles?.avatar_url) {
+                    <img [src]="prayer.profiles.avatar_url" [alt]="prayer.profiles.name">
+                  } @else {
+                    {{ initials(prayer.profiles?.name ?? '') }}
+                  }
+                </div>
+                <div class="author-info">
+                  <a [routerLink]="['/profile', prayer.user_id]" class="author-name" (click)="$event.stopPropagation()">{{ prayer.profiles?.name }}</a>
+                  <span class="time">{{ prayer.profiles?.level }} · {{ timeAgo(prayer.created_at) }}</span>
+                </div>
+              </div>
+              @if (prayer.churches?.name) {
+                <span class="church-badge">⛪ {{ prayer.churches!.name }}</span>
+              }
+            </div>
+
+            <p class="prayer-text">{{ prayer.text }}</p>
+
+            <div class="card-footer">
+              @if (prayer.status === 'answered') {
+                <span class="answered-badge">✨ Respondido</span>
+              }
+              <button
+                class="pray-btn"
+                [class.prayed]="prayer.has_prayed"
+                (click)="onPray(prayer, $event)"
+              >
+                🙏
+                @if (mainTab() !== 'all') {
+                  {{ prayer.pray_count }}
+                }
+                {{ prayer.has_prayed ? 'Ya oré' : 'Orar' }}
+              </button>
+            </div>
+          </div>
+        }
 
         @if (i === 2) {
           <div class="feed-mobile-card">
