@@ -40,7 +40,7 @@
       --radius-xl:      32px;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -90,7 +90,7 @@
       font-family: inherit; font-weight: 700; font-size: 1rem;
       border-radius: 99px; padding: 0.9rem 1.875rem;
       text-decoration: none; transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
-      white-space: nowrap;
+      white-space: nowrap; max-width: 100%;
     }
     .btn:hover { transform: translateY(-2px); }
     .btn-primary {
@@ -512,6 +512,7 @@
       background: linear-gradient(145deg, var(--primary), var(--primary-dark));
       border-color: transparent; color: #fff;
     }
+    .reward-full { grid-column: span 2; }
     .reward-badge {
       position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
       background: var(--primary); color: #fff;
@@ -726,6 +727,9 @@
       .piloto-card { grid-template-columns: 1fr; gap: 2rem; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
+      /* demo card tablet */
+      .demo-card { grid-template-columns: 1fr; gap: 1.75rem; padding: 1.75rem; }
+      .demo-card-right { min-width: auto; }
     }
 
     @media (max-width: 680px) {
@@ -733,16 +737,59 @@
       .problema-intro { grid-template-columns: 1fr; gap: 1.5rem; }
       .problema-grid { grid-template-columns: 1fr; }
       .audience-grid { grid-template-columns: 1fr; }
-      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
       .rewards-grid { grid-template-columns: 1fr; }
       .trans-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; text-align: center; }
-      .footer-links { justify-content: center; }
+      .footer-links { justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
       .wa-text { display: none; }
       .wa-bubble { padding: 0.875rem; border-radius: 50%; }
       .hero { padding: 3.5rem 0 0; }
-      .btn-group { flex-direction: column; }
+
+      /* Botones — permiten salto de línea en mobile */
+      .btn { white-space: normal; text-align: center; }
+      .btn-group { flex-direction: column; align-items: stretch; }
       .btn-group .btn { width: 100%; }
+
+      /* S/500+ card: anula el grid-column:span 2 inline */
+      .reward-card.dark { grid-column: 1 !important; }
+
+      /* Cards sin desborde */
+      .reward-card,
+      .feature-card,
+      .problem-card,
+      .audience-card,
+      .trans-card,
+      .piloto-stat,
+      .demo-card,
+      .payment-box { max-width: 100%; }
+
+      /* Nav: ocultar botón de nav en móvil muy pequeño */
+      .nav-right .btn-primary { display: none; }
+
+      /* Piloto stats apilados */
+      .piloto-stats { width: 100%; }
+
+      /* CF items sin desborde */
+      .cf-item { gap: 0.5rem; }
+      .cf-item-bar { min-width: 0; }
+      .cf-item-label { font-size: 0.8rem; }
+      .cf-item-pct { width: 2.5rem; }
+
+      /* CTA final botones */
+      .cta-final-inner { padding: 0 1rem; }
+
+      /* Footer links no desbordan */
+      .footer-links a { font-size: 0.8125rem; }
+    }
+
+    @media (max-width: 400px) {
+      .trans-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .payment-qr img,
+      .payment-qr-placeholder { width: 100%; max-width: 180px; height: 160px; }
+      .hero h1 { font-size: 1.75rem; }
     }
   </style>
 </head>
@@ -1229,7 +1276,7 @@
         </a>
       </div>
 
-      <div class="reward-card dark" style="grid-column:span 2;">
+      <div class="reward-card dark reward-full">
         <div class="reward-amount"><span>S/</span> 500+</div>
         <div class="reward-name">Aliado Fundador</div>
         <p class="reward-desc">El nivel máximo de apoyo. Eres parte del equipo que hace posible INTERCEDE. Queremos conocerte.</p>
