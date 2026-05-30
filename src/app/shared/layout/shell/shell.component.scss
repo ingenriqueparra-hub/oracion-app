@@ -1,6 +1,7 @@
 :host {
   display: block;
   width: 100%;
+  padding-top: env(safe-area-inset-top);
 }
 
 .shell {
@@ -50,7 +51,7 @@
 @media (max-width: 680px) {
   .shell {
     grid-template-columns: 1fr;
-    padding-bottom: 64px;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
   }
   .shell-left {
     display: none;

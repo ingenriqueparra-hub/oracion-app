@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intercede — Ora con otros, recibe respuestas</title>
+  <meta name="description" content="Intercede es la app de oración comunitaria donde puedes pedir, orar por otros y compartir testimonios de respuesta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #4f46e5;
+      --primary-dark:  #4338ca;
+      --primary-light: #f0f4ff;
+      --text-1:        #1a1a2e;
+      --text-2:        #6b7280;
+      --surface:       #ffffff;
+      --border:        #e5e7eb;
+      --success:       #16a34a;
+      --wa-green:      #25d366;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-1);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--text-1); }
+    .nav-cta {
+      background: var(--primary);
+      color: #fff;
+      padding: 0.5rem 1.25rem;
+      border-radius: 99px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--primary-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, #f0f4ff 0%, #faf8ff 50%, #ede9fe 100%);
+      padding: 5rem 1.5rem 4rem;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ede9fe;
+      color: var(--primary);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 0.35rem 0.875rem;
+      border-radius: 99px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: var(--text-1);
+      max-width: 700px;
+      margin: 0 auto 1rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--primary);
+    }
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--text-2);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.875rem 1.75rem;
+      border-radius: 99px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(79,70,229,0.35);
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff;
+      color: var(--primary);
+      padding: 0.875rem 1.75rem;
+      border-radius: 99px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid var(--primary);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { background: var(--primary-light); transform: translateY(-2px); }
+
+    /* ── MOCKUP ── */
+    .mockup-wrap {
+      max-width: 900px;
+      margin: 3.5rem auto 0;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0 1.5rem;
+    }
+    .phone {
+      width: 200px;
+      background: var(--text-1);
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow: 0 32px 64px rgba(26,26,46,0.25);
+      flex-shrink: 0;
+    }
+    .phone.center { transform: translateY(-20px); width: 220px; }
+    .phone-screen {
+      background: var(--primary-light);
+      border-radius: 28px;
+      overflow: hidden;
+      aspect-ratio: 9/19;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-bar {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.6rem 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .phone-content { padding: 0.75rem; flex: 1; }
+    .prayer-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.625rem 0.75rem;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .card-author {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 0.25rem;
+    }
+    .card-text {
+      font-size: 0.525rem;
+      color: var(--text-2);
+      line-height: 1.5;
+      margin-bottom: 0.4rem;
+    }
+    .card-pray {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 0.5rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 99px;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 5rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text-1);
+      margin-bottom: 0.75rem;
+    }
+    .section-sub {
+      text-align: center;
+      font-size: 1.0625rem;
+      color: var(--text-2);
+      max-width: 560px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.7;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      box-shadow: 0 8px 32px rgba(79,70,229,0.1);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .feature-card h3 {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.9375rem;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    /* ── HOW ── */
+    .how {
+      background: linear-gradient(160deg, #f0f4ff 0%, #faf8ff 100%);
+      padding: 5rem 1.5rem;
+    }
+    .how-inner { max-width: 1100px; margin: 0 auto; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .step {
+      text-align: center;
+    }
+    .step-num {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .step p {
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* ── CTA FINAL ── */
+    .cta-section {
+      padding: 5rem 1.5rem;
+      text-align: center;
+    }
+    .cta-box {
+      max-width: 680px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+      border-radius: 28px;
+      padding: 3.5rem 2rem;
+      color: #fff;
+      box-shadow: 0 24px 64px rgba(79,70,229,0.3);
+    }
+    .cta-box h2 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.75rem;
+    }
+    .cta-box p {
+      font-size: 1.0625rem;
+      opacity: 0.85;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+    .cta-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff;
+      color: var(--primary);
+      padding: 0.875rem 1.75rem;
+      border-radius: 99px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+    .btn-white:hover { transform: translateY(-2px); opacity: 0.95; }
+    .btn-outline-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: #fff;
+      padding: 0.875rem 1.75rem;
+      border-radius: 99px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid rgba(255,255,255,0.6);
+      transition: transform 0.15s, border-color 0.2s;
+    }
+    .btn-outline-white:hover { transform: translateY(-2px); border-color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    footer p {
+      font-size: 0.875rem;
+      color: var(--text-2);
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+
+    /* ── WHATSAPP BUBBLE ── */
+    .wa-bubble {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      background: var(--wa-green);
+      color: #fff;
+      padding: 0.75rem 1.25rem 0.75rem 0.875rem;
+      border-radius: 99px;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-bubble:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 10px 32px rgba(37,211,102,0.5);
+    }
+    .wa-bubble svg {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .wa-label { display: inline; }
+    @media (max-width: 480px) {
+      .wa-label { display: none; }
+      .wa-bubble { padding: 0.875rem; border-radius: 50%; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      .phone:not(.center) { display: none; }
+      .mockup-wrap { margin-top: 2.5rem; }
+      .phone.center { width: 200px; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">Inter<span>cede</span></a>
+      <a class="nav-cta" href="https://oracion-app.vercel.app/">Usar ahora →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">🙏 Red de oración comunitaria</div>
+    <h1>Ora con otros.<br/><em>Dios responde.</em></h1>
+    <p>Intercede es la app donde puedes pedir oración, orar por tu iglesia y compartir testimonios de respuesta en comunidad.</p>
+    <div class="hero-btns">
+      <!-- Reemplaza href con el enlace de descarga del APK (Drive, Dropbox, etc.) -->
+      <a class="btn-primary" href="https://drive.google.com/drive/folders/14IThUGh-GZrXD5uT41v7-rbI8aNwmAFQ?usp=drive_link" target="_blank" rel="noopener">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 16l-5-5h3V4h4v7h3l-5 5z" fill="currentColor"/><path d="M5 20h14v-2H5v2z" fill="currentColor"/></svg>
+        Descargar para Android
+      </a>
+      <!-- Reemplaza href con la URL de tu app web -->
+      <a class="btn-secondary" href="https://oracion-app.vercel.app/">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Versión web
+      </a>
+    </div>
+
+    <!-- Mockup de teléfonos -->
+    <div class="mockup-wrap">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-bar"><span>Oración</span><span>🔔</span></div>
+          <div class="phone-content">
+            <div class="prayer-card">
+              <div class="card-author">María G. · Mi grupo</div>
+              <div class="card-text">Pido sabiduría para mi trabajo y que Dios guíe mis decisiones esta semana.</div>
+              <div class="card-pray">🙏 8 Orar</div>
+            </div>
+            <div class="prayer-card">
+              <div class="card-author">Juan P. · Mi iglesia</div>
+              <div class="card-text">Por sanidad de mi mamá que está en el hospital.</div>
+              <div class="card-pray">🙏 5 Orar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone center">
+        <div class="phone-screen">
+          <div class="phone-bar"><span>Intercede</span><span>+ Nueva</span></div>
+          <div class="phone-content">
+            <div class="prayer-card">
+              <div class="card-author">Carlos M. · 15 may.</div>
+              <div class="card-text">Pido encontrar mi propósito de vida.</div>
+              <div class="card-pray">🙏 4 Orar</div>
+            </div>
+            <div class="prayer-card">
+              <div class="card-author">Ana R. · Hoy</div>
+              <div class="card-text">Gracias a Dios, ¡respondió mi oración! 🎉</div>
+              <div class="card-pray">⭐ Testimonio</div>
+            </div>
+            <div class="prayer-card">
+              <div class="card-author">Luis T. · Mi iglesia</div>
+              <div class="card-text">Oración por la economía de mi familia.</div>
+              <div class="card-pray">🙏 12 Orar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-bar"><span>Testimonios</span><span>⭐</span></div>
+          <div class="phone-content">
+            <div class="prayer-card">
+              <div class="card-author">Rosa L. · Respondido ✅</div>
+              <div class="card-text">Pedí trabajo y Dios abrió una puerta increíble.</div>
+              <div class="card-pray">🙏 23 oraron</div>
+            </div>
+            <div class="prayer-card">
+              <div class="card-author">Pedro V. · Respondido ✅</div>
+              <div class="card-text">Mi hija sanó completamente. ¡Gloria a Dios!</div>
+              <div class="card-pray">🙏 41 oraron</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="section-label">¿Qué puedes hacer?</div>
+    <h2 class="section-title">Todo lo que necesitas<br/>para orar en comunidad</h2>
+    <p class="section-sub">Diseñada para iglesias y grupos que quieren mantenerse conectados en oración.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🙏</div>
+        <h3>Feed de oración</h3>
+        <p>Ve los pedidos de tu grupo, tu iglesia y de otros creyentes. Ora por ellos con un toque.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⛪</div>
+        <h3>Iglesias y grupos</h3>
+        <p>Únete a tu iglesia y a tu grupo de oración. Mantén los pedidos dentro de tu comunidad.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎙️</div>
+        <h3>Respuestas de voz</h3>
+        <p>Anima a otros enviando un mensaje de voz o texto directamente a su pedido de oración.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <h3>Testimonios</h3>
+        <p>Cuando Dios responde, comparte tu testimonio con toda la comunidad y edifica la fe.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <h3>Notificaciones</h3>
+        <p>Recibe alertas en tiempo real cuando alguien ora por ti o responde tu pedido.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Logros e insignias</h3>
+        <p>Gana puntos e insignias por orar, responder y compartir. La fidelidad tiene recompensa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="how">
+    <div class="how-inner">
+      <div class="section-label">Fácil de usar</div>
+      <h2 class="section-title">Empieza en minutos</h2>
+      <p class="section-sub">Sin complicaciones. Solo oración.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Crea tu cuenta</h3>
+          <p>Regístrate con tu email, Google, o crea una cuenta rápida con solo tu nombre y un PIN.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Únete a tu iglesia</h3>
+          <p>Busca tu iglesia, solicita unirte y el admin te aprobará. También puedes orar en global.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Comparte y ora</h3>
+          <p>Publica tu pedido, ora por otros con un toque y recibe respuestas de tu comunidad.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Comparte el testimonio</h3>
+          <p>Cuando Dios responda, marca tu pedido como respondido y comparte tu testimonio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>¿Listo para orar<br/>con tu comunidad?</h2>
+      <p>Disponible en Android y en tu navegador, en escritorio y móvil. Gratis.</p>
+      <div class="cta-btns">
+        <!-- Reemplaza href con el enlace de descarga del APK -->
+        <a class="btn-white" href="https://drive.google.com/drive/folders/14IThUGh-GZrXD5uT41v7-rbI8aNwmAFQ?usp=drive_link" target="_blank" rel="noopener">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12 16l-5-5h3V4h4v7h3l-5 5z" fill="currentColor"/><path d="M5 20h14v-2H5v2z" fill="currentColor"/></svg>
+          Descargar APK
+        </a>
+        <!-- Reemplaza href con la URL de tu app web -->
+        <a class="btn-outline-white" href="https://oracion-app.vercel.app/">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3.0 010 20M12 2a15.3 15.3 0 000 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Abrir versión web
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Intercede · Hecho con ❤️ para la comunidad cristiana · <a href="https://wa.me/51912618048">Soporte</a></p>
+  </footer>
+
+  <!-- WHATSAPP BUBBLE -->
+  <a class="wa-bubble" href="https://wa.me/51912618048?text=Hola%2C%20necesito%20ayuda%20con%20Intercede" target="_blank" rel="noopener" aria-label="Soporte por WhatsApp">
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="16" fill="white" fill-opacity="0.2"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M16 6C10.477 6 6 10.477 6 16c0 1.89.523 3.66 1.435 5.174L6 26l4.957-1.418A9.956 9.956 0 0016 26c5.523 0 10-4.477 10-10S21.523 6 16 6zm-3.5 7.5c.2-.5.7-1.5 1.2-1.7.2-.1.5-.1.7 0l.6.3c.4.2.7.9.8 1.3.1.3 0 .6-.2.8l-.5.6c-.1.1-.1.3 0 .4.3.6.8 1.3 1.4 1.8.6.5 1.2.9 1.8 1.1.2.1.4 0 .5-.1l.5-.6c.2-.2.5-.3.8-.2l1.3.6c.4.2.6.6.4 1-.3.8-1.3 1.5-2.1 1.6-1.4.2-3.2-.4-5-2.2-1.3-1.3-2.1-2.8-2.2-4 0-.9.4-1.7.7-2.2z" fill="white"/>
+    </svg>
+    <span class="wa-label">¿Necesitas ayuda?</span>
+  </a>
+
+</body>
+</html>
