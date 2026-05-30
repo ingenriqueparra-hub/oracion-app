@@ -628,6 +628,86 @@
     .wa-bubble svg { width: 24px; height: 24px; flex-shrink: 0; }
     .wa-text { display: inline; }
 
+    /* ─────────── PAYMENT BOX ─────────── */
+    .payment-box {
+      background: #fff; border-radius: var(--radius-lg);
+      padding: 1.5rem; margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .payment-box-title {
+      font-size: 0.8125rem; font-weight: 800; color: var(--primary);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .payment-box-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .payment-qr {
+      display: flex; flex-direction: column; align-items: center; gap: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    .payment-qr img {
+      width: 180px; height: 180px; border-radius: 12px;
+      border: 2px solid var(--border); object-fit: contain;
+      background: #f9fafb;
+    }
+    .payment-qr-placeholder {
+      width: 180px; height: 180px; border-radius: 12px;
+      border: 2px dashed var(--border); background: var(--primary-light);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.5rem; color: var(--primary); font-weight: 700; font-size: 0.8125rem;
+      text-align: center; padding: 1rem;
+    }
+    .payment-qr-placeholder span { font-size: 2.5rem; }
+    .payment-info { text-align: center; }
+    .payment-info .payment-apps {
+      display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.875rem;
+    }
+    .payment-app-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.3rem 0.75rem; border-radius: 99px;
+      font-size: 0.75rem; font-weight: 800;
+    }
+    .payment-app-badge.yape { background: #6b21a8; color: #fff; }
+    .payment-app-badge.plin { background: #0ea5e9; color: #fff; }
+    .payment-number {
+      font-size: 1.5rem; font-weight: 900; color: var(--text-1);
+      letter-spacing: 1px; margin-bottom: 0.25rem;
+    }
+    .payment-name { font-size: 0.875rem; color: var(--text-2); margin-bottom: 0.625rem; }
+    .payment-desc { font-size: 0.8125rem; color: var(--text-2); line-height: 1.6; }
+    .payment-note {
+      font-size: 0.75rem; color: var(--text-2); line-height: 1.5;
+      background: var(--primary-light); border-radius: 8px;
+      padding: 0.5rem 0.75rem; margin-top: 0.875rem; font-style: italic;
+    }
+    .payment-actions { display: flex; flex-direction: column; gap: 0.625rem; margin-top: 1rem; }
+    .btn-proof {
+      background: var(--green); color: #fff; font-weight: 800;
+      box-shadow: 0 4px 16px rgba(22,163,74,0.3);
+    }
+    .btn-proof:hover { background: #15803d; }
+
+    /* ─────────── PROOF CALLOUT ─────────── */
+    .proof-callout {
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--primary-light) 100%);
+      border-top: 2px solid var(--green-mid);
+      border-bottom: 2px solid var(--green-mid);
+      padding: 2.5rem 0;
+    }
+    .proof-callout-inner {
+      max-width: 680px; margin: 0 auto; padding: 0 1.5rem;
+      text-align: center;
+    }
+    .proof-callout h3 {
+      font-size: 1.375rem; font-weight: 900; color: var(--text-1);
+      margin-bottom: 0.5rem; letter-spacing: -0.25px;
+    }
+    .proof-callout p {
+      font-size: 0.9375rem; color: var(--text-2); line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
     /* ─────────── DIVIDER ─────────── */
     .divider { width: 60px; height: 4px; background: linear-gradient(90deg, var(--primary), var(--indigo)); border-radius: 99px; }
     .divider.center { margin: 0 auto; }
@@ -1061,7 +1141,40 @@
             <span>Preparar la plataforma para que más iglesias de Latinoamérica puedan unirse en una segunda fase.</span>
           </li>
         </ul>
-        <div style="margin-top:1.75rem;">
+        <!-- PAGO YAPE / PLIN -->
+        <div class="payment-box" style="margin-top:1.75rem;">
+          <div class="payment-box-title">💳 Formas de apoyar</div>
+          <div class="payment-qr">
+            <img src="qr-yape-plin.png" alt="QR Yape o Plin para apoyar INTERCEDE"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="payment-qr-placeholder" style="display:none;">
+              <span>📱</span>
+              QR próximamente disponible
+            </div>
+            <div class="payment-info">
+              <div class="payment-apps">
+                <span class="payment-app-badge yape">💜 Yape</span>
+                <span class="payment-app-badge plin">💙 Plin</span>
+              </div>
+              <div class="payment-number">912 618 048</div>
+              <div class="payment-name">Enrique Parra / INTERCEDE</div>
+              <div class="payment-desc">Escanea el QR o usa el número para apoyar desde Yape o Plin.</div>
+            </div>
+          </div>
+          <div class="payment-note">
+            Después de aportar, envíanos tu comprobante para registrarte como fundador y asignarte la recompensa correspondiente.
+          </div>
+          <div class="payment-actions">
+            <a class="btn btn-proof" href="https://wa.me/51912618048?text=Hola%2C%20ya%20apoy%C3%A9%20INTERCEDE.%20Te%20env%C3%ADo%20mi%20comprobante." target="_blank" rel="noopener" style="justify-content:center;">
+              ✅ Ya apoyé, enviar comprobante
+            </a>
+            <a class="btn btn-secondary btn-sm" href="https://wa.me/51912618048?text=Hola%2C%20tengo%20una%20duda%20antes%20de%20apoyar%20INTERCEDE" target="_blank" rel="noopener" style="justify-content:center;">
+              💬 Tengo una duda antes de apoyar
+            </a>
+          </div>
+        </div>
+
+        <div style="margin-top:0;">
           <a class="btn btn-white" style="width:100%; justify-content:center;" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20el%20lanzamiento%20de%20INTERCEDE">
             💜 Quiero apoyar ahora
           </a>
@@ -1100,7 +1213,7 @@
           <li>Eres parte del inicio de algo que importa</li>
         </ul>
         <a class="btn btn-secondary btn-sm" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20INTERCEDE%20con%20S%2F%2020">
-          Apoyar con S/ 20
+          Apoyar con S/ 20 por WhatsApp
         </a>
       </div>
 
@@ -1115,7 +1228,7 @@
           <li>Agradecimiento en redes sociales</li>
         </ul>
         <a class="btn btn-primary btn-sm" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20INTERCEDE%20con%20S%2F%2050">
-          Apoyar con S/ 50
+          Apoyar con S/ 50 por WhatsApp
         </a>
       </div>
 
@@ -1166,6 +1279,17 @@
         </a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF CALLOUT ═══ -->
+<section class="proof-callout">
+  <div class="proof-callout-inner">
+    <h3>¿Ya hiciste tu aporte? 🙌</h3>
+    <p>Envíanos tu comprobante por WhatsApp para registrarte como fundador y asignarte la recompensa correspondiente según el monto que aportaste.</p>
+    <a class="btn btn-green" href="https://wa.me/51912618048?text=Hola%2C%20ya%20apoy%C3%A9%20INTERCEDE.%20Te%20env%C3%ADo%20mi%20comprobante." target="_blank" rel="noopener">
+      ✅ Ya apoyé, enviar comprobante
+    </a>
   </div>
 </section>
 
