@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Apoya INTERCEDE — App de oración comunitaria para iglesias</title>
-  <meta name="description" content="Ayúdanos a lanzar INTERCEDE, la app móvil para que las iglesias evangélicas de Latinoamérica compartan pedidos de oración, acompañen durante la semana y celebren testimonios. Apoya nuestro crowdfunding." />
-  <meta property="og:title" content="Apoya el lanzamiento de INTERCEDE" />
-  <meta property="og:description" content="Una app móvil para que las iglesias oren juntas. Necesitamos tu apoyo para llevarla a más comunidades de Latinoamérica." />
+  <meta name="description" content="Ayúdanos a lanzar INTERCEDE, una app móvil cristiana de oración comunitaria para iglesias. La demo ya está operativa y buscamos apoyo para llevarla a más comunidades." />
+  <meta property="og:title" content="Apoya el lanzamiento de INTERCEDE — Demo ya operativa" />
+  <meta property="og:description" content="La demo ya está operativa. Apoya el lanzamiento y ayúdanos a llevar INTERCEDE a más iglesias de Latinoamérica." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://landing.intercede.pe/apoya" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -116,7 +116,86 @@
     .btn-sm { font-size: 0.875rem; padding: 0.6rem 1.25rem; }
     .btn-green { background: var(--green); color: #fff; box-shadow: 0 6px 20px rgba(22,163,74,0.3); }
     .btn-green:hover { background: #15803d; }
+    .btn-demo {
+      background: rgba(255,255,255,0.12); color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.35);
+    }
+    .btn-demo:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.7); }
     .btn-group { display: flex; gap: 0.875rem; flex-wrap: wrap; }
+
+    /* ─────────── DEMO BADGE ─────────── */
+    .demo-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(22,163,74,0.15); color: #86efac;
+      border: 1.5px solid rgba(134,239,172,0.4);
+      font-size: 0.875rem; font-weight: 700;
+      padding: 0.45rem 1rem; border-radius: 99px;
+      margin-bottom: 1.5rem;
+    }
+    .demo-badge .dot {
+      width: 8px; height: 8px; background: #4ade80;
+      border-radius: 50%; animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+    .hero-microcopy {
+      margin-top: 1rem;
+      font-size: 0.875rem; color: rgba(255,255,255,0.5);
+      font-style: italic;
+    }
+    .hero-microcopy a { color: rgba(255,255,255,0.7); text-decoration: underline; text-underline-offset: 3px; }
+    .hero-microcopy a:hover { color: #fff; }
+
+    /* ─────────── SECCIÓN DEMO ─────────── */
+    .demo-section { background: #fff; padding: 3.5rem 0; }
+    .demo-card {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 3rem; align-items: center;
+      background: linear-gradient(135deg, #f0fdf4 0%, #f5f3ff 100%);
+      border: 2px solid #d1fae5; border-radius: var(--radius-xl);
+      padding: 2.5rem 3rem;
+    }
+    .demo-card-left {}
+    .demo-card-badge {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: var(--green-light); color: var(--green);
+      border: 1.5px solid var(--green-mid);
+      font-size: 0.8125rem; font-weight: 800;
+      padding: 0.35rem 0.875rem; border-radius: 99px;
+      margin-bottom: 1rem;
+    }
+    .demo-card-badge .dot {
+      width: 7px; height: 7px; background: var(--green);
+      border-radius: 50%; animation: pulse-dot 2s infinite;
+    }
+    .demo-card h2 {
+      font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+      font-weight: 900; letter-spacing: -0.5px;
+      color: var(--text-1); margin-bottom: 0.875rem;
+    }
+    .demo-card h2 em { font-style: normal; color: var(--green); }
+    .demo-card p { font-size: 0.9375rem; color: var(--text-2); line-height: 1.75; }
+    .demo-card-right {
+      display: flex; flex-direction: column; gap: 0.875rem;
+      min-width: 220px;
+    }
+    .demo-stats {
+      display: flex; flex-direction: column; gap: 0.625rem;
+      margin-top: 0.5rem;
+    }
+    .demo-stat {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8125rem; color: var(--text-2); font-weight: 500;
+    }
+    .demo-stat::before {
+      content: '✓'; color: var(--green); font-weight: 900; font-size: 0.875rem;
+    }
+    @media (max-width: 768px) {
+      .demo-card { grid-template-columns: 1fr; gap: 1.75rem; padding: 1.75rem; }
+      .demo-card-right { min-width: auto; }
+    }
 
     /* ─────────── NAV ─────────── */
     nav {
@@ -619,19 +698,27 @@
         <span class="chip">🙏 App móvil de oración comunitaria</span>
       </div>
       <h1>Ayúdanos a lanzar <em>INTERCEDE</em> para que más iglesias oren juntas</h1>
-      <p class="hero-sub">Una app móvil para que cada iglesia comparta pedidos de oración, se acompañe durante la semana y celebre testimonios de respuesta.</p>
+      <p class="hero-sub">INTERCEDE ya tiene una primera versión operativa: una app móvil para que cada iglesia comparta pedidos de oración, se acompañe durante la semana y celebre testimonios de respuesta.</p>
+      <div class="demo-badge">
+        <span class="dot"></span>
+        ✅ Demo operativa disponible · Puedes probar INTERCEDE hoy
+      </div>
       <div class="btn-group">
         <a class="btn btn-white" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20el%20lanzamiento%20de%20INTERCEDE">
           💜 Apoyar el lanzamiento
+        </a>
+        <a class="btn btn-demo" href="https://oracion-app.vercel.app/" target="_blank" rel="noopener">
+          👀 Ver demo operativa
         </a>
         <a class="btn btn-outline-white" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20probar%20INTERCEDE%20en%20mi%20iglesia">
           ⛪ Quiero probarla en mi iglesia
         </a>
       </div>
+      <p class="hero-microcopy">Primero pruébala. Si crees en la misión, <a href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20el%20lanzamiento%20de%20INTERCEDE">ayúdanos a llevarla a más iglesias</a>.</p>
       <div class="hero-meta">
         <div class="hero-stat">
-          <strong>Primera versión</strong>
-          funcional disponible
+          <strong>Demo operativa</strong>
+          disponible hoy
         </div>
         <div class="hero-stat">
           <strong>Android</strong>
@@ -690,6 +777,37 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEMO ═══ -->
+<section class="demo-section">
+  <div class="container">
+    <div class="demo-card">
+      <div class="demo-card-left">
+        <div class="demo-card-badge">
+          <span class="dot"></span>
+          ✅ Demo operativa
+        </div>
+        <h2>INTERCEDE ya se<br/><em>puede probar</em></h2>
+        <p>No estamos empezando desde cero. Ya existe una primera versión funcional donde puedes conocer la experiencia de oración comunitaria, ver cómo se organizan los pedidos, testimonios, iglesias y grupos.<br/><br/>El apoyo que estamos levantando servirá para convertir esta demo operativa en una app móvil lista para más iglesias. <strong>INTERCEDE ya funciona. Ahora queremos terminarla bien y llevarla a más iglesias.</strong></p>
+      </div>
+      <div class="demo-card-right">
+        <a class="btn btn-green" href="https://oracion-app.vercel.app/" target="_blank" rel="noopener">
+          👀 Ver demo operativa
+        </a>
+        <a class="btn btn-primary" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20el%20lanzamiento%20de%20INTERCEDE">
+          💜 Apoyar lanzamiento
+        </a>
+        <div class="demo-stats">
+          <div class="demo-stat">Feed de oración funcionando</div>
+          <div class="demo-stat">Pedidos, respuestas y testimonios</div>
+          <div class="demo-stat">Iglesias, grupos y notificaciones</div>
+          <div class="demo-stat">Login con PIN para adultos mayores</div>
+          <div class="demo-stat">Panel para pastores y líderes</div>
         </div>
       </div>
     </div>
@@ -857,7 +975,7 @@
     <div class="cf-left">
       <div class="tag-label" style="color:#a78bfa;">¿Por qué necesitamos apoyo?</div>
       <h2 class="section-title white" style="margin:0.75rem 0 1rem;">INTERCEDE ya existe.<br/>Ayúdanos a <em>terminarla bien</em>.</h2>
-      <p class="section-sub white">Ya tenemos una primera versión funcional. Ahora queremos terminar la experiencia móvil, preparar el lanzamiento en Android y Google Play, mejorar la facilidad de uso para adultos mayores, acompañar iglesias piloto y abrir la plataforma a más comunidades de Latinoamérica.</p>
+      <p class="section-sub white">Ya tenemos una demo operativa que puedes probar hoy. El siguiente paso es terminar la experiencia móvil, preparar el lanzamiento en Android y Google Play, mejorar la facilidad de uso para adultos mayores, acompañar iglesias piloto y abrir la plataforma a más comunidades de Latinoamérica.</p>
 
       <div class="cf-meta">
         <div class="cf-goal-row">
@@ -866,15 +984,15 @@
             <div class="cf-goal-num">S/ 8,000</div>
           </div>
           <div style="text-align:right;">
-            <div class="cf-raised">Recaudado hasta hoy</div>
-            <div class="cf-goal-num" style="color:#a78bfa;">S/ 0</div>
+            <div class="cf-raised">Estado</div>
+            <div class="cf-goal-num" style="color:#a78bfa; font-size:1.25rem; line-height:1.3;">Campaña en<br/>pre-lanzamiento</div>
           </div>
         </div>
         <div class="progress-bar"><div class="progress-fill"></div></div>
         <div class="cf-stats">
-          <div class="cf-stat"><strong>0</strong>personas han apoyado</div>
-          <div class="cf-stat"><strong>0%</strong>de la meta</div>
-          <div class="cf-stat"><strong>Abierto</strong>desde hoy</div>
+          <div class="cf-stat"><strong>S/ 8,000</strong>meta inicial</div>
+          <div class="cf-stat"><strong>Buscando</strong>primeros fundadores</div>
+          <div class="cf-stat"><strong>Demo</strong>operativa hoy</div>
         </div>
       </div>
 
@@ -939,9 +1057,13 @@
           <a class="btn btn-white" style="width:100%; justify-content:center;" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20el%20lanzamiento%20de%20INTERCEDE">
             💜 Quiero apoyar ahora
           </a>
+          <a class="btn" style="width:100%; justify-content:center; margin-top:0.75rem; background:rgba(255,255,255,0.1); color:#fff; border:1.5px solid rgba(255,255,255,0.3);" href="https://oracion-app.vercel.app/" target="_blank" rel="noopener">
+            👀 Ver demo operativa primero
+          </a>
           <a class="btn btn-outline-white" style="width:100%; justify-content:center; margin-top:0.75rem;" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20probar%20INTERCEDE%20en%20mi%20iglesia">
             ⛪ Quiero probarla en mi iglesia
           </a>
+          <p style="margin-top:1rem; font-size:0.8125rem; color:rgba(255,255,255,0.45); text-align:center; font-style:italic;">Puedes ver la demo antes de apoyar.</p>
         </div>
       </div>
     </div>
@@ -1112,15 +1234,19 @@
       🙏 Sé parte del lanzamiento
     </div>
     <h2>No estás financiando<br/>solo una <em>aplicación</em></h2>
-    <p>Estás ayudando a que más iglesias oren, acompañen y celebren testimonios durante la semana. Cada pedido que no se pierde. Cada testimonio que llega a todos. Cada adulto mayor que puede orar sin depender de nadie.</p>
+    <p>INTERCEDE ya funciona. Tu apoyo nos ayuda a terminarla bien y llevarla a más iglesias. Estás ayudando a que más comunidades oren, acompañen y celebren testimonios durante la semana. Cada pedido que no se pierde. Cada testimonio que llega a todos. Cada adulto mayor que puede orar sin depender de nadie.</p>
     <div class="btn-group" style="justify-content:center;">
       <a class="btn btn-white" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20apoyar%20el%20lanzamiento%20de%20INTERCEDE">
         💜 Apoyar el lanzamiento
+      </a>
+      <a class="btn btn-demo" href="https://oracion-app.vercel.app/" target="_blank" rel="noopener">
+        👀 Ver demo operativa
       </a>
       <a class="btn btn-outline-white" href="https://wa.me/51912618048?text=Hola%2C%20quiero%20probar%20INTERCEDE%20en%20mi%20iglesia">
         ⛪ Quiero probarla en mi iglesia
       </a>
     </div>
+    <p style="margin-top:1.25rem; font-size:0.875rem; color:rgba(255,255,255,0.4); font-style:italic;">Primero pruébala. Si crees en la misión, ayúdanos a llevarla a más iglesias.</p>
     <p class="cta-verse">«Oren sin cesar.» — 1 Tesalonicenses 5:17</p>
   </div>
 </section>
