@@ -12,7 +12,19 @@
       "Bash(Get-Content *)",
       "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\supabase\\\\migrations\")",
       "Bash(New-Item -ItemType Directory -Force \"C:\\\\Users\\\\enriq\\\\oracion-app\\\\src\\\\app\\\\features\\\\churches\\\\invite-accept\")",
-      "Bash(Write-Output \"OK\")"
+      "Bash(Write-Output \"OK\")",
+      "Bash(winget install *)",
+      "PowerShell(winget install OpenJS.NodeJS.LTS --version 22.16.0 --accept-package-agreements --accept-source-agreements)",
+      "Bash(npm --version)",
+      "Bash(.\\\\gradlew.bat assembleDebug)",
+      "Read(//c/Users/ENRIQUE/AppData/Local/Android/Sdk/**)",
+      "PowerShell(java -version 2>&1)",
+      "Read(//c/Program Files/Eclipse Adoptium/**)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Eclipse Adoptium\\\\jdk-21.0.11.10-hotspot\"; $env:PATH = \"$env:JAVA_HOME\\\\bin;$env:PATH\"; java -version 2>&1; cd \"c:\\\\Users\\\\ENRIQUE\\\\Desktop\\\\PROYECTOS\\\\oracion-app\\\\android\"; .\\\\gradlew.bat assembleDebug 2>&1)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Eclipse Adoptium\\\\jdk-21.0.11.10-hotspot\"; $env:PATH = \"$env:JAVA_HOME\\\\bin;$env:PATH\"; cd \"c:\\\\Users\\\\ENRIQUE\\\\Desktop\\\\PROYECTOS\\\\oracion-app\\\\android\"; .\\\\gradlew.bat assembleDebug 2>&1)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
