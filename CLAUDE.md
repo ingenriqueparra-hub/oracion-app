@@ -1,5 +1,22 @@
 # CLAUDE.md — Reglas de trabajo para oracion-app
 
+## Preferencias del proyecto
+
+- Skills: crear e instalar localmente en .claude/skills/ por defecto; usar ~/.claude/ solo cuando aplique a multiples proyectos y Enrique apruebe explicitamente su instalacion global
+- Settings y permisos: usar `.claude/settings.json` (local al proyecto)
+- Memoria: usar solo el auto-memory del harness (`~/.claude/projects/<hash>/memory/`) - aislado por proyecto, no se duplica en el repo
+- MCP: mantener en `.mcp.json` local - URLs de infraestructura especificas de este proyecto
+
+
+## Politica de archivos Markdown
+
+- `CLAUDE.md` contiene instrucciones operativas para Claude; `AGENTS.md`, para el otro agente.
+- `README.md` presenta el proyecto para humanos; `docs/` guarda politicas, decisiones y procedimientos extensos.
+- Este es un proyecto de desarrollo: `COMANDOS.md` y `docs/ESTADO_ACTUAL.md` son opcionales mientras no tenga tareas operativas repetitivas.
+- Si existe `COMANDOS.md`, esta protegido y requiere autorizacion textual explicita de Enrique para modificarlo.
+- Antes de crear un `.md`, revisar si la informacion pertenece a uno existente y evitar duplicacion.
+- No mover ni borrar `.md` heredados sin aprobacion explicita; requieren revision separada.
+
 ## Stack
 - Frontend: Angular + PWA (nombre de la app: **Intercede**)
 - Backend/DB: Supabase (auth, base de datos, storage de audio)
